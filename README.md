@@ -5,6 +5,6 @@
 | **Team Member** | **Student Email** |
 | ---------------- | ---------------- |
 | Benjamin Kao | bkao1@mail.sfsu.edu |
-| Team Member | Student Email |
+| Abishek Neralla | aneralla@mail.sfsu.edu |
 | Team Member | Student Email |
 | Team Member | Student Email |
