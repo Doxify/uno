@@ -7,4 +7,4 @@
 | Benjamin Kao | bkao1@mail.sfsu.edu |
 | Abishek Neralla | aneralla@mail.sfsu.edu |
 | Andrei Georgescu | ageorgescu@mail.sfsu.edu |
-| Team Member | Student Email |
+| Yangesh KC      | ykc@mail.sfsu.edu|
