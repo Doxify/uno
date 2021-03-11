@@ -1,5 +1,3 @@
-var path = require('path');
-
 require("dotenv").config();
 
 module.exports = {
@@ -16,7 +14,7 @@ module.exports = {
         "dialect": "postgres",
         "dialectOptions": {
             "ssl": {
-                "require": true,
+                // "require": true,
                 "rejectUnauthorized": false
             }
 
