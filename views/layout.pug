@@ -3,16 +3,28 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css")
-    script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
-    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js") 
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous")
 
   body
-    nav.navbar.navbar-dark.bg-dark
+    nav.navbar.navbar-expand-md.navbar-dark.bg-dark
       div.container-fluid
-        a.navbar-brand(href="#") Youno
-        ul.nav.navbar-nav
-          li.nav-item.active: a.nav-link.active(href="#") Home
-          li.nav-item: a.nav-link(href="#") Play Now
+        a.navbar-brand(href="/") Youno
+      
+        // TODO: isAuthenticated will need to be passed to this view in order to
+        // make the layout dynamic.
+        - var isAuthenticated = false 
+        case isAuthenticated
+          when true 
+            ul.navbar-nav.mr-auto
+              li.nav-item
+                a.nav-link(href="/account") Account
+          when false
+          default
+            ul.navbar-nav.mr-auto
+              li.nav-item
+                a.nav-link(href="/login") Login
+              li.nav-item
+                a.nav-link(href="/register") Register
 
     block content
