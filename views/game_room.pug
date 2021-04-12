@@ -1,0 +1,23 @@
+extends layout 
+
+block content
+    // Import game_room.css
+    head 
+        title= title 
+        link(rel='stylesheet', href='/stylesheets/game_room.css')
+        script(src="/javascripts/game_room.js") 
+
+
+    .page-content 
+        .game 
+        .chat-sidebar.bg-dark
+            .chat-title-box.bg-dark
+                .chat-title 
+                    h4 Game Chat 
+                .chat-close-btn
+                    h4.chat-close-btn-x X
+            .chat-content 
+            .chat-box.bg-dark
+                form.message-box-container
+                    input.message-box(type="text", placeholder="Send a message")
+                button.send-btn Send

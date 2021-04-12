@@ -11,6 +11,7 @@ if(process.env.NODE_ENV === "development") {
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testsRouter = require('./routes/tests');
+var gameRoomRouter = require('./routes/game_room')
 
 
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tests', testsRouter);
+app.use('/gameroom', gameRoomRouter)
 
 
 // catch 404 and forward to error handler
