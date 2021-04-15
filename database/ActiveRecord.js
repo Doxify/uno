@@ -30,6 +30,10 @@ class ActiveRecord {
 
         return db.none(`INSERT INTO ${table_name}(${fieldsAndCols[0].join(", ")}) VALUES (${fieldsAndCols[1].join(", ")})`)
     }
+
+    static delete(id) {
+        return db.none(`DELETE FROM ${table_name} WHERE id=$id`, { id });
+    }
 }
 
 module.exports = ActiveRecord;
