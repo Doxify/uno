@@ -1,0 +1,127 @@
+.maindiv {
+  position: absolute;
+  width: 90%;
+  height: 3px;
+  left: 33px;
+  top: 125px;
+  font-family: Aleo;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 4px;
+  color: #000000;
+}
+
+.line {
+  position: absolute;
+  width: 100%;
+  background-color: black;
+  height: 5px;
+  left: 68px;
+  top: 90px;
+  border: 1px solid #000000;
+}
+
+.gamerooms {
+  margin-top: 5%;
+  height: 600px;
+  width: 70%;
+  position: relative;
+}
+.games {
+  width: auto;
+  position: relative;
+  width: 359px;
+  height: 255px;
+  left: 10px;
+  top: 50px;
+  padding: 10px;
+  margin-right: 25px;
+  background: #c4c4c4;
+  border: 2px solid #000000;
+  box-sizing: border-box;
+}
+.chatroom {
+  background-color: black;
+  margin-top: 5%;
+  height: 600px;
+  width: 30%;
+}
+
+.disp {
+  position: relative;
+  gap: 1em;
+  display: block;
+  margin-bottom: 1em;
+  display: flex;
+  height: 10px;
+}
+.playnow:active,
+.joinnow:active {
+  transform: scale(0.98);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+.playnow {
+  position: relative;
+  width: 260px;
+  height: 82px;
+  right: 100px;
+  bottom: 3em;
+  margin-left: 45%;
+  background: #008d39;
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-family: Alfa Slab One;
+  font-style: normal;
+  font-weight: normal;
+  color: #ffffff;
+}
+.joinnow {
+  position: relative;
+  width: 260px;
+  height: 82px;
+  right: 100px;
+  text-align: center;
+  padding-top: 35px;
+  bottom: 3em;
+  background: red;
+  border: 3px solid #000000;
+  box-sizing: border-box;
+  border-radius: 10px;
+
+  font-family: Alfa Slab One;
+  font-style: normal;
+  font-weight: normal;
+  color: #ffffff;
+}
+.box {
+  height: 255px;
+  background: darkslategrey;
+  border: 2px solid white;
+
+  box-sizing: content-box;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.chatbox {
+  height: 255px;
+  background: gray;
+  border: 2px solid white;
+  width: 510px;
+  box-sizing: content-box;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.outerbox {
+  background-color: gray;
+  width: auto;
+  padding-right: 0%;
+  display: grid;
+  grid-template-columns: 35% 35% 30%;
+}
+.chatouterbox {
+  background-color: gray;
+  width: 100%;
+  padding-right: 0%;
+  display: grid;
+  grid-template-columns: 50%;
+}
