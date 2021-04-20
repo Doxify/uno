@@ -13,6 +13,7 @@ var passport = require('./config/passport');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testsRouter = require('./routes/tests');
+var gameRoomRouter = require('./routes/game_room')
 
 
 
@@ -35,6 +36,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tests', testsRouter);
+app.use('/gameroom', gameRoomRouter)
 
 
 // catch 404 and forward to error handler
