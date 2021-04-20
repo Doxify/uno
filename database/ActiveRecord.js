@@ -18,15 +18,19 @@ class ActiveRecord {
         
         Object.entries(data).forEach(([key, value]) => {
             if (!this.fields.includes(key)) return INVALID_FIELD_ERROR(key);
-            db_data[0].push(key);
-            db_data[1].push(value);
+            fieldsAndCols[0].push(key);
+            fieldsAndCols[1].push(`'${value}'`);
         });
 
-        return db.none(`INSERT INTO "${this.table_name}"(${fieldsAndCols[0].join(", ")}) VALUES (${fieldsAndCols[1].join(", ")})`)
+        return db.oneOrNone(`
+            INSERT INTO "${this.table_name}"(${fieldsAndCols[0].join(", ")}) 
+            VALUES (${fieldsAndCols[1].join(", ")})
+            RETURNING *
+        `);
     }
 
     static delete(id) {
-        return db.none(`DELETE FROM ${this.table_name} WHERE id=$1`, id);
+        return db.none(`DELETE FROM "${this.table_name}" WHERE id=$1`, id);
     }
 
     static INVALID_FIELD_ERROR(field) {
