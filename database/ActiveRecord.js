@@ -1,29 +1,23 @@
-import db from './connection';
+const db = require('./connection');
 
 class ActiveRecord {
-    table_name = "";
-    fields = [];
-
-    constructor(table_name, fields) {
-        this.table_name = table_name;
-        this.fields = fields;
-    }
+    static table_name = "";
+    static fields = [];
 
     static all() {
         return db.any(`SELECT * FROM ${table_name}`);
     }
 
-    static find(id) {
-        return db.oneOrNone(`SELECT * FROM ${table_name} WHERE id=$id`, { id });
+    static findBy(field, value) {
+        if(!fields.includes(field)) return INVALID_FIELD_ERROR(field);
+        return db.oneOrNone(`SELECT * FROM ${table_name} WHERE ${field}=$value`, { value });
     }
 
     static create(data) {
         const fieldsAndCols = [[], []]
         
         Object.entries(data).forEach(([key, value]) => {
-            if (!fields.includes(key)) {
-                throw new Error("Data contains invalid field.");
-            }
+            if (!fields.includes(key)) return INVALID_FIELD_ERROR(key);
             db_data[0].push(key);
             db_data[1].push(value);
         });
@@ -33,6 +27,10 @@ class ActiveRecord {
 
     static delete(id) {
         return db.none(`DELETE FROM ${table_name} WHERE id=$id`, { id });
+    }
+
+    static INVALID_FIELD_ERROR(field) {
+        throw new Error(`${table_name} does not contain the '${field}' field.`);
     }
 }
 
