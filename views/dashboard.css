@@ -42,10 +42,10 @@
   box-sizing: border-box;
 }
 .chatroom {
-  background-color: black;
+  background-color: lightslategray;
   margin-top: 5%;
-  height: 600px;
-  width: 30%;
+  height: 47em;
+  width: 40%;
 }
 
 .disp {
@@ -96,7 +96,7 @@
   color: #ffffff;
 }
 .box {
-  height: 255px;
+  height: 231px;
   background: darkslategrey;
   border: 2px solid white;
 
@@ -104,10 +104,10 @@
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .chatbox {
-  height: 255px;
-  background: gray;
+  height: 400px;
+  background: rgba(177, 174, 189, 0.959);
   border: 2px solid white;
-  width: 510px;
+  width: 199%;
   box-sizing: content-box;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 }
