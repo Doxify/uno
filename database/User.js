@@ -4,12 +4,12 @@ class User extends ActiveRecord {
     static table_name = "User";
     static fields = ['id', 'firstName', 'lastName', 'username', 'email', 'password'];
 
-    #id = '';
-    #username = '';
-    #firstName = '';
-    #lastName = '';
-    #email = '';
-    #password = '';
+    #id = undefined;
+    #username = undefined;
+    #firstName = undefined;
+    #lastName = undefined;
+    #email = undefined;
+    #password = undefined;
 
     constructor(id, username, firstName, lastName, email, password) {
         super();
@@ -54,9 +54,17 @@ class User extends ActiveRecord {
     getByUsername(username) {
         // TODO: Figure out how postgres returns data.
         // TODO: Set instance of User after db returns data.
+        return new Promise((resolve, reject) => {
+            User.findBy('username', username)
+                .then((user) => {
+                    if (!user) { return resolve(null); }
+                    return resolve(user);
+                })
+                .catch((err) => { reject(err); })
+        });
     }
     
-    // Saves a user to the database with the values from data fields.
+    // Saves a user to the database with the values from instance data fields.
     save() {
         const data = { 
             username: this.#username, 
