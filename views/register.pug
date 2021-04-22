@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  script(src="/javascripts/register.js" defer)
+
   div.container
     div.row.mt-5
       div.col-sm-12.col-md-6.offset-md-3
@@ -9,20 +11,25 @@ block content
             h2.card-title Sign Up
             p.card-text Quick and easy!
             hr
-            form(action='/api/auth/register', method="post")
+            div.alert.alert-danger(id="error-alert" role="alert" hidden) Error occurred.
+            div.alert.alert-success(id="success-alert" role="alert" hidden)
+                span Account successfully created! Click 
+                a(href="/login") here
+                span  to login.
+            form(id="register-form")
               div.form-group
                 label(for="usernameInput") Username
-                input.form-control(id="usernameInput" type='text', placeholder="Enter username", name="username")
+                input.form-control(required, id="usernameInput" type='text', placeholder="Enter username", name="username")
               br
               div.form-group
-                label(for="usernameInput") Email
-                input.form-control(id="usernameInput" type='email', placeholder="e@mail.com", name="email")
+                label(for="emailInput") Email
+                input.form-control(required, id="emailInput" type='email', placeholder="e@mail.com", name="email")
               br
               div.form-group
                 label(for="passwordInput") Password
-                input.form-control(id="passwordInput" type='password', placeholder="Password", name="password")
+                input.form-control(required, id="passwordInput" type='password', placeholder="Password", name="password")
               br
-              button.btn.btn-success(type="submit") Register
+              button.btn.btn-success(id="register-btn" type="submit") Register
               a.card-text.p-3(href="/register") Already have an account? Login
 //-  form.Form
 //-     label 

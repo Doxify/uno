@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  script(src="/javascripts/login.js" defer)
+
   div.container
     div.row.mt-5
       div.col-sm-12.col-md-6.offset-md-3
@@ -9,16 +11,17 @@ block content
             h2.card-title Login
             p.card-text Welcome
             hr
-            form(action='/api/auth/login', method="post")
+            div.alert.alert-danger(id="error-alert" role="alert" hidden) Invalid login credentials provided
+            form(id="login-form")
               div.form-group
                 label(for="usernameInput") Username
-                input.form-control(id="usernameInput" type='text', placeholder="Enter username", name="username")
+                input.form-control(required, id="usernameInput" type='text', placeholder="Enter username", name="username")
               br
               div.form-group
                 label(for="passwordInput") Password
-                input.form-control(id="passwordInput" type='password', placeholder="Password", name="password")
+                input.form-control(required, id="passwordInput" type='password', placeholder="Password", name="password")
               br
-              button.btn.btn-success(type="submit") Login
+              button.btn.btn-success(id="login-btn" type="submit") Login
               a.card-text.p-3(href="/register") Don't have an account? Sign up
 //-   form.Form(action='/api/auth/login',method='post')
 //-     label 

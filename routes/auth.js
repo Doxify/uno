@@ -10,16 +10,22 @@ router.post('/register', notAuthed, (req, res, next) => {
 
 // Uses passport to authenticate a user.
 router.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login' }),
+  passport.authenticate('local'), 
   (req, res, next) => {
     // Store the user object in the session.
-    res.redirect('/');
+    res.json({
+      status: 'success',
+      message: 'Successfully authenticated.'
+    });
 });
 
 // Uses passport to log a user out by destroying their session.
 router.get('/logout', isAuthed, (req, res, next) => {
   req.logout();
-  res.redirect('/');
+  res.json({
+    status: 'success',
+    message: 'Successfully logged out.'
+  });
 });
 
 module.exports = router;
