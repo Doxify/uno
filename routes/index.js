@@ -4,20 +4,20 @@ const { isAuthed, notAuthed } = require('../middleware/routeProtectors');
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', (req, res, next) => {
+  res.render('index', { title: 'Home', user: req.user });
 });
 
-router.get('/login', notAuthed, function(req, res, next) {
-  res.render('login', { title: 'Login' });
+router.get('/login', notAuthed, (req, res, next) => {
+  res.render('login', { title: 'Login', user: req.user });
 });
 
-router.get('/register', notAuthed, function(req, res, next) {
-  res.render('register', { title: 'Register' });
+router.get('/register', notAuthed, (req, res, next) => {
+  res.render('register', { title: 'Register', user: req.user });
 });
 
-router.get('/dashboard', function(req, res, next) {
-  res.render('dashboard', { title: 'Dashboard' });
+router.get('/dashboard', isAuthed, (req, res, next) => {
+  res.render('dashboard', { title: 'Dashboard', user: req.user });
 });
 
 

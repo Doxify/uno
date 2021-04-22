@@ -3,7 +3,7 @@ const User = require('../database/User');
 const Controller = {
     create: (request, response, next) => {
         // TODO: Validate input with more detail (dont just do null check)
-        let { username, firstName, lastName, email, password } = request.body;
+        let { username, email, password } = request.body;
         
         User.usernameIsUnique(username)
             .then((usernameIsUnique) => {
