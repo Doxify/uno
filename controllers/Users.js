@@ -22,7 +22,7 @@ const Controller = {
                         }
                         
                         // Attempting to save the user to the database.
-                        const newUser = new User(null, username, firstName, lastName, email, password);
+                        const newUser = new User(null, username, email, password);
                         
                         newUser.save()
                             .then((userCreated) => {
@@ -41,12 +41,7 @@ const Controller = {
             .catch((err) => {
                 return response.json(err);
             });
-
-    },
-    authenticate: (request, response, next) => {
-        // TODO: Authenticate user via username and password
     }
-
 }
 
 module.exports = Controller;
