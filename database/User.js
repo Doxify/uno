@@ -105,7 +105,7 @@ class User extends ActiveRecord {
     // Returns if a user with a given username exists in the database.
     static usernameIsUnique(username) {
         return new Promise((resolve, reject) => {
-            this.findBy('username', username)
+            this.findBy('username', username.toLowerCase())
                 .then((user) => {
                     if (!user) { return resolve(true); }
                     return resolve(false);
@@ -117,7 +117,7 @@ class User extends ActiveRecord {
     // Returns if a user with a given email exists in the database.
     static emailIsUnique(email) {
         return new Promise((resolve, reject) => {
-            this.findBy('email', email)
+            this.findBy('email', email.toLowerCase())
                 .then((user) => {
                     if (!user) { return resolve(true); }
                     return resolve(false);

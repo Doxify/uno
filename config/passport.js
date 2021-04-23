@@ -1,17 +1,20 @@
 const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const User = require('../database/User');
+const bcrypt = require('bcrypt');
 
 // Utilizing the passport local strategy.
-// 
-// TODO: Implement bcrypt here.
 passport.use(new Strategy((username, password, cb) => {
     const user = new User();
     user.getByUsername(username)
         .then((user) => {
             if (!user) { return cb(null, false); }
-            if (user.password != password) { return cb(null, false); }
-            return cb(null, user);
+            bcrypt.compare(password, user.password, (err, result) => {
+                if(!err && result) {
+                    return cb(null, user);
+                }
+                return cb(null, false);
+            });
         })
         .catch((err) => {
             // TODO: Better error handling.
