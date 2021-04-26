@@ -12,7 +12,8 @@ var passport = require('./config/passport');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var testsRouter = require('./routes/tests');
-var gameRoomRouter = require('./routes/game_room')
+var gameRoomRouter = require('./routes/game_room');
+var testBaseDeckRouter = require('./routes/testBaseDeck');
 
 var app = express();
 
@@ -33,7 +34,8 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/tests', testsRouter);
-app.use('/gameroom', gameRoomRouter)
+app.use('/gameroom', gameRoomRouter);
+app.use('/testBaseDeck', testBaseDeckRouter);
 
 
 // catch 404 and forward to error handler
