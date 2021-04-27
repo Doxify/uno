@@ -69,7 +69,6 @@ a:link,
 a:visited {
   color: black;
   text-decoration: none;
-  cursor: auto;
 }
 
 .help {
@@ -79,4 +78,8 @@ a:visited {
 }
 .loginBtn {
   margin-left: 156px;
+}
+
+.navbar-brand {
+  cursor: pointer;
 }
