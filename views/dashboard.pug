@@ -3,7 +3,6 @@ block content
 
     head 
         title= title 
-        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
     .maindiv
         .button-container
@@ -17,6 +16,7 @@ block content
             .gamerooms-container.bg-dark
                 .gamerooms
                     .outerbox.bg-dark
+                        - var games = []
                         each game in games 
 
                             a(href="/game/" + game.id + "/join").box 
