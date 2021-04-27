@@ -14,12 +14,13 @@ block content
                 
                     
         .main-container
-            .gamerooms
-                .outerbox.bg-dark
-                    each game in games 
+            .gamerooms-container.bg-dark
+                .gamerooms
+                    .outerbox.bg-dark
+                        each game in games 
 
-                        a(href="/game/" + game.id + "/join").box 
-                            .game-id Game: #{game.id}
+                            a(href="/game/" + game.id + "/join").box 
+                                .game-id Game: #{game.id}
 
  
                  

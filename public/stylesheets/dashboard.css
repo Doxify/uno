@@ -102,18 +102,26 @@
   
 }
 
+.gamerooms-container {
+  max-height: 90vh;
+  width: 70%;
+  padding: 16px;
+}
+
 .gamerooms {
   box-sizing: border-box;
 
   display: block;
   height: 100%;
-  width: 60%;
+  width: 100%;
 
   margin-right: 8px;
 
   flex-grow: 1;
 
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+  overflow-y: auto;
 }
 /* .games {
   width: auto;
@@ -157,6 +165,7 @@
   flex-direction: column;
   justify-content: center;
 
+  max-height: 90vh;
   width: 30%;
 
   margin-left: 8px;
@@ -171,7 +180,7 @@
 
   padding: 8px;
 
-  flex-grow: 1;
+  flex-grow: 0.05;
 
   border-bottom: 2px solid grey;
 
@@ -179,7 +188,6 @@
 
 .chatroom-title {
   display: inline-block;
-  height: 100%;
   width: 100%;
   vertical-align: middle;
   text-align: center;
@@ -191,16 +199,16 @@
   box-sizing: border-box;
   display: flex;
 
+  max-height: 85vh;
+
   flex-direction: column;
-  height: 100%;
 
-  flex-grow: 3;
-
-  justify-content: flex-end;
+  flex-grow: 4;
 
   /* background: rgba(177, 174, 189, 0.959); */
   box-sizing: border-box;
   
+  overflow-y: auto;
 }
 
 .chat-message-container {
@@ -247,7 +255,7 @@
   padding-top: 16px;
   height: 75px;
 
-  flex-grow: 1;
+  flex-grow: 0.05;
 
   border-top: 2px solid grey;
 }
