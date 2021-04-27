@@ -1,27 +1,31 @@
 var express = require('express');
 var router = express.Router();
-const UserController = require('../controllers/Users');
+const userController = require('../controllers/Users');
 const passport = require('../config/passport');
+const { isAuthed, notAuthed } = require('../middleware/routeProtectors');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.post('/register', notAuthed, (req, res, next) => {
+  userController.create(req, res, next);
 });
 
-router.post('/register', (request, response, next) => {
-  UserController.create(request, response, next);
-});
-
+// Uses passport to authenticate a user.
 router.post('/login', 
-  passport.authenticate('local', { failureRedirect: '/login', session: true }), 
-  (request, response, next) => {
-    console.log(request.user);
-    response.redirect('/');
-  });
+  passport.authenticate('local'), 
+  (req, res, next) => {
+    // Store the user object in the session.
+    res.json({
+      status: 'success',
+      message: 'Successfully authenticated.'
+    });
+});
 
-router.get('/logout', (request, response, next) => {
-    request.logout();
-    response.redirect('/');
+// Uses passport to log a user out by destroying their session.
+router.get('/logout', isAuthed, (req, res, next) => {
+  req.logout();
+  res.json({
+    status: 'success',
+    message: 'Successfully logged out.'
   });
+});
 
 module.exports = router;

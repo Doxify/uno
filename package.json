@@ -12,10 +12,13 @@
     "postinstall": "npx sequelize db:migrate"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "connect-pg-simple": "^6.2.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "express-session": "^1.17.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
@@ -23,7 +26,8 @@
     "pg-promise": "^10.9.4",
     "pug": "2.0.0-beta11",
     "sequelize": "^6.5.0",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
