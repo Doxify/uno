@@ -101,7 +101,7 @@ class GameUser extends ActiveRecord {
   // game_id. 
   static getNextAvailablePlayerNum(game_id) {
     return new Promise((resolve, reject) => {
-      this.findAllBy("game_id", game_id)
+      this.findAll("game_id", game_id)
         .then((gameUsers) => {
           // No game users exist.
           if (gameUsers.length === 0) { 
@@ -109,7 +109,7 @@ class GameUser extends ActiveRecord {
           }
 
           // Game is full.
-          if (gameUsers.length === MAX_GAME_USERS_PER_GAME) {
+          if (gameUsers.length === this.MAX_GAME_USERS_PER_GAME) {
             return resolve(null);
           }
 
@@ -124,7 +124,7 @@ class GameUser extends ActiveRecord {
   // Returns whether a relation between a user_id and game_id exists.
   static isGameUser(user_id, game_id) {
     return new Promise((resolve, reject) => {
-      this.findAllBy("game_id", game_id)
+      this.findAll("game_id", game_id)
         .then((gameUsers) => {
           if (gameUsers.length === 0) { 
             return resolve(false); 
