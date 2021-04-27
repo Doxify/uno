@@ -1,32 +1,44 @@
 extends layout 
 block content
 
-    div.maindiv
-        h1  
-            i GAMEROOMS 
+    head 
+        title= title 
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
-        div.line 
-        div.disp
-                    button.playnow Create Room 
-                    buttom.joinnow Join   Room
-                    
-        div.disp
-            div.gamerooms
-                div.outerbox
-                 div
-                  div.box 
-                  div
-                   div.box 
-                  div 
-                   div.box
+    .maindiv
+        .button-container
+            .main-title GAMEROOMS 
+            a(href="/game/create-game").create-game-btn.btn.bg-success Create Room 
 
-                div 
-                    div.box 
-                div 
+        .line 
+                
                     
-           
-            div.chatroom
-                div 
-                    div.chatouterbox
-                        div.chatbox
+        .main-container
+            .gamerooms-container.bg-dark
+                .gamerooms
+                    .outerbox.bg-dark
+                        each game in games 
+
+                            a(href="/game/" + game.id + "/join").box 
+                                .game-id Game: #{game.id}
+
+ 
+                 
+                    
+            .chatroom.bg-dark
+                .chatroom-title-container
+                    .chatroom-title Global Chat
+                .chatbox
+                    .chat-message-container 
+                        .chat-message-time 12:00
+                        .chat-message-user Username that is really long:
+                        .chat-message Example Message of a really long message that should make the message container grow to fit, now this should grow infinitely
+                    .chat-message-container 
+                        .chat-message-time 12:00
+                        .chat-message-user Username:
+                        .chat-message Example of a small message
+                .messagebox
+                    .input-group
+                        input(type="text").form-control
+                        button.btn.bg-success Send
                     
