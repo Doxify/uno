@@ -27,7 +27,7 @@ const GameController = {
         Game.getAllActiveGames()
         .then((games) => {
             console.log(games);
-            return response.render('dashboard', { title: 'Dashboard', games: games });
+            return response.render('dashboard', { title: 'Dashboard', user: request.user, games: games });
         })
         
     },

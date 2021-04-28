@@ -1,3 +1,7 @@
+/* =============================================================================== */
+/* Main layout/titles and Create Game Room buttons */
+/* =============================================================================== */
+
 .maindiv {
   box-sizing: border-box;
   display: flex;
@@ -8,7 +12,6 @@
   padding: 16px;
 
   font-family: Aleo;
-  font-style: italic;
   font-weight: bold;
   font-size: 20px;
   color: #000000;
@@ -64,7 +67,6 @@
   height: 100%;
   text-align: center;
 
-  font-style: normal;
   color: white;
 }
 
@@ -89,6 +91,10 @@
   align-items: stretch;
 }
 
+/* =============================================================================== */
+/* Game Rooms Grid CSS */
+/* =============================================================================== */
+
 .gamerooms-container {
   max-height: 90vh;
   width: 70%;
@@ -110,19 +116,8 @@
 
   overflow-y: auto;
 }
-/* .games {
-  width: auto;
-  position: relative;
-  width: 359px;
-  height: 255px;
-  left: 10px;
-  top: 50px;
-  padding: 10px;
-  margin-right: 25px;
-  background: #c4c4c4;
-  border: 2px solid #000000;
-  box-sizing: border-box;
-} */
+
+
 .outerbox {
   display: grid;
 
@@ -131,20 +126,49 @@
 
   padding: 8px;
 
-  gap: 8px 8px;
+  gap: 24px 24px;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 200px;
 }
+/* ----------------------------------------------------------------------------- */
+/* Game Card CSS */
+/* ----------------------------------------------------------------------------- */
 
 .box {
-  height: 200px;
-  background: darkslategrey;
-  border: 2px solid white;
-
   box-sizing: border-box;
+  display: block;
+
+  height: 200px;
+  
+  padding: 8px;
+
+  
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+  text-decoration: none;
+  color: white;
+  background-color: #58636e;
 }
 
+.box:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.box:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.open {
+  color: #208f5a;
+}
+
+
+/* =============================================================================== */
+/* Global Chat CSS */
+/* =============================================================================== */
 .chatroom {
   box-sizing: border-box;
   display: flex;
@@ -191,7 +215,6 @@
 
   flex-grow: 4;
 
-  /* background: rgba(177, 174, 189, 0.959); */
   box-sizing: border-box;
   height: 300px;
   overflow: hidden;
@@ -214,7 +237,6 @@
   padding: 8px;
 
   font-size: 16px;
-  font-style: normal;
   font-weight: normal;
   color: white;
 
@@ -251,4 +273,8 @@
 
 .form-control {
   margin: 0;
+}
+
+.btn.bg-success {
+  color: white;
 }

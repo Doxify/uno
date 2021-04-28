@@ -1,5 +1,12 @@
 const ActiveRecord = require('./ActiveRecord');
 
+// value: 10 - Skip
+// value: 11 - Reverse
+// value: 12 - Draw 2
+// value: 13 - Wildcard
+// value: 14 - Draw 4 Wildcard
+
+
 class Game extends ActiveRecord {
     static table_name = "Game";
     static fields = ['id', 'active', 'direction_clockwise'];

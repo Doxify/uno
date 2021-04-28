@@ -9,7 +9,7 @@ block content
     .maindiv
         .button-container
             .main-title GAMEROOMS 
-            a(href="/game/create-game").create-game-btn.btn.bg-success Create Room 
+            a(href="/game/create-game").create-game-btn.btn.bg-success Create Game 
 
         .line 
                 
@@ -22,7 +22,10 @@ block content
                         each game in games 
 
                             a(href="/game/" + game.id + "/join").box 
-                                .game-id Game: #{game.id}
+                                .game-id Game #{game.id}
+                                .num-players Players: #/4
+                                .open Open
+                                .close.text-danger Closed
 
  
                  

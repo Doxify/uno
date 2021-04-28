@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const GameController = require('../controllers/game')
+const { isAuthed, notAuthed } = require('../middleware/routeProtectors');
 
 router.get('/create-game', function(request, response, next) {
 
@@ -8,7 +9,10 @@ router.get('/create-game', function(request, response, next) {
 
 });
 
-router.get('/', function(request, response, next) {
+router.get('/', isAuthed, function(request, response, next) {
+
+
+
     GameController.getOpenGames(request, response, next);
 });
 
