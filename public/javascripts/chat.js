@@ -1,10 +1,17 @@
 const pusher = new Pusher('968799b8f88c1d76da50', { cluster: "us3" });
 const roomId = document.getElementById("chatId").value;
+const userInput = document.getElementById("userInput");
 const channel = pusher.subscribe(`CHAT_${roomId}`);
 
 // Listening for when the user presses the send button in chat.
 document.getElementById("chatbox-btn").addEventListener("click", function(event) {
+  // Validating input
+  if(userInput.value === "") return;
+  if(userInput.value.trim() === "") return;
+
+  // Send the message if it passes validation and clear the input box.
   sendMessage(event);
+  userInput.value = "";
 });
 
 // Listening for all messages sent in this channel.
@@ -13,7 +20,6 @@ channel.bind('message', (data) => {
 });
 
 function sendMessage(event) {
-  var userInput = document.getElementById("userInput");
   const formData = { id: roomId, message: userInput.value };
 
   // Making the API call to trigger pusher.
@@ -25,9 +31,6 @@ function sendMessage(event) {
     body: JSON.stringify(formData),
     method: "POST"
   });
-
-  // Clearing the chat message input box.
-  userInput.value = "";
 }
 
 function updateChatBox(data) {
