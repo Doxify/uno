@@ -1,5 +1,7 @@
 extends layout 
 block content
+    script(src="/javascripts/dashboard.js" defer)
+
 
     head 
         title= title 
@@ -39,6 +41,6 @@ block content
                         .chat-message Example of a small message
                 .messagebox
                     .input-group
-                        input(type="text").form-control
-                        button.btn.bg-success Send
+                        input(id="userInput" type="text").form-control
+                        button.btn.bg-success(id="chatbox-btn" type="submit") Send
                     
