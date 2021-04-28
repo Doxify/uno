@@ -7,7 +7,6 @@
 
   padding: 16px;
 
-  
   font-family: Aleo;
   font-style: italic;
   font-weight: bold;
@@ -20,7 +19,6 @@
   flex-grow: 1;
 }
 
-
 .line {
   box-sizing: border-box;
   display: block;
@@ -29,8 +27,6 @@
 
   height: 5px;
   width: 100%;
-
-  
 
   background-color: black;
   border: 1px solid #000000;
@@ -48,7 +44,6 @@
   align-items: center;
 }
 
-
 /* .playnow, .joinnow {
   box-sizing: border-box;
   display: block;
@@ -64,9 +59,8 @@
   color: #ffffff;
 } */
 
-
-
-.create-game-btn:link, .create-game-btn:visited {
+.create-game-btn:link,
+.create-game-btn:visited {
   height: 100%;
   text-align: center;
 
@@ -93,8 +87,6 @@
 
   justify-content: center;
   align-items: stretch;
-
-  
 }
 
 .gamerooms-container {
@@ -178,7 +170,6 @@
   flex-grow: 0.05;
 
   border-bottom: 2px solid grey;
-
 }
 
 .chatroom-title {
@@ -202,8 +193,13 @@
 
   /* background: rgba(177, 174, 189, 0.959); */
   box-sizing: border-box;
-  
-  overflow-y: auto;
+  height: 300px;
+  overflow: hidden;
+  overflow-y: scroll;
+  /* overflow-x: auto; */
+  word-wrap: break-word;
+  display: block;
+  word-break: break-all;
 }
 
 .chat-message-container {
@@ -241,7 +237,6 @@
   font-weight: bold;
 }
 
-
 .messagebox {
   box-sizing: border-box;
   display: block;
@@ -251,7 +246,6 @@
   height: 75px;
 
   flex-grow: 0.05;
-
   border-top: 2px solid grey;
 }
 
