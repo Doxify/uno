@@ -25,6 +25,7 @@
     "passport-local": "^1.0.0",
     "pg-promise": "^10.9.4",
     "pug": "2.0.0-beta11",
+    "pusher": "^5.0.0",
     "sequelize": "^6.5.0",
     "sequelize-cli": "^6.2.0",
     "validator": "^13.6.0"

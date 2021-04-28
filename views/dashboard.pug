@@ -1,9 +1,10 @@
 extends layout 
 block content
+    script(src="https://js.pusher.com/7.0/pusher.min.js")
+    script(src="/javascripts/chat.js" defer)
 
     head 
         title= title 
-        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
 
     .maindiv
         .button-container
@@ -17,6 +18,7 @@ block content
             .gamerooms-container.bg-dark
                 .gamerooms
                     .outerbox.bg-dark
+                        - var games = []
                         each game in games 
 
                             a(href="/game/" + game.id + "/join").box 
@@ -31,17 +33,11 @@ block content
             .chatroom.bg-dark
                 .chatroom-title-container
                     .chatroom-title Global Chat
+                    input(type="hidden", id="chatId", name="chatId" value="lobby")
                 .chatbox
-                    .chat-message-container 
-                        .chat-message-time 12:00
-                        .chat-message-user Username that is really long:
-                        .chat-message Example Message of a really long message that should make the message container grow to fit, now this should grow infinitely
-                    .chat-message-container 
-                        .chat-message-time 12:00
-                        .chat-message-user Username:
-                        .chat-message Example of a small message
+                    //- Messages will be appended here.
                 .messagebox
                     .input-group
-                        input(type="text").form-control
-                        button.btn.bg-success Send
+                        input(id="userInput" type="text").form-control
+                        button.btn.bg-success(id="chatbox-btn" type="submit") Send
                     
