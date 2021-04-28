@@ -1,7 +1,7 @@
 extends layout 
 block content
-    script(src="/javascripts/dashboard.js" defer)
-
+    script(src="https://js.pusher.com/7.0/pusher.min.js")
+    script(src="/javascripts/chat.js" defer)
 
     head 
         title= title 
@@ -32,14 +32,7 @@ block content
                     .chatroom-title Global Chat
                     input(type="hidden", id="chatId", name="chatId" value="lobby")
                 .chatbox
-                    .chat-message-container 
-                        .chat-message-time 12:00
-                        .chat-message-user Username that is really long:
-                        .chat-message Example Message of a really long message that should make the message container grow to fit, now this should grow infinitely
-                    .chat-message-container 
-                        .chat-message-time 12:00
-                        .chat-message-user Username:
-                        .chat-message Example of a small message
+                    //- Messages will be appended here.
                 .messagebox
                     .input-group
                         input(id="userInput" type="text").form-control

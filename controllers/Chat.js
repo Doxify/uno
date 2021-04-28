@@ -2,8 +2,8 @@ const pusher = require('../config/pusher');
 
 const Controller = {
   send: (req, res, next) => {
-    const { roomId, message } = req.body;
-    const channel = `CHAT_${roomId}`;
+    const { id, message } = req.body;
+    const channel = `CHAT_${id}`;
 
     // Trigger pusher
     pusher.trigger(channel, 'message', {
