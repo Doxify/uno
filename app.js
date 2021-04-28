@@ -14,6 +14,7 @@ var db = require('./database/connection');
 // Routes
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
+var chatRouter = require('./routes/chat');
 var gameUserRouter = require('./routes/gameUser');
 var testsRouter = require('./routes/tests');
 var gameRoomRouter = require('./routes/game_room')
@@ -51,6 +52,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/gameUser', gameUserRouter);
+app.use('/api/chat', chatRouter);
 app.use('/tests', testsRouter);
 app.use('/gameroom', gameRoomRouter)
 app.use('/game', gameRouter);
