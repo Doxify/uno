@@ -16,7 +16,7 @@ const GameController = {
             .then((gameCreated) => {
                 console.log("got here");
                 if(!gameCreated) return GENERIC_ERROR(res);
-                return response.redirect('/game');
+                return response.redirect('/dashboard');
             });
     },
     joinGame: () => {

@@ -50,10 +50,6 @@ body {
     padding: 0px;
 }
 
-.bottom .container-fluid .row .col {
-    margin: 0px;
-    padding: 0px;
-}
 
 /* ================================================================================ */
 /* Game Elements */
@@ -78,7 +74,7 @@ body {
     cursor: pointer;
 }
 
-.my-card:hover {
+#game-center  .my-card:hover {
     transform: scale(1.6);
 }
 
@@ -96,15 +92,7 @@ body {
     width: 100%;
 }
 
-.face-up {
-    border-radius: 6px;
-    background-color: white;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-}
-
-.face-down {
+.face-up, .face-down {
     display: block;
     height: auto;
     width: 100%;
@@ -127,16 +115,19 @@ body {
 }
 
 
-
 .user-hand {
+    box-sizing: border-box;
     display: flex;
+
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 1px;
+    flex-grow: 1;
+
     height: 100%;
+    width: 100%;
+    
     justify-content: center;
     align-items: center;
-    align-content: center;
 }
 
 .user-hand .my-card {
@@ -145,18 +136,32 @@ body {
     max-width: 32px;
 }
 
-
-.user-hand .my-card:hover {
-    
-    transform: scale(2.75);
-}
-
-.user-hand .face-down {
+.user-hand .face-down, .user-hand .face-up {
     height: 100%;
 
     object-fit: contain;
 }
 
+.center-player {
+    box-sizing: border-box;
+    display: flex;
+
+    flex-direction: column;
+    
+    justify-content: center;
+    align-items: center;
+
+}
+
+.top-player-container {
+    box-sizing: border-box;
+    display: flex;
+
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+}
 
 #top-player {
     flex-wrap: wrap-reverse;
@@ -166,13 +171,45 @@ body {
     padding: 0px 20px;
 }
 
-.side-player .my-card {
+#left-player .my-card {
     transform: rotate(90deg);
 }
 
-#left-player .my-card .face-down {
-    /* max-height: 400px; */
+#right-player .my-card {
+    transform: rotate(270deg);
 }
+
+#user-player .my-card:hover {
+    transform: scale(2.75);
+}
+
+#user-player .my-card{
+    object-fit: contain;
+}
+
+
+.username-container {
+    box-sizing: border-box;
+    display: flex;
+    padding: 16px;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: white;
+}
+
+.username {
+    display: block;
+
+    padding: 8px;
+
+    
+}
+
+
 /* ================================================================================ */
 /* Chat-sidebar*/
 /* ================================================================================ */

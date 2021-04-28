@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const GameController = require('../controllers/game')
 const { isAuthed, notAuthed } = require('../middleware/routeProtectors');
 
 /* GET home page. */
@@ -16,7 +17,7 @@ router.get('/register', notAuthed, (req, res, next) => {
 });
 
 router.get('/dashboard', isAuthed, (req, res, next) => {
-  res.render('dashboard', { title: 'Dashboard', user: req.user });
+  GameController.getOpenGames(req, res, next);
 });
 
 module.exports = router;

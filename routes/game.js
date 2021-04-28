@@ -9,12 +9,6 @@ router.get('/create-game', function(request, response, next) {
 
 });
 
-router.get('/', isAuthed, function(request, response, next) {
-
-
-
-    GameController.getOpenGames(request, response, next);
-});
 
 
 router.post('/game/:id/play-card', function(request, response, next) {

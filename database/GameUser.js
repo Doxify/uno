@@ -3,8 +3,8 @@ const ActiveRecord = require("./ActiveRecord");
 class GameUser extends ActiveRecord {
   static table_name = "Game User";
   static fields = [
-    "user_id",
-    "game_id",
+    "user",
+    "game",
     "player_num",
     "current_player",
     "winner",
@@ -12,24 +12,24 @@ class GameUser extends ActiveRecord {
 
   static MAX_GAME_USERS_PER_GAME = 4;
 
-  user_id = undefined;
-  game_id = undefined;
+  user = undefined;
+  game = undefined;
   player_num = undefined;
   current_player = undefined;
   winner = undefined;
 
-  constructor(user_id, game_id) {
+  constructor(user, game) {
     super();
-    this.user_id = user_id;
-    this.game_id = game_id;
+    this.user = user;
+    this.game = game;
   }
 
-  get user_id() {
-    return this.user_id;
+  get user() {
+    return this.user;
   }
 
-  get game_id() {
-    return this.game_id;
+  get game() {
+    return this.game;
   }
 
   get player_num() {
@@ -63,8 +63,8 @@ class GameUser extends ActiveRecord {
   // Saves a gameUser to the database with the values from instance data fields.
   save() {
     const data = {
-      game_id: this.game_id,
-      user_id: this.user_id,
+      game: this.game,
+      user: this.user,
       player_num: undefined,
       current_player: false,
       winner: false
@@ -72,7 +72,7 @@ class GameUser extends ActiveRecord {
 
     return new Promise((resolve, reject) => {
       // Check if there are any available spots.
-      GameUser.getNextAvailablePlayerNum(this.game_id)
+      GameUser.getNextAvailablePlayerNum(this.game)
         .then((nextAvailablePlayerNum) => {
           if(!nextAvailablePlayerNum) { 
             return reject(null);
@@ -98,10 +98,10 @@ class GameUser extends ActiveRecord {
   }
 
   // Helper method to get the next available GameUser player_num for a given
-  // game_id. 
-  static getNextAvailablePlayerNum(game_id) {
+  // game. 
+  static getNextAvailablePlayerNum(game) {
     return new Promise((resolve, reject) => {
-      this.findAll("game_id", game_id)
+      this.findAll("game", game)
         .then((gameUsers) => {
           // No game users exist.
           if (gameUsers.length === 0) { 
@@ -121,17 +121,17 @@ class GameUser extends ActiveRecord {
     });
   }
 
-  // Returns whether a relation between a user_id and game_id exists.
-  static isGameUser(user_id, game_id) {
+  // Returns whether a relation between a user and game exists.
+  static isGameUser(user, game) {
     return new Promise((resolve, reject) => {
-      this.findAll("game_id", game_id)
+      this.findAll("game", game)
         .then((gameUsers) => {
           if (gameUsers.length === 0) { 
             return resolve(false); 
           }
 
           gameUsers.map(gameUser => {
-            if(gameUser.user_id === user_id) { 
+            if(gameUser.user === user) { 
               return resolve(true); 
             };
           });
