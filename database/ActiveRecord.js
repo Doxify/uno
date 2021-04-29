@@ -29,10 +29,10 @@ class ActiveRecord {
         });
 
         return db.oneOrNone(`
-            INSERT INTO "${this.table_name}"(${fieldsAndCols[0].join(", ")}) 
+            INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 
             VALUES (${fieldsAndCols[1].join(", ")})
             RETURNING *
-        `);
+    `);
     }
 
     // Used for database tables where all columns have default values, returns the inserted row

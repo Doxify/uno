@@ -9,17 +9,17 @@ body {
 .game-container {
     flex-grow: 1;
     padding: 0px;
+    background-color: #58636e;
+    
 }
 .game {
     margin: 0px;
     padding: 0px;
-    background-color: lightgrey;
 }
 
 
 .top {
     flex-grow: 0.5;
-    background-color: red;
 }
 
 .middle {
@@ -35,14 +35,12 @@ body {
     padding: 0px;
 }
 
-.center {
-    background-color: chartreuse;
-}
+/* .center {
+} */
 
 .bottom {
     flex-basis: 150px;
     flex-grow: 0.5;
-    background-color: violet;
     margin: 0px;
 }
 
@@ -65,7 +63,6 @@ body {
 
     margin: 8px;
     padding: 0px;
-    border-radius: 10px;
 
     background-color: inherit;
 
@@ -98,6 +95,8 @@ body {
     width: 100%;
     object-fit: cover;
 
+    border-radius: 5px;
+    box-shadow: 4px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .deck {
@@ -127,7 +126,7 @@ body {
     width: 100%;
     
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 .user-hand .my-card {
@@ -149,8 +148,12 @@ body {
     flex-direction: column;
     
     justify-content: center;
-    align-items: center;
+    align-items: start;
 
+}
+
+.reverse {
+    align-items: flex-end;
 }
 
 .top-player-container {
@@ -163,6 +166,16 @@ body {
     align-items: center;
 }
 
+.user-player-container {
+    box-sizing: border-box;
+    display: flex;
+    
+    flex-direction: row;
+    
+    justify-content: center;
+    align-items: center;
+}
+
 #top-player {
     flex-wrap: wrap-reverse;
 }
@@ -171,20 +184,27 @@ body {
     padding: 0px 20px;
 }
 
-#left-player .my-card {
+/* #left-player .my-card {
     transform: rotate(90deg);
 }
 
 #right-player .my-card {
     transform: rotate(270deg);
-}
+} */
 
 #user-player .my-card:hover {
-    transform: scale(2.75);
+    transform: scale(3, 2.75);
+}
+
+#user-player .my-card img:hover {
+    object-fit: fill;
+    border: 2px solid rgba(0, 255, 255);
 }
 
 #user-player .my-card{
-    object-fit: contain;
+    object-fit: cover;
+    height: 58px;
+    width: 32px;
 }
 
 
@@ -202,11 +222,26 @@ body {
 }
 
 .username {
+    --username-padding: 1.0rem;
+    position: relative;
     display: block;
 
-    padding: 8px;
+    padding: var(--username-padding);
 
-    
+    border-radius: 8px;
+}
+
+.username::after {
+    content: '';
+    position: absolute;
+    display: block;
+
+    left: 0;
+
+    height: 3px;
+    width: 75%;
+
+    background-color: rgb(0, 255, 0);
 }
 
 
