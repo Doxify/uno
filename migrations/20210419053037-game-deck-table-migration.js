@@ -5,16 +5,16 @@ module.exports = {
     return queryInterface.createTable(
       'Game Deck',
       {
-        game_id: {
-          type: Sequelize.INTEGER,
+        game: {
+          type: Sequelize.UUID,
           primaryKey: true,
           references: {model: 'Game', key: 'id'}
         },
-        user_id: {
-          type: Sequelize.INTEGER,
+        user: {
+          type: Sequelize.UUID,
           references: {model: 'User', key: 'id'}
         },
-        card_id: {
+        card: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           references: {model: 'Base Deck', key: 'id'}

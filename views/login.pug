@@ -1,45 +1,67 @@
 extends layout
 
 block content
- form.Form(action='/',method='post')
-    label 
-     h1 Login 
-     section.wel 
-      i Welcome 
-      hr      
-      div.inputfeild
-        section 
-            label Username 
-            br
-            input(type='text' placeholder='john')
-        section.psec 
-            label Password 
-            br
-            input(type='password')
+  script(src="/javascripts/login.js" defer)
+
+  div.container
+    div.row.mt-5
+      div.col-sm-12.col-md-6.offset-md-3
+        div.card
+          div.card-body
+            h2.card-title Login
+            p.card-text Welcome
+            hr
+            div.alert.alert-danger(id="error-alert" role="alert" hidden) Invalid login credentials provided
+            form(id="login-form")
+              div.form-group
+                label(for="usernameInput") Username
+                input.form-control(required, id="usernameInput" type='text', placeholder="Enter username", name="username")
+              br
+              div.form-group
+                label(for="passwordInput") Password
+                input.form-control(required, id="passwordInput" type='password', placeholder="Password", name="password")
+              br
+              button.btn.btn-primary(id="login-btn" type="submit") Login
+              a.card-text.p-3(href="/register") Don't have an account? Sign up
+//-   form.Form(action='/api/auth/login',method='post')
+//-     label 
+//-      h1 Login 
+//-      section.wel 
+//-       i Welcome 
+//-       hr      
+//-       div.inputfeild
+//-         section 
+//-             label Username 
+//-             br
+//-             input(type='text' placeholder='john', name="username")
+//-         section.psec 
+//-             label Password 
+//-             br
+//-             input(type='password', name="password")
 
             
-     div.newAccbtn
-        button.btn.btn-outline-info
-         a(class='button' href='/register') No Account? Sign Up
+//-      div.newAccbtn
+//-         button.btn.btn-outline-info
+//-          a(class='button' href='/register') No Account? Sign Up
          
-     ul 
-        b Forgot 
-        br
-        ul  
-         a(class='button' href='/') Username
-         br
-         a(class='button' href='/') Password
+//-      ul 
+//-         b Forgot 
+//-         br
+//-         ul  
+//-          a(class='button' href='/') Username
+//-          br
+//-          a(class='button' href='/') Password
 
     
-    div.id 
-        i
-            a(class='button' href='/') Help 
-            br        
-            a(class='button' href='/') FAQ 
+//-     div.id 
+//-         i
+//-             a(class='button' href='/') Help 
+//-             br        
+//-             a(class='button' href='/') FAQ 
 
 
-    div.loginBtn
-        button.btn.btn-secondary.btn-lg Login
+//-     div.loginBtn
+//-         button.btn.btn-secondary.btn-lg Login
 
 
     

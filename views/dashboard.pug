@@ -1,32 +1,43 @@
 extends layout 
 block content
+    script(src="https://js.pusher.com/7.0/pusher.min.js")
+    script(src="/javascripts/chat.js" defer)
 
-    div.maindiv
-        h1  
-            i GAMEROOMS 
+    head 
+        title= title 
 
-        div.line 
-        div.disp
-                    button.playnow Create Room 
-                    buttom.joinnow Join   Room
+    .maindiv
+        .button-container
+            .main-title GAMEROOMS 
+            a(href="/game/create-game").create-game-btn.btn.bg-success Create Game 
+
+        .line 
+                
                     
-        div.disp
-            div.gamerooms
-                div.outerbox
-                 div
-                  div.box 
-                  div
-                   div.box 
-                  div 
-                   div.box
+        .main-container
+            .gamerooms-container.bg-dark
+                .gamerooms
+                    .outerbox.bg-dark
+                        each game in games 
 
-                div 
-                    div.box 
-                div 
+                            a(href="/game/" + game.id + "/join").box 
+                                .game-id Game #{game.id}
+                                .num-players Players: #/4
+                                .open Open
+                                .close.text-danger Closed
+                                .rejoin.text-warning Rejoin
+
+ 
+                 
                     
-           
-            div.chatroom
-                div 
-                    div.chatouterbox
-                        div.chatbox
+            .chatroom.bg-dark
+                .chatroom-title-container
+                    .chatroom-title Global Chat
+                    input(type="hidden", id="chatId", name="chatId" value="lobby")
+                .chatbox
+                    //- Messages will be appended here.
+                .messagebox
+                    .input-group
+                        input(id="userInput" type="text").form-control
+                        button.btn.bg-success(id="chatbox-btn" type="submit") Send
                     

@@ -8,6 +8,12 @@ class ActiveRecord {
         return db.any(`SELECT * FROM "${this.table_name}"`);
     }
 
+    // Similar to findBy(field, value), but this method returns all rows
+    static findAll(field, value) {
+        if(!this.fields.includes(field)) return this.INVALID_FIELD_ERROR(field);
+        return db.any(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
+    }
+
     static findBy(field, value) {
         if(!this.fields.includes(field)) return INVALID_FIELD_ERROR(field);
         return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
@@ -23,9 +29,16 @@ class ActiveRecord {
         });
 
         return db.oneOrNone(`
-            INSERT INTO "${this.table_name}"(${fieldsAndCols[0].join(", ")}) 
+            INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 
             VALUES (${fieldsAndCols[1].join(", ")})
             RETURNING *
+    `);
+    }
+
+    // Used for database tables where all columns have default values, returns the inserted row
+    static createDefault() {
+        return db.oneOrNone(`
+            INSERT INTO "${this.table_name}" DEFAULT VALUES RETURNING *
         `);
     }
 

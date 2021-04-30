@@ -5,14 +5,14 @@ module.exports = {
     return queryInterface.createTable(
       'Game User',
       {
-        user_id: {
-          type: Sequelize.INTEGER,
+        user: {
+          type: Sequelize.UUID,
           primaryKey:true,
           references: {model: 'User', key: 'id'}
         },
-        game_id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
+        game: {
+          type: Sequelize.UUID,
+          primaryKey:true,
           references: {model: 'Game', key: 'id'}
         },
         player_num: {
