@@ -1,4 +1,5 @@
 const ActiveRecord = require('./ActiveRecord');
+const GameUser = require('./GameUser');
 
 // value: 10 - Skip
 // value: 11 - Reverse
@@ -53,6 +54,12 @@ class Game extends ActiveRecord {
         })
     }
 
+    // Get number of players for specific game
+    static getNumOfPlayers(id) {
+        return new Promise((resolve, reject) => {
+            return resolve(GameUser.getNumberOfPlayers(id));
+        });
+    }
 
     // Get specific game instance
     getById(id) {
@@ -70,12 +77,6 @@ class Game extends ActiveRecord {
     
     // Saves a game to the database with the values from the instance data fields
     save() {
-        // All columns have default values, so data should be empty
-        const data = {}
-
-
-        // TODO: Validate data before attempting to insert into database.
-        
         return new Promise((resolve, reject) => {
             // Insert new game entry into Game table
             Game.createDefault()// create() returns either null or the newly entered game row

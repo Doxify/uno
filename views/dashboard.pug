@@ -22,9 +22,13 @@ block content
 
                             a(href="/game/" + game.id + "/join").box 
                                 .game-id Game #{game.id}
-                                .num-players Players: #/4
-                                .open Open
-                                .close.text-danger Closed
+                                .num-players Players: #{game.numPlayers}/4
+
+                                if game.numPlayers < 4
+                                    .open Open
+                                else if game.numPlayers >= 4
+                                    .close.text-danger Closed
+                                
                                 .rejoin.text-warning Rejoin
 
  

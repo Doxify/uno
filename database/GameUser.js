@@ -97,6 +97,34 @@ class GameUser extends ActiveRecord {
     });
   }
 
+  // Get all Game Users in a game
+  static getGameUsers(game) {
+    return new Promise((resolve, reject) => {
+      this.findAll("game", game)
+        .then((gameUsersData) => {
+          if (!gameUsersData) {
+            resolve(null);
+          }
+
+          let gameUsers = [];
+
+          // Iterate over all game users in game and create GameUser objects
+          for(let gameUserData of gameUsersData) {
+            let gameUser = new GameUser(gameUserData.user, gameUserData.game);
+            gameUser.player_num = gameUserData.player_num;
+            
+            gameUsers.push(gameUser);
+          }
+          resolve(gameUsers);
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        })
+    });
+  }
+
+
   // Helper method to get the next available GameUser player_num for a given
   // game. 
   static getNextAvailablePlayerNum(game) {
@@ -120,6 +148,21 @@ class GameUser extends ActiveRecord {
         });
     });
   }
+
+  // Method to get the number of players in a given game
+  static getNumberOfPlayers(game) {
+    return new Promise((resolve, reject) => {
+      this.findAll("game", game)
+        .then((gameUsers) => {
+          // No game users exist in game
+          if(!gameUsers) return resolve(0);
+
+          // At least 1 game user exists so return the length of the returned array
+          return resolve(gameUsers.length)
+        })
+    })
+  }
+
 
   // Returns whether a relation between a user and game exists.
   static isGameUser(user, game) {
