@@ -1,19 +1,26 @@
+if(process.env.NODE_ENV === "development") {
+  require("dotenv").config();
+}
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('./config/passport');
+var session = require('express-session');
+var db = require('./database/connection');
 
-if(process.env.NODE_ENV === "development") {
-  require("dotenv").config();
-}
-
+// Routes
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
+var chatRouter = require('./routes/chat');
+var gameUserRouter = require('./routes/gameUser');
 var testsRouter = require('./routes/tests');
 var gameRoomRouter = require('./routes/game_room')
-
-
+var gameRouter = require('./routes/game')
+var testBaseDeckRouter = require('./routes/testBaseDeck');
+const { use } = require("./routes/index");
 
 var app = express();
 
@@ -23,14 +30,35 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// initializing sessions store
+app.use(session({
+  store: new (require('connect-pg-simple')(session))(),
+  pgPromise: db,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  name: 'sid',
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+  }
+}));
+
+// initialize passport and restore authentication state.
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/gameUser', gameUserRouter);
+app.use('/api/chat', chatRouter);
 app.use('/tests', testsRouter);
 app.use('/gameroom', gameRoomRouter)
+app.use('/game', gameRouter);
+app.use('/testBaseDeck', testBaseDeckRouter);
 
 
 // catch 404 and forward to error handler

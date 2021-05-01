@@ -1,4 +1,24 @@
+// ====================================================================
+// Fetch/Client HTTP Request Logic Below
+// ====================================================================
 
+document.getElementById("draw-card").addEventListener("click", (event) => {
+    console.log("Send draw card move request to server.");
+
+    // TODO: Implement Fetch logic here
+});
+
+
+
+// ====================================================================
+// Pusher/Socket Logic Below
+// ====================================================================
+
+
+
+// ====================================================================
+// Dynamic Page Logic Below
+// ====================================================================
 
 document.getElementById("chat-close-btn").addEventListener("click", function(event) {
     closeChat(event);

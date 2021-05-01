@@ -15,153 +15,48 @@ block content
                         .top.row
                             .container-fluid.w-100.h-100
                                 .row.w-100.h-100
-                                    .col
-                                    .col-sm-6 
-                                        #top-player.user-hand
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                    .col
+                                    .col.top-player-container
+                                        #top-player.user-hand.reverse-hand
+                                            each i in Array(7)
+                                                .my-card
+                                                    img(src="../images/unocards.png").face-down
+                                        .username-container    
+                                            #top-player-username.username.bg-dark Username
                         .middle.row
-                            .col-sm
+                            .col-sm.center-player
+                                .username-container 
+                                    #left-player-username.username.bg-dark Username
                                 #left-player.user-hand.side-player
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
-                                    .my-card
-                                        img(src="images/unocards.png").face-down
+                                    each i in Array(7)
+                                        .my-card
+                                            img(src="../images/unocards.png").face-down
+                                    
                             .center.col-sm
                                 #game-center.container.h-100
                                     .row.justify-content-center.align-items-center.w-100.h-100
                                         .my-card
-                                            .face-up
+                                            img(src="../images/unocards.png").face-up
+                                        #draw-card.my-card
+                                            img(src="../images/unocards.png").face-down
+                            .col-sm.center-player.reverse
+                                #right-player.user-hand.side-player.reverse-hand
+                                    each i in Array(7)
                                         .my-card
-                                            img(src="images/unocards.png").face-down
-                            .col-sm 
+                                            img(src="../images/unocards.png").face-down
+                                .username-container 
+                                    #right-player-username.username.bg-dark Username
                         .bottom.row
                             .container-fluid.w-100.h-100
                                 .row.w-100.h-100
-                                    .col
-                                    .col-sm-6 
+                                    .col.user-player-container
+                                        .username-container
+                                            #username.username.bg-dark Username
                                         #user-player.user-hand
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
-                                            .my-card
-                                                img(src="images/unocards.png").face-down
+                                            each i in Array(7)
+                                                .my-card
+                                                    img(src="../images/unocards.png").face-up
+                                                    input(type="hidden")
 
-                                    .col 
                 .chat-sidebar.col-sm-3.flex-column.bg-dark
                     .chat-title-box.container.bg-dark.pt-2.pb-2
                         .row

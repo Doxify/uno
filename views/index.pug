@@ -1,5 +1,115 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  // TODO: Replace this image with an actual gameplay
+  //- Header Image Section
+  img(src="https://picsum.photos/200/?blur" alt="..." height="500").d-block.w-100
+  
+  //- Play Now Section
+  div.container.mt-5
+    
+    div.row
+      div.col-sm-12.col-md-4.offset-md-4.d-grid
+        a(href="/dashboard").btn.btn-lg.btn-success Play Now
+
+  //- TODO: Fetch this from an API
+  -
+    var rulesData = [
+      {
+        id: 0,
+        title: "Rule #1",
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      },
+      {
+        id: 1,
+        title: "Rule #2",
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      },
+      {
+        id: 2,
+        title: "Rule #3",
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      }
+    ]
+
+  //- Rules Section
+  div.container.mt-5
+    h2.text-center Rules
+    p.text-center Here are some things to keep in mind while playing.
+    hr
+    div.row.mt-4
+      each rule in rulesData
+        div.col-sm-12.col-md-4
+          .card.p-2
+            .card-body
+              h5.card-title=rule.title
+              p.card-text=rule.content
+
+  //- TODO: Fetch this from an API
+  - 
+    var faqData = [
+      { 
+        id: 0, 
+        title: "Question 1", 
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      },
+      { 
+        id: 1, 
+        title: "Question 2", 
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      },
+      { 
+        id: 2, 
+        title: "Question 3", 
+        content: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas nam eos facilis perferendis ipsa, facere repellat unde veniam dicta esse illo vitae, aliquam velit laboriosam amet culpa iure blanditiis eum."
+      }
+    ]
+
+  //- FAQ Section
+  div.container.mt-5
+    h2.text-center FAQs
+    p.text-center Find the answers to the questions you are probably thinking about.
+    hr
+    div.row.mt-4
+      div.col-sm-12
+        div(id="faq-accordian").accordion.accordian-flush
+          each faq in faqData
+            div.accordian-item
+              h2(id="flush-heading"+faq.id).accordian-header
+                button(type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse"+faq.id aria-expanded="false" aria-controls="flush-collapse"+faq.id).accordion-button.collapsed=faq.title 
+              div(id="flush-collapse"+faq.id  aria-labelledby="flush-heading"+faq.id data-bs-parent="faq-accordian").accordian-collapse.collapse
+                div.accordion-body=faq.content
+
+  //- TODO: Fetch this from an API
+  -
+    var aboutData = [
+      {
+        name: "Andrei Georgescu",
+        image: "https://picsum.photos/150/?blur"
+      },
+      {
+        name: "Benjamin Kao",
+        image: "https://picsum.photos/150/?blur"
+      },
+      {
+        name: "Yangesh KC",
+        image: "https://picsum.photos/150/?blur"
+      },
+      {
+        name: "Abishek Neralla",
+        image: "https://picsum.photos/150/?blur"
+      }
+    ]
+
+  //- About Us Section
+  div.container.mt-5.mb-5
+    h2.text-center About Us
+    p.text-center Learn more about the team behind this website.
+    hr
+    div.row.mt-4
+      each item in aboutData
+        div.col-sm-12.col-md-3
+          div.card
+            img(src=item.image).card-img-top
+            .card-body
+              strong.card-text.text-center=item.name

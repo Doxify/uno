@@ -1,0 +1,79 @@
+extends layout
+
+block content
+  script(src="/javascripts/register.js" defer)
+
+  div.container
+    div.row.mt-5
+      div.col-sm-12.col-md-6.offset-md-3
+        div.card
+          div.card-body
+            h2.card-title Sign Up
+            p.card-text Quick and easy!
+            hr
+            div.alert.alert-danger(id="error-alert" role="alert" hidden) Error occurred.
+            div.alert.alert-success(id="success-alert" role="alert" hidden)
+                span Account successfully created! Click 
+                a(href="/login") here
+                span  to login.
+            form(id="register-form")
+              div.form-group
+                label(for="usernameInput") Username
+                input.form-control(required, id="usernameInput" type='text', placeholder="Enter username", name="username")
+              br
+              div.form-group
+                label(for="emailInput") Email
+                input.form-control(required, id="emailInput" type='email', placeholder="e@mail.com", name="email")
+              br
+              div.form-group
+                label(for="passwordInput") Password
+                input.form-control(required, id="passwordInput" type='password', placeholder="Password", name="password")
+              br
+              button.btn.btn-success(id="register-btn" type="submit") Register
+              a.card-text.p-3(href="/register") Already have an account? Login
+//-  form.Form
+//-     label 
+//-      h1 Sign Up
+//-      section.wel 
+//-       i Quick and easy !
+//-       hr 
+//-       div.inputfeild
+//-         section 
+//-             label Username 
+//-             br
+//-             input(type='text' placeholder='john' name="username")
+//-         section
+//-             label Email 
+//-             br
+//-             input(type="email" placeholder="e@mail.com" name="email")
+//-         section.psec 
+//-             label Password 
+//-             br
+//-             input(type='password' name="password") 
+//-      ul 
+//-       i 
+//-         a(class='button' href='/login') Already have an Account? Login
+//-         br
+     
+    
+//-     div.id 
+//-         i         
+//-             a(class='button' href='/') Help
+//-             br
+//-             a(class='button' href='/') FAQ 
+
+//-     div.loginBtn
+//-         button.btn.btn-secondary.btn-lg Register
+
+
+    
+         
+
+
+
+      
+
+
+
+
+             
