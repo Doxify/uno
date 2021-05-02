@@ -1,31 +1,53 @@
-// Event Listeners
+// =============================================
+// EVENT LISTENERS
+// =============================================
 window.onload = async () => {
   const games = await getGamesList();
   renderGamesList(games);
 };
 
-document.getElementById("new-game-btn").addEventListener("click", (event) => {
-  createGame();
+document.getElementById("new-game-btn").addEventListener("click", async () => {
+  const createdGameId = await createGame();
+  if(createdGameId) {
+    await joinGame(createdGameId);
+  }
 });
+
+// =============================================
+// COMMUNICATING WITH THE BACKEND API
+// =============================================
+
+// Makes the API call for getting the list of active games.
+async function getGamesList() {
+  const data = await fetch('/api/game/getList').then(res => res.json());
+  return data.games;
+}
 
 // Makes the API calls required to create a new game.
 async function createGame() {
   const createdGame = await fetch('/api/game/create').then(res => res.json());
-  const joinedGame = await fetch(`/api/game/join/${createdGame.id}`).then(res => res.json());
   
+  if(createdGame.status === 'success') {
+    return createdGame.id;
+  } else {
+    return null;
+  }
+}
+
+async function joinGame(gameId) {
+  const joinedGame = await fetch(`/api/game/join/${gameId}`).then(res => res.json());
+    
   if(joinedGame.status === 'success') {
-    window.location.replace(`/game/${createdGame.id}`);
+    window.location.replace(`/game/lobby/${gameId}`);
   } else {
     // TODO: Render error messages.
     console.log('Could not join game.');
   }
 }
 
-// Makes the API call for getting the list of active games.
-async function getGamesList() {
-  const games = await fetch('/api/game/getList').then(res => res.json());
-  return games.games;
-}
+// =============================================
+// RENDER METHODS
+// =============================================
 
 // Takes an array of games and renders them.
 function renderGamesList(games) {  
@@ -40,8 +62,8 @@ function renderGamesList(games) {
         <div class="card-footer d-grid">
           ${
             game.isGameUser ?
-              `<a class="btn btn-warning" type="button" href="/game/${game.id}">Rejoin </a>` : 
-              `<a class="btn btn-primary" type="button" href="/game/${game.id}">Join </a>`
+              `<a class="btn btn-warning" type="button" href="/game/lobby/${game.id}">Rejoin </a>` : 
+              `<a class="btn btn-primary" type="button" onclick="joinGame('${game.id}')">Join </a>`
           }
           </div>
       </div>
@@ -49,6 +71,5 @@ function renderGamesList(games) {
     `;
 
     document.querySelector('#active-games').insertAdjacentHTML('beforeend', html);
-
   });
 }

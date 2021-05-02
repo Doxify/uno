@@ -111,6 +111,21 @@ class User extends ActiveRecord {
     });
   }
 
+  static getUser(id) {
+    return new Promise((resolve, reject) => {
+      this.findBy("id", id)
+        .then((user) => {
+          if (!user) {
+            return resolve(null);
+          }
+          return resolve(user);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   // Returns if a user with a given username exists in the database.
   static usernameIsUnique(username) {
     return new Promise((resolve, reject) => {
