@@ -6,7 +6,12 @@ block content
         title= title 
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
         link(rel='stylesheet', href='/stylesheets/game_room.css')
-        script(src="/javascripts/game_room.js" defer) 
+        script(src="/javascripts/chat.js" defer)
+        script(src="/javascripts/game_room.js" defer)
+
+        //- This input value is used by various scripts.
+        input(type="hidden", id="roomId", name="roomId" value=gameId)
+        input(type="hidden", id="userId", name="userId" value=user.id)
 
         .container-fluid.d-flex.flex-column.h-100
             .row.flex-fill.d-flex.flex-row
@@ -50,7 +55,7 @@ block content
                                 .row.w-100.h-100
                                     .col.user-player-container
                                         .username-container
-                                            #username.username.bg-dark Username
+                                            #username.username.bg-dark=user.username
                                         #user-player.user-hand
                                             each i in Array(7)
                                                 .my-card
@@ -62,13 +67,19 @@ block content
                         .row
                             .chat-close-container.col-sm-1.text-center.mt-2
                                 button#chat-close-btn.btn.btn-close.btn-close-white
-                            .chat-title.col.h2.mt-1 Chat
+                            .chat-title.col.h4.mt-1 Chat
                             
-                    .container.bg-dark.flex-fill
-                    .chat-message-box.container.bg-dark.mb-2
-                        .input-group.mg-5
-                            input(type="text").form-control
-                            button.btn.bg-success Send
+                            .chatbox
+                                //- Messages will be appended here.
+                            .chat-message-box.container.bg-dark.mb-2
+                                .input-group
+                                    input(id="userInput" type="text").form-control
+                                    button.btn.bg-success(id="chatbox-btn" type="submit") Send
+                    //- .container.bg-dark.flex-fill
+                    //- .chat-message-box.container.bg-dark.mb-2
+                    //-     .input-group.mg-5
+                    //-         input(type="text").form-control
+                    //-         button.btn.bg-success Send
                 #chat-sidebar-closed.col.bg-dark.hidden
                     button#chat-open-btn.btn.btn-default.open-chat
                         i.fa.fa-chevron-left

@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const userController = require('../controllers/Users');
-const passport = require('../config/passport');
-const { isAuthed, notAuthed } = require('../middleware/routeProtectors');
+const userController = require('../../controllers/Users');
+const passport = require('../../config/passport');
+const { isAuthed, notAuthed } = require('../../middleware/routeProtectors');
 
 router.post('/register', notAuthed, (req, res, next) => {
   userController.create(req, res, next);

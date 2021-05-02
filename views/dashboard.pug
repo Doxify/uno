@@ -1,47 +1,67 @@
 extends layout 
 block content
-    script(src="https://js.pusher.com/7.0/pusher.min.js")
     script(src="/javascripts/chat.js" defer)
+    script(src="/javascripts/dashboard.js" defer)
 
     head 
         title= title 
 
+    
+    input(type="hidden", id="roomId", name="roomId" value="lobby")
+
     .maindiv
         .button-container
-            .main-title GAMEROOMS 
-            a(href="/game/create-game").create-game-btn.btn.bg-success Create Game 
+            .main-title Dashboard 
+            .create-game-btn.btn.bg-success(id="new-game-btn") Create Game 
 
-        .line 
-                
+        .line.mb-3
+        
+        .row 
+            //- Active Games Section
+            .col-sm-12.col-md-9
+                .row.row-cols-1.row-cols-md-4.g-2(id="active-games")
+
+            //- Dashboard Chat Section
+            .col-sm-12.col-md-3
+                .card.bg-dark.text-white 
+                    .card-body
+                        .chatroom-title-container
+                            .chatroom-title Global Chat
+                        .chatbox
+                            //- Messages will be appended here.
+                        .messagebox
+                            .input-group
+                                input(id="userInput" type="text").form-control
+                                button.btn.bg-success(id="chatbox-btn" type="submit") Send
                     
-        .main-container
-            .gamerooms-container.bg-dark
-                .gamerooms
-                    .outerbox.bg-dark
-                        each game in games 
+        //- .main-container
+        //-     .gamerooms-container.bg-dark
+        //-         .gamerooms
+        //-             .outerbox.bg-dark
+        //-                 //- each game in games 
 
-                            a(href="/game/" + game.id + "/join").box 
-                                .game-id Game #{game.id}
-                                .num-players Players: #{game.numPlayers}/4
+        //-                 //-     a(href="/game/" + game.id + "/join").box 
+        //-                 //-         .game-id Game #{game.id}
+        //-                 //-         .num-players Players: #{game.numPlayers}/4
 
-                                if game.numPlayers < 4
-                                    .open Open
-                                else if game.numPlayers >= 4
-                                    .close.text-danger Closed
+        //-                 //-         if game.numPlayers < 4
+        //-                 //-             .open Open
+        //-                 //-         else if game.numPlayers >= 4
+        //-                 //-             .close.text-danger Closed
                                 
-                                .rejoin.text-warning Rejoin
+        //-                 //-         .rejoin.text-warning Rejoin
 
  
                  
                     
-            .chatroom.bg-dark
-                .chatroom-title-container
-                    .chatroom-title Global Chat
-                    input(type="hidden", id="chatId", name="chatId" value="lobby")
-                .chatbox
-                    //- Messages will be appended here.
-                .messagebox
-                    .input-group
-                        input(id="userInput" type="text").form-control
-                        button.btn.bg-success(id="chatbox-btn" type="submit") Send
+        //-     .chatroom.bg-dark
+        //-         .chatroom-title-container
+        //-             .chatroom-title Global Chat
+        //-             input(type="hidden", id="chatId", name="chatId" value="lobby")
+        //-         .chatbox
+        //-             //- Messages will be appended here.
+        //-         .messagebox
+        //-             .input-group
+        //-                 input(id="userInput" type="text").form-control
+        //-                 button.btn.bg-success(id="chatbox-btn" type="submit") Send
                     
