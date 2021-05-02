@@ -12,31 +12,31 @@ class Game extends ActiveRecord {
     static table_name = "Game";
     static fields = ['id', 'active', 'direction_clockwise'];
 
-    #id = undefined;
-    #active = undefined;
-    #clockwise= undefined;
+    id = undefined;
+    active = undefined;
+    clockwise= undefined;
 
     constructor(id, active, clockwise) {
         super();
-        this.#id = id;
-        this.#active = active;
-        this.#clockwise = clockwise;
+        this.id = id;
+        this.active = active;
+        this.clockwise = clockwise;
     }
 
     get id() {
-        return this.#id;
+        return this.id;
     }
 
     get isActive() {
-        return this.#active;
+        return this.active;
     }
 
     get turnClockwise() {
-        return this.#clockwise;
+        return this.clockwise;
     }
 
     // Get all active games, used for game dashboard
-    static getAllActiveGames() {
+    static getActiveGames() {
         return new Promise((resolve, reject) => {
             Game.findAll('active', true)
                 .then((gamesData) => {
@@ -50,7 +50,8 @@ class Game extends ActiveRecord {
                         games.push(game);
                     }
                     resolve(games);
-                });
+                })
+                .catch((err) => { reject(err); });
         })
     }
 
@@ -70,7 +71,8 @@ class Game extends ActiveRecord {
                         resolve(null)
                     }
                     return resolve(game);
-                }).catch((err) => {reject(err);})
+                })
+                .catch((err) => {reject(err);})
         });
     }
 
@@ -85,15 +87,13 @@ class Game extends ActiveRecord {
                         resolve(null);
                     }
                     // Set this game object's id from the auto incremented id field in the Game table
-                    this.#id = game.id;
-                    this.#active = game.active;
-                    this.#clockwise = game.direction_clockwise;
+                    this.id = game.id;
+                    this.active = game.active;
+                    this.clockwise = game.direction_clockwise;
 
                     resolve(game);
                 })
-                .catch((err) => {
-                    reject(err);
-                });
+                .catch((err) => { reject(err); });
         });
     }
 }

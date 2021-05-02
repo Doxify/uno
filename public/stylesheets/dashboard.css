@@ -193,7 +193,7 @@
 
   flex-grow: 0.05;
 
-  border-bottom: 2px solid grey;
+  /* border-bottom: 2px solid grey; */
 }
 
 .chatroom-title {
@@ -209,16 +209,16 @@
   box-sizing: border-box;
   display: flex;
 
-  max-height: 85vh;
+  /* max-height: 100%; */
 
   flex-direction: column;
 
   flex-grow: 4;
 
   box-sizing: border-box;
-  height: 300px;
+  height: 550px;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   /* overflow-x: auto; */
   word-wrap: break-word;
   display: block;
@@ -239,6 +239,8 @@
   font-size: 16px;
   font-weight: normal;
   color: white;
+
+  overflow:hidden;
 
   border-top: 1px solid grey;
 }
@@ -268,7 +270,7 @@
   height: 75px;
 
   flex-grow: 0.05;
-  border-top: 2px solid grey;
+  /* border-top: 2px solid grey; */
 }
 
 .form-control {

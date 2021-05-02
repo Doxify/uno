@@ -13,14 +13,11 @@ var db = require('./database/connection');
 
 // Routes
 var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth');
-var chatRouter = require('./routes/chat');
-var gameUserRouter = require('./routes/gameUser');
-var testsRouter = require('./routes/tests');
-var gameRoomRouter = require('./routes/game_room')
-var gameRouter = require('./routes/game')
-var testBaseDeckRouter = require('./routes/testBaseDeck');
-const { use } = require("./routes/index");
+var gameRoomRouter = require('./routes/game')
+
+var authRouter = require('./routes/api/auth');
+var chatRouter = require('./routes/api/chat');
+var gameRouter = require('./routes/api/game');
 
 var app = express();
 
@@ -52,13 +49,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/', indexRouter);
+app.use('/game', gameRoomRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/gameUser', gameUserRouter);
 app.use('/api/chat', chatRouter);
-app.use('/tests', testsRouter);
-app.use('/gameroom', gameRoomRouter)
-app.use('/game', gameRouter);
-app.use('/testBaseDeck', testBaseDeckRouter);
+app.use('/api/game', gameRouter);
 
 
 // catch 404 and forward to error handler

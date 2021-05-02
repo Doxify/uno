@@ -1,6 +1,6 @@
 const BaseDeck = require('../database/BaseDeck')
 const GameDeck = require('../database/GameDeck')
-const GameUser = require('../controllers/GameUsers')
+const GameUser = require('../database/GameUser')
 const GameDeckCard = require('../database/GameDeck')
 
 

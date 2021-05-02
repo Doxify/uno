@@ -13,8 +13,12 @@ document.getElementById("draw-card").addEventListener("click", (event) => {
 // ====================================================================
 // Pusher/Socket Logic Below
 // ====================================================================
+const userId = document.getElementById("userId").value;
+const stateChannel = pusher.subscribe(`STATE_${roomId}${userId}`);
 
-
+stateChannel.bind('update', (data) => {
+    // Do something on state update.
+});
 
 // ====================================================================
 // Dynamic Page Logic Below

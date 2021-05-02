@@ -1,7 +1,7 @@
 const pusher = new Pusher('968799b8f88c1d76da50', { cluster: "us3" });
-const roomId = document.getElementById("chatId").value;
+const roomId = document.getElementById("roomId").value;
 const userInput = document.getElementById("userInput");
-const channel = pusher.subscribe(`CHAT_${roomId}`);
+const chatChannel = pusher.subscribe(`CHAT_${roomId}`);
 
 // Listening for when the user presses the send button in chat.
 document.getElementById("chatbox-btn").addEventListener("click", function(event) {
@@ -15,7 +15,7 @@ document.getElementById("chatbox-btn").addEventListener("click", function(event)
 });
 
 // Listening for all messages sent in this channel.
-channel.bind('message', (data) => {
+chatChannel.bind('message', (data) => {
   updateChatBox(data);
 });
 
