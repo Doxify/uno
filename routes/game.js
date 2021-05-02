@@ -14,7 +14,6 @@ router.get('/lobby/:uuid', isAuthed, function(req, res, next) {
     setTimeout(() => {
         GamePusherController.TRIGGER_PLAYER_JOINED_LOBBY(req.params.uuid);
     }, 1000);
-
 });
 
 module.exports = router

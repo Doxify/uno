@@ -41,7 +41,7 @@ Here is how the chat controller is setup:
 
 1. Create a route in `app.js` called `/api/chat` which points to the chat router:
 
-```
+```javascript
 const express = require('express');
 const router = express.Router();
 const ChatController = require('../controllers/Chat');
@@ -56,7 +56,7 @@ module.exports = router;
 
 2. Create a Controller for the route to use:
 
-```
+```javascript
 const pusher = require('../config/pusher');
 
 const Controller = {
@@ -92,7 +92,7 @@ Here is how the frontend utilizes pusher to make dashboard chat work:
 
 1. Add the Pusher and chat scripts to the dashboard.pug view:
 
-```
+```javascript
 script(src="https://js.pusher.com/7.0/pusher.min.js")
 script(src="/javascripts/chat.js" defer)
 ```
@@ -100,7 +100,7 @@ script(src="/javascripts/chat.js" defer)
 2. Use the chat.js script to initialize and subscribe to a pusher channel.
    ***The code here is snipped, look at the `/public/javascripts/chat.js` file
    to see all of the code.***
-```
+```javascript
 const pusher = new Pusher('968799b8f88c1d76da50', { cluster: "us3" });
 const channel = pusher.subscribe(`CHAT_${roomId}`);
 
