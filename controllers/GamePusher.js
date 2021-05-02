@@ -3,7 +3,7 @@ const GameUser = require('../database/GameUser');
 const pusher = require('../config/pusher');
 
 const GamePusherController = {
-  // Takes an instance of User and announces that they have joined the Game. 
+  // Takes a gameId and sends all of its GameUsers to the game's lobby.
   TRIGGER_PLAYER_JOINED_LOBBY: (gameId) => {
     GameUser.getGameUsers(gameId)
       .then((gameUsers) => {
