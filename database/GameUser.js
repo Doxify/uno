@@ -101,20 +101,8 @@ class GameUser extends ActiveRecord {
   static getGameUsers(game) {
     return new Promise((resolve, reject) => {
       this.findAll("game", game)
-        .then((gameUsersData) => {
-          if (!gameUsersData) {
-            resolve(null);
-          }
-
-          let gameUsers = [];
-
-          // Iterate over all game users in game and create GameUser objects
-          for(let gameUserData of gameUsersData) {
-            let gameUser = new GameUser(gameUserData.user, gameUserData.game);
-            gameUser.player_num = gameUserData.player_num;
-            
-            gameUsers.push(gameUser);
-          }
+        .then((gameUsers) => {
+          if (!gameUsers) { resolve(null); }
           resolve(gameUsers);
         })
         .catch((err) => {
