@@ -1,3 +1,4 @@
+const { response } = require("express");
 const Game = require("../database/Game");
 const GameUser = require("../database/GameUser");
 const GameDeckController = require("./GameDeck");
@@ -10,7 +11,7 @@ const GENERIC_ERROR = function (response) {
   });
 };
 
-const JSON_ERROR = function(response, message) {
+const JSON_ERROR = function (response, message) {
   return response.json({
     status: 'failure',
     message: message
@@ -131,6 +132,48 @@ const GameController = {
     // Create new Game Deck in database
     GameDeckController.createGameDeck(game);
   },
+  // Check if a game exists in the database
+  gameExists: (game_id) => {
+    game = new Game()
+    return new Promise((resolve, reject) => {
+      game.getById(game_id)
+        .then((game) => {
+          if (!game) {
+            return resolve(false);
+          }
+
+          return resolve(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          return response.json({
+            status: "failure",
+            message: "Error occurred while checking if game exists",
+          });
+        })
+    })
+  },
+  // Check if a user is a game user in the specific game in the database
+  isGameUser: (user, game) => {
+
+    return new Promise((resolve, reject) => {
+      GameUser.isGameUser(user, game)
+      .then((isGameUser) => {
+        if(isGameUser) {
+          return resolve(true);
+        }
+
+        return resolve(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        return response.json({
+          status: "failure",
+          message: "Error occurred while checking if user is a game user."
+        })
+      })
+    })
+  }
 };
 
 module.exports = GameController;

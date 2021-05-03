@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const GameController = require('../../controllers/Game')
-const { isAuthed, notAuthed } = require('../../middleware/routeProtectors');
+const { isAuthed, notAuthed, gameExists, isGameUser, notGameUser } = require('../../middleware/routeProtectors');
 
 router.get('/create', isAuthed, function(request, response, next) {
     GameController.create(request, response, next);
 });
 
-router.get('/join/:uuid', isAuthed, function(request, response, next) {
+router.get('/join/:uuid', isAuthed, gameExists, notGameUser, function(request, response, next) {
     GameController.join(request, response, next);
 });
 

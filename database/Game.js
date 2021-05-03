@@ -68,9 +68,14 @@ class Game extends ActiveRecord {
             Game.findBy('id', id)
                 .then((game) => {
                     if(!game) {
-                        resolve(null)
+                        return resolve(null);
                     }
-                    return resolve(game);
+                    
+                    this.id = game.id;
+                    this.active = game.active;
+                    this.clockwise = game.direction_clockwise;
+
+                    return resolve(this);
                 })
                 .catch((err) => {reject(err);})
         });
