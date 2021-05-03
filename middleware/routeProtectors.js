@@ -22,6 +22,15 @@ module.exports = {
         // Get game id
         game = request.params.uuid;
 
+        // Validate that game is the correct UUIDv4 Format
+        uuidRegex = new RegExp('/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i');
+
+        if(!uuidRegex.test(game)) {
+            console.log("got here");
+            return response.redirect('/dashboard');
+        }
+
+
         GameController.gameExists(game)
             .then((gameExists) => {
                 if(gameExists) {
