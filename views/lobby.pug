@@ -29,20 +29,28 @@ block content
 
                         .spinner-border(id="loading")
 
-                        .row(id="connected-players" hidden)
-                          .col
-                            small.text-muted Player 1
-                            h5.text-info(id="player-1-name") waiting...
-                          .col
-                            small.text-muted Player 2
-                            h5.text-info(id="player-2-name") waiting...
-                          .col
-                            small.text-muted Player 3
-                            h5.text-info(id="player-3-name") waiting...
-                          .col
-                            small.text-muted Player 4
-                            h5.text-info(id="player-4-name") waiting...
+                        .row(id="connected-players")
+                          //- .col
+                          //-   small.text-muted Player 1
+                          //-   h5.text-info(id="player-1-name") waiting...
+                          //- .col
+                          //-   small.text-muted Player 2
+                          //-   h5.text-info(id="player-2-name") waiting...
+                          //- .col
+                          //-   small.text-muted Player 3
+                          //-   h5.text-info(id="player-3-name") waiting...
+                          //- .col
+                          //-   small.text-muted Player 4
+                          //-   h5.text-info(id="player-4-name") waiting...
                         
+                      .card-footer(id="lobby-status" hidden)
+                        .row
+                          .col-12.text-end
+                            small
+                              span Waiting for 
+                              span.text-success(id="lobby-player-count")
+                              span other player(s) before starting...
+
                   //- Game Chat Section
                   .col-sm-12.col-md-3
                     .card.bg-dark.text-white 

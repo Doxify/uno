@@ -22,7 +22,7 @@ module.exports = {
 
           // Execute all promises and trigger pusher.
           Promise.all(promises).then(() => {
-            const channel = `LOBBY_${gameId}`;
+            const channel = `presence-LOBBY_${gameId}`;
             const event = 'PLAYER_JOIN';
 
             pusher.trigger(channel, event, gameUsers);

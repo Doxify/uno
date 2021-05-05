@@ -12,7 +12,8 @@ router.post('/register', notAuthed, (req, res, next) => {
 
 // Authentication endpoint for Pusher.
 router.post('/pusher', isAuthed, (req, res, next) => {
-  const { socketId, channel } = req.body;
+  const socketId = req.body.socket_id;
+  const channel = req.body.channel_name;
   const presenceData = {
     user_id: req.user.id,
     user_info: { username: req.user.username }
