@@ -1,22 +1,6 @@
 const GameController = require("../controllers/Game");
 
 module.exports = {
-    // Allows a request to go through if a user session is present.
-    isAuthed: (request, response, next) => {
-        if(request.user) {
-            next();
-        } else {
-            response.redirect('/login');
-        }
-    },
-    // Allows a request to go through if a user session is NOT present.
-    notAuthed:  (request, response, next) => {
-        if(!request.user) {
-            next();
-        } else {
-            response.redirect('/');
-        }
-    },
     // Allows a request to go through if the game exists in the database
     gameExists: (request, response, next) => {
         // Get game id
@@ -27,7 +11,9 @@ module.exports = {
 
         if(!uuidRegex.test(game)) {
             console.log("got here");
-            return response.redirect('/dashboard');
+            return response.render('404', { 
+                message: "That game id does not exist." 
+            })
         }
 
 
@@ -36,7 +22,9 @@ module.exports = {
                 if(gameExists) {
                     next();
                 } else {
-                    response.redirect('/dashboard');
+                    return response.render('404', { 
+                        message: "That game id does not exist." 
+                    })
                 }
             })
     },
