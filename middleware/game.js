@@ -1,5 +1,6 @@
 const GameController = require("../controllers/Game");
 const Game = require('../database/Game');
+const GameUser = require("../database/GameUser");
 
 module.exports = {
     // Allows a request to go through if the game exists in the database
@@ -42,10 +43,31 @@ module.exports = {
                     return response.redirect('/dashboard');
                 }
 
-                if(playersInGame == 4) {
+                if(playersInGame == GameUser.MAX_GAME_USERS_PER_GAME) {
                     next();
                 } else {
                     return response.redirect(`/game/lobby/${gameId}`);
+                }
+
+            })
+    },
+    // Allows a request to go through only if a game is NOT active.
+    isNotActiveGame: (request, response, next) => {
+        // Get the game id
+        gameId = request.params.uuid;
+
+        // TODO: Handle this differently?
+        // Check if the max number of players are in game.
+        Game.getNumOfPlayers(gameId)
+            .then((playersInGame) => {
+                if(!playersInGame) {
+                    return response.redirect('/dashboard');
+                }
+
+                if(playersInGame < GameUser.MAX_GAME_USERS_PER_GAME) {
+                    next();
+                } else {
+                    return response.redirect(`/dashboard`);
                 }
 
             })
