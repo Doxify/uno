@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const GamePusherController = require('../controllers/GamePusher');
-const { isAuthed, gameExists, isGameUser } = require('../middleware/routeProtectors');
+const { isAuthed } = require('../middleware/auth');
+const { gameExists, isGameUser } = require('../middleware/game');
 
 /* Get game room page */
 router.get('/:uuid', isAuthed, gameExists, isGameUser, function(req,res, next) {
