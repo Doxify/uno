@@ -39,7 +39,9 @@ module.exports = {
                 if(isGameUser) {
                     next();
                 } else {
-                    response.redirect('/dashboard');
+                    return response.render('404', { 
+                        message: "You are not a member of this game." 
+                    })
                 }
             })
     },
