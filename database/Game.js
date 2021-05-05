@@ -81,6 +81,20 @@ class Game extends ActiveRecord {
         });
     }
 
+    // Returns a game by its id.
+    static get(id) {
+        return new Promise((resolve, reject) => {
+            Game.findBy('id', id)
+                .then((game) => {
+                    if(!game) {
+                        return resolve(null);
+                    }
+                    return resolve(game);
+                })
+                .catch((err) => {reject(err);})
+        }); 
+    }
+
     
     // Saves a game to the database with the values from the instance data fields
     save() {
