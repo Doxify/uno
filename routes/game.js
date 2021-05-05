@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const GamePusherController = require('../controllers/GamePusher');
 const { isAuthed } = require('../middleware/auth');
 const { gameExists, isGameUser, isActiveGame, isNotActiveGame } = require('../middleware/game');
 

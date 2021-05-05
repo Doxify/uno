@@ -12,7 +12,6 @@ module.exports = {
         uuidRegex = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
         if(!uuidRegex.test(game)) {
-            console.log("got here");
             return response.render('404', { 
                 message: "That game id does not exist." 
             })
@@ -39,10 +38,6 @@ module.exports = {
         // Check if the max number of players are in game.
         Game.getNumOfPlayers(gameId)
             .then((playersInGame) => {
-                if(!playersInGame) {
-                    return response.redirect('/dashboard');
-                }
-
                 if(playersInGame == GameUser.MAX_GAME_USERS_PER_GAME) {
                     next();
                 } else {
@@ -60,10 +55,6 @@ module.exports = {
         // Check if the max number of players are in game.
         Game.getNumOfPlayers(gameId)
             .then((playersInGame) => {
-                if(!playersInGame) {
-                    return response.redirect('/dashboard');
-                }
-
                 if(playersInGame < GameUser.MAX_GAME_USERS_PER_GAME) {
                     next();
                 } else {
