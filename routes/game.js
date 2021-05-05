@@ -6,8 +6,7 @@ const { gameExists, isGameUser, isActiveGame } = require('../middleware/game');
 
 /* Get game room page */
 router.get('/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, function(req,res, next) {
-        res.render('game', { title: 'Game Room', user: req.user, gameId: req.params.uuid })
-
+    res.render('game', { title: 'Game Room', user: req.user, gameId: req.params.uuid })
 });
 
 router.get('/lobby/:uuid', isAuthed, gameExists, isGameUser, function(req, res, next) {

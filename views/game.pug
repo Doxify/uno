@@ -73,14 +73,11 @@ block content
                             .chatbox
                                 //- Messages will be appended here.
                             .chat-message-box.container.bg-dark.mb-2
-                                .input-group
-                                    input(id="userInput" type="text").form-control
-                                    button.btn.bg-success(id="chatbox-btn" type="submit") Send
-                    //- .container.bg-dark.flex-fill
-                    //- .chat-message-box.container.bg-dark.mb-2
-                    //-     .input-group.mg-5
-                    //-         input(type="text").form-control
-                    //-         button.btn.bg-success Send
+                                form
+                                    .input-group
+                                        input(id="userInput" type="text").form-control
+                                        button.btn.bg-success(id="chatbox-btn" type="submit")
+                                            i.fa.fa-paper-plane
                 #chat-sidebar-closed.col.bg-dark.hidden
                     button#chat-open-btn.btn.btn-default.open-chat
                         i.fa.fa-chevron-left

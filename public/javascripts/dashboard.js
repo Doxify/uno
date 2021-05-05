@@ -56,14 +56,29 @@ function renderGamesList(games) {
       <div class="col">
         <div class="card bg-dark text-white h-100">
         <div class="card-body">
-            <h4 class="card-title">Game ${i}</h4>
-            <p class="small text-muted">${game.numPlayers}/4</p>
+            <h4 class="card-title text-muted">#${i}</h4>
+            <div class="card-subtitle text-end">
+              ${
+                game.numPlayers == 4 ?
+                  'In progress'
+                  :
+                  'In lobby'
+              }
+            </div>
+            <div class="card-subtitle text-muted text-end">${game.numPlayers}/4 players</div>
         </div>
         <div class="card-footer d-grid">
           ${
             game.isGameUser ?
-              `<a class="btn btn-warning" type="button" href="/game/lobby/${game.id}">Rejoin </a>` : 
-              `<a class="btn btn-primary" type="button" onclick="joinGame('${game.id}')">Join </a>`
+              `<a class="btn btn-warning" type="button" href="/game/lobby/${game.id}">
+              <i class="fa fa-arrow-right"></i>
+              Resume
+              </a>` 
+              : 
+              `<a class="btn btn-primary" type="button" onclick="joinGame('${game.id}')">
+                <i class="fa fa-arrow-up"></i>
+                Join
+              </a>`
           }
           </div>
       </div>

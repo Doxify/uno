@@ -31,38 +31,8 @@ block content
                         .chatbox
                             //- Messages will be appended here.
                         .messagebox
+                          form
                             .input-group
                                 input(id="userInput" type="text").form-control
-                                button.btn.bg-success(id="chatbox-btn" type="submit") Send
-                    
-        //- .main-container
-        //-     .gamerooms-container.bg-dark
-        //-         .gamerooms
-        //-             .outerbox.bg-dark
-        //-                 //- each game in games 
-
-        //-                 //-     a(href="/game/" + game.id + "/join").box 
-        //-                 //-         .game-id Game #{game.id}
-        //-                 //-         .num-players Players: #{game.numPlayers}/4
-
-        //-                 //-         if game.numPlayers < 4
-        //-                 //-             .open Open
-        //-                 //-         else if game.numPlayers >= 4
-        //-                 //-             .close.text-danger Closed
-                                
-        //-                 //-         .rejoin.text-warning Rejoin
-
- 
-                 
-                    
-        //-     .chatroom.bg-dark
-        //-         .chatroom-title-container
-        //-             .chatroom-title Global Chat
-        //-             input(type="hidden", id="chatId", name="chatId" value="lobby")
-        //-         .chatbox
-        //-             //- Messages will be appended here.
-        //-         .messagebox
-        //-             .input-group
-        //-                 input(id="userInput" type="text").form-control
-        //-                 button.btn.bg-success(id="chatbox-btn" type="submit") Send
-                    
+                                button.btn.bg-success(id="chatbox-btn" type="submit")
+                                    i.fa.fa-paper-plane

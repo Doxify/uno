@@ -21,20 +21,18 @@ block content
 
                   //- Lobby Status Section
                   .col-sm-12.col-md-9 
+
+
                     .card.bg-dark.text-white 
                       .card-body
                         h4.card-title Game Lobby 
-                          small.text-muted #{gameId}
-                        hr
+                        h5.card-subtitle.text-muted(id="lobby-status" hidden)
+                          span Waiting for 
+                          span.text-success(id="lobby-player-count")
+                          span other player(s) before starting...
+                        br
                         .spinner-border(id="loading")
                         .row(id="connected-players")
-                      .card-footer(id="lobby-status" hidden)
-                        .row
-                          .col-12.text-end
-                            small
-                              span Waiting for 
-                              span.text-success(id="lobby-player-count")
-                              span other player(s) before starting...
 
                   //- Game Chat Section
                   .col-sm-12.col-md-3
@@ -45,6 +43,8 @@ block content
                         .chatbox
                             //- Messages will be appended here.
                         .messagebox
+                          form
                             .input-group
-                                input(id="userInput" type="text").form-control
-                                button.btn.bg-success(id="chatbox-btn" type="submit") Send
+                              input(id="userInput" type="text").form-control
+                              button.btn.bg-success(id="chatbox-btn" type="submit")
+                                i.fa.fa-paper-plane
