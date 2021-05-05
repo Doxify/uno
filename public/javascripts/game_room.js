@@ -24,15 +24,15 @@ stateChannel.bind('update', (data) => {
         otherPlayers: [
             {
                 handLength: 7,
-                playerNum: 2,
-            },
-            {
-                handLength: 7,
-                playerNum: 3,
-            },
-            {
-                handLength: 7,
                 playerNum: 4,
+            },
+            {
+                handLength: 7,
+                playerNum: 1,
+            },
+            {
+                handLength: 7,
+                playerNum: 2,
             },
         ],
         user: {
@@ -52,11 +52,29 @@ stateChannel.bind('update', (data) => {
 
             ],
             handLength: 7,
-            playerNum: 1,
+            playerNum: 3,
+        },
+        lastPlayedCard: {
+            value: 6,
+            color: "Yellow",
         }
     }
 
     console.log(data);
+
+    // Render lastPlayedCard
+
+
+    // Check if game is over
+
+
+    // Render user cards
+
+
+    // Render other player cards
+    
+        // Render Left Player -> Top Player -> Right Player
+
 });
 
 // ====================================================================

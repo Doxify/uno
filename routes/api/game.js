@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const GameController = require('../../controllers/Game')
+const GameController = require('../../controllers/Game');
 const { isAuthed, notAuthed } = require('../../middleware/auth'); 
 const { gameExists, isGameUser, notGameUser } = require('../../middleware/game');
 
