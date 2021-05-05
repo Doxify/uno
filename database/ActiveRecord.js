@@ -14,9 +14,17 @@ class ActiveRecord {
         return db.any(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
     }
 
+    static findOne(field, value, asscending) {
+        // TODO:
+    }
+
     static findBy(field, value) {
         if(!this.fields.includes(field)) return INVALID_FIELD_ERROR(field);
         return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
+    }
+
+    static update(data) {
+        // TODO:
     }
 
     static create(data) {

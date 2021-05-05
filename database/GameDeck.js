@@ -11,38 +11,38 @@ class GameDeckCard extends ActiveRecord{
     static PLAYED = -3;
 
 
-    #game = undefined;
-    #user = undefined;
-    #card = undefined;
-    #order = undefined;
+    game = undefined;
+    user = undefined;
+    card = undefined;
+    order = undefined;
 
 
     constructor(game, user, card, order) {
         super();
-        this.#game = game;
-        this.#user = user;
-        this.#card = card;
-        this.#order = order;
+        this.game = game;
+        this.user = user;
+        this.card = card;
+        this.order = order;
     }
 
     get game() {
-        return this.#game;
+        return this.game;
     }
 
     get user() {
-        return this.#user;
+        return this.user;
     }
 
     get card() {
-        return this.#card;
+        return this.card;
     }
 
     get order() {
-        return this.#order;
+        return this.order;
     }
 
     set order(order) {
-        this.#order = order;
+        this.order = order;
     }
 
 
@@ -104,10 +104,10 @@ class GameDeckCard extends ActiveRecord{
     // Save GameDeckCard into Game Deck table in database with the values from the instance data fields
     save() {
         const data = {
-            game: this.#game,
-            user: this.#user,
-            card: this.#card,
-            order: this.#order
+            game: this.game,
+            user: this.user,
+            card: this.card,
+            order: this.order
         }
 
         return new Promise((resolve, reject) => {

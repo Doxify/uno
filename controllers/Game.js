@@ -132,6 +132,12 @@ const GameController = {
     // Create new Game Deck in database
     GameDeckController.createGameDeck(game);
   },
+  updateGameState: (game) => {
+
+  },
+  getGameState: (game) => {
+
+  },
   // Check if a game exists in the database
   gameExists: (game_id) => {
     game = new Game()

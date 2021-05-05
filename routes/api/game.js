@@ -10,6 +10,7 @@ router.get('/create', isAuthed, function(request, response, next) {
 
 router.get('/join/:uuid', isAuthed, gameExists, notGameUser, function(request, response, next) {
     GameController.join(request, response, next);
+    
 });
 
 router.get('/getList', isAuthed, function(request, response, next) {
