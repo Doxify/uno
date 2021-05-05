@@ -9,7 +9,7 @@ router.get('/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, function(re
     res.render('game', { title: 'Game Room', user: req.user, gameId: req.params.uuid })
 });
 
-router.get('/lobby/:uuid', isAuthed, gameExists, isGameUser, function(req, res, next) {
+router.get('/lobby/:uuid', isAuthed, gameExists, function(req, res, next) {
     res.render('lobby', { title: 'Lobby', user: req.user, gameId: req.params.uuid });
 });
 
