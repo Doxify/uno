@@ -1,25 +1,48 @@
-const lobbyChannel = pusher.subscribe(`LOBBY_${roomId}`);
+const lobbyChannel = pusher.subscribe(`presence-LOBBY_${roomId}`);
+const lobbyData = { members: {}, memberCount: 0 };
 
-lobbyChannel.bind('PLAYER_JOIN', (data) => {
-  updatePlayersList(data);
+lobbyChannel.bind("pusher:subscription_succeeded", (data) => {
+  lobbyData.members = data.members;
+  lobbyData.memberCount = data.count;
+  updatePlayersList();
 });
+
+lobbyChannel.bind("pusher:member_added", (member) => {
+  lobbyData.members[member.id] = member.info;
+  lobbyData.memberCount += 1;
+  updatePlayersList();
+});
+
+lobbyChannel.bind("pusher:member_removed", (member) => {
+  delete lobbyData.members[member.id];
+  lobbyData.memberCount -= 1;
+  updatePlayersList();
+})
 
 lobbyChannel.bind('GAME_START', (data) => {
   console.log('game starting...');
 });
 
+function updatePlayersList() {
+  // Clear all players before we re-render them.
+  document.querySelector("#connected-players").innerHTML = null;
+  // Update player count
+  document.getElementById("lobby-player-count").innerText = ` ${4-lobbyData.memberCount} `;
 
-function updatePlayersList(players) {
   // Render each player to the connected players list.
-  players.forEach((player) => {
-    let element = document.getElementById(`player-${player.player_num}-name`);
-    element.innerText = player.username;
-    element.className = "text-success";
+  Object.values(lobbyData.members).forEach((player, i) => {
+    let html = `
+    <div class="col-sm-4">
+      <div class="small text-muted">Player ${i+1}</div>
+      <div class="text-success">${player.username}</div>
+    </div>
+    `;
+    document.querySelector("#connected-players").insertAdjacentHTML('beforeend', html);
   });
-
-  // Unhide the connected players list
-  document.getElementById('connected-players').removeAttribute('hidden');
 
   // Hide the loading spinner
   document.getElementById('loading').setAttribute('hidden', true);
+  // Show the lobbby status
+  document.getElementById('lobby-status').removeAttribute('hidden');
+
 }
