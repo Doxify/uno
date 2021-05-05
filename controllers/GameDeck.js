@@ -11,55 +11,67 @@ const GameDeckController = {
     createGameDeck: (game) => {
 
         // Need to get all game users of game from database
-        GameUser.getGameUsers()
-            .then((gameUsers) => {
+        return new Promise((resolve, reject) => {
+            GameUser.getGameUsers(game)
+                .then((gameUsers) => {
 
-                if (gameUsers.length < 4) {
-                    // TODO: Throw error
-                }
+                    if (gameUsers.length < 4) {
+                        // TODO: Throw error
+                    }
+                    console.log("got here");
+
+                    // Need to get Base Deck from database
+                    BaseDeck.getDeck()
+                        .then((baseDeck) => {
+                            console.log("got base deck");
+                            // Iterate over baseDeck array and create Game Deck Card objects
+                            gameDeck = [];
+
+                            baseDeck.forEach((card, i) => {
+                                let gameCard = new GameDeckCard(game, null, card.id, 0);
+
+                                gameDeck.push(gameCard);
+                            });
+
+                            console.log("created game deck array");
+                            // Shuffle gameDeck
+                            GameDeckController.shuffle(gameDeck);
+
+                            console.log("shuffled game deck");
+
+                            // Deal 7 cards to each Game User
+                            gameDeck = GameDeckController.dealCards(gameUsers, gameDeck);
+
+                            console.log("dealt cards")
+
+                            // Insert all Game Deck Card objects into database using Promise.all
+                            var promises = [];
+
+                            gameDeck.forEach((gameCard) => {
+                                console.log(gameCard);
+                                promises.push(
+                                    gameCard.save()
+                                );
+                            });
+
+                            console.log("created all promises");
 
 
-                // Need to get Base Deck from database
-                BaseDeck.getDeck()
-                    .then((baseDeck) => {
-
-                        // Iterate over baseDeck array and create Game Deck Card objects
-                        gameDeck = [];
-
-                        baseDeck.forEach((card, i) => {
-                            let gameCard = new GameDeckCard(game, 0, card.id, 0);
-
-                            gameDeck.push(gameCard);
+                            Promise.all(promises)
+                                .then(() => {
+                                    console.log("added everything to database");
+                                    resolve(true)
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                })
                         });
 
-                        // Shuffle gameDeck
-                        GameDeckController.shuffle(gameDeck);
-
-                        // Deal 7 cards to each Game User
-                        GameDeckController.dealCards(gameUsers, gameDeck);
-
-
-                        // Insert all Game Deck Card objects into database using Promise.all
-                        var promises = [];
-
-                        gameDeck.forEach((gameCard) => {
-                            promises.push(
-                                gameCard.save()
-                            );
-                        });
-
-                        Promise.all(promises)
-                            .catch((err) => {
-                                console.log(err);
-                            })
-                    });
-
-            })
-            .catch((err) => {
-                console.log(err);
-
-
-            });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        });
 
     },
 
@@ -92,6 +104,7 @@ const GameDeckController = {
 
         // Iterate over array again and update order values of GameDeckCard object
         gameDeck.forEach((gameCard, i) => {
+            console.log(i);
             gameCard.order = i;
         });
 
@@ -106,10 +119,6 @@ const GameDeckController = {
             throw new Error("gameUsers must be an array")
         }
 
-        if (!(gameUsers[0] instanceof GameUser)) {
-            throw new Error("gameUsers objects must be a GameUser object.");
-        }
-
         if (!(gameDeck instanceof Array)) {
             throw new Error("gameDeck must be an array.");
         }
@@ -122,12 +131,13 @@ const GameDeckController = {
         for (let i = 0; i < 7; i++) {
 
             for (let gameUser of gameUsers) {
-
                 gameDeck[topCard].user = gameUser.user;
                 gameDeck[topCard].order = GameDeckCard.DRAWN;
                 topCard++;
             }
         }
+
+        return gameDeck;
     }
 }
 

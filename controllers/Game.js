@@ -3,6 +3,7 @@ const Game = require("../database/Game");
 const GameUser = require("../database/GameUser");
 const GameDeckController = require("./GameDeck");
 const GamePusherController = require('./GamePusher');
+const LobbyPusher = require('../events/lobby');
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -61,10 +62,31 @@ const GameController = {
               return JSON_ERROR(response, "Could not create a new game user.");
             }
 
+            // Get the new number of game users in game
+            GameUser.getNumberOfPlayers(gameId)
+              .then((numGameUsers) => {
+
+                if(numGameUsers < 4) {
+                  return response.json({
+                    status: 'success',
+                    message: 'Successfully created a new game user.'
+                  })
+                }
+                // Game has 4 players, that means all users in lobby have successfully joined
+                // Start game and create game deck and trigger game start pusher event
+                GameController.startGame(gameId)
+                  .then((_) => {
+                    // Game successfully started, send trigger pusher event
+                    LobbyPusher.TRIGGER_GAME_START(gameId);
+                  })
+              })
+          })
+          .catch((err) => {
+            console.log(err);
             return response.json({
-              status: 'success',
-              message: 'Successfully created a new game user.'
-            })
+              status: 'failure',
+              message: 'Error occurred while creating new game user.'
+            });
           })
       })
       .catch((err) => {
@@ -130,7 +152,8 @@ const GameController = {
   },
   startGame: (game) => {
     // Create new Game Deck in database
-    GameDeckController.createGameDeck(game);
+    console.log("starting game");
+    return GameDeckController.createGameDeck(game)
   },
   updateGameState: (game) => {
 

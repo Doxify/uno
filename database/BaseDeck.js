@@ -1,4 +1,5 @@
 const ActiveRecord = require('./ActiveRecord');
+const Card = require('../models/card')
 
 
 class BaseDeckCard extends ActiveRecord {
@@ -29,9 +30,9 @@ class BaseDeckCard extends ActiveRecord {
     
     static getDeck = function () {
         return new Promise((resolve, reject) => {
-            BaseDeck.all().then((baseDeckData) => {
+            BaseDeckCard.all().then((baseDeckData) => {
 
-                baseDeck = [];
+                var baseDeck = [];
 
                 for(let cardData of baseDeckData) {
 

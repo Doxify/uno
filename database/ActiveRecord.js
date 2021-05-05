@@ -33,8 +33,19 @@ class ActiveRecord {
         Object.entries(data).forEach(([key, value]) => {
             if (!this.fields.includes(key)) return INVALID_FIELD_ERROR(key);
             fieldsAndCols[0].push(key);
-            fieldsAndCols[1].push(`'${value}'`);
+
+            if (value != null) {
+                fieldsAndCols[1].push(`'${value}'`);
+            } else {
+                fieldsAndCols[1].push(`${value}`);
+            }
         });
+
+        console.log(`
+        INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 
+        VALUES (${fieldsAndCols[1].join(", ")})
+        RETURNING *
+`);
 
         return db.oneOrNone(`
             INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 

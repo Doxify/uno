@@ -12,7 +12,8 @@ module.exports = {
         },
         user: {
           type: Sequelize.UUID,
-          references: {model: 'User', key: 'id'}
+          references: {model: 'User', key: 'id'},
+          allowNull: true,
         },
         card: {
           type: Sequelize.INTEGER,

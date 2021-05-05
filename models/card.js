@@ -53,14 +53,14 @@ class BaseDeck {
 
 class Card{ 
 
-    #id = undefined;
-    #color = undefined;
-    #value = undefined;
+    id = undefined;
+    color = undefined;
+    value = undefined;
 
     constructor (id, color, value){ 
-        this.#id = id;
-        this.#color= col; 
-        this.#value = val; 
+        this.id = id;
+        this.color= color; 
+        this.value = value; 
     }
 
 }
@@ -80,4 +80,4 @@ class Card{
 
 
 
-module.exports = BaseDeck;
+module.exports = Card;
