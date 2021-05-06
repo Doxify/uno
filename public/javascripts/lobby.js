@@ -9,14 +9,13 @@ lobbyChannel.bind("pusher:subscription_succeeded", (data) => {
   lobbyData.members = data.members;
   lobbyData.memberCount = data.count;
   updatePlayersList();
-  attemptReadyUp();
+  joinGame();
 });
 
 lobbyChannel.bind("pusher:member_added", (member) => {
   lobbyData.members[member.id] = member.info;
   lobbyData.memberCount += 1;
   updatePlayersList();
-  attemptReadyUp();
 });
 
 lobbyChannel.bind("pusher:member_removed", (member) => {
@@ -33,8 +32,7 @@ lobbyChannel.bind('GAME_START', (data) => {
 // COMMUNICATING WITH THE BACKEND API
 // =============================================
 
-async function attemptReadyUp() {
-  if(lobbyData.memberCount != 4) return;
+async function joinGame() {
   await fetch(`/api/game/join/${roomId}`).then(res => res.json());
 }
 

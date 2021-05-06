@@ -15,9 +15,9 @@ const GameDeckController = {
             GameUser.getGameUsers(game)
                 .then((gameUsers) => {
 
-                    if (gameUsers.length < 4) {
+                    if (gameUsers.length < GameUser.MAX_GAME_USERS_PER_GAME) {
                         // TODO: Throw error
-                        resolve(null);
+                        return resolve(null);
                     }
                     console.log("got here");
 

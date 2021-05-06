@@ -61,16 +61,11 @@ function renderGamesList(games) {
           <div class="card-title text-start">
           ${
             game.numPlayers == 4 ?
-              `
-                <div class="card-text text-warning">In progress</div>
-                <div class="card-text text-muted">${game.numPlayers}/4 players</div>
-              `
+              `<div class="card-text text-warning">In progress</div>`
               :
-              `
-                <div class="card-text text-success">In lobby</div>
-                <div class="card-text text-muted">${game.numPlayersInLobby}/4 players</div>
-              `
+              `<div class="card-text text-success">In lobby</div>`
           }
+            <div class="card-text text-muted">${game.numPlayers}/4 players</div>
           </div>  
         </div>
         <div class="card-footer d-grid">

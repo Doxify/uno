@@ -1,3 +1,5 @@
+const Game = require('../database/Game');
+const GameUser = require('../database/GameUser');
 const pusher = require('../config/pusher');
 
 module.exports = {
