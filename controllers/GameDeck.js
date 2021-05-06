@@ -36,7 +36,7 @@ const GameDeckController = {
 
                             console.log("created game deck array");
                             // Shuffle gameDeck
-                            GameDeckController.shuffle(gameDeck);
+                            GameDeckController.shuffle(gameDeck, 2);
 
                             console.log("shuffled game deck");
 
