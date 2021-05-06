@@ -1,8 +1,7 @@
-const Game = require('../database/Game');
-const GameUser = require('../database/GameUser');
+const pusher = require('../config/pusher');
 
 module.exports = {
-  SEND_GAME_STATE: (gameId, userId) => {
-
+  TRIGGER_GAME_STATE: (gameId, userId, state) => {
+    pusher.trigger(`presence-STATE_${gameId}${userId}`, 'GAME_STATE', state);
   }
 }

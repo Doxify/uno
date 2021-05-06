@@ -89,7 +89,7 @@ class GameDeckCard extends ActiveRecord{
                     for(let gameCardData of gameDeckData) {
                         let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
 
-                        gameDeck.push(gameDeck);
+                        gameDeck.push(gameCard);
                     }
 
                     resolve(gameDeck);
