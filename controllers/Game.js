@@ -3,6 +3,7 @@ const Game = require("../database/Game");
 const GameUser = require("../database/GameUser");
 const GameDeckController = require("./GameDeck");
 const Pusher = require('../config/pusher');
+const LobbyPusher = require('../events/lobby');
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -19,8 +20,8 @@ const JSON_ERROR = function (response, message) {
 }
 
 const GameController = {
+  // Create a new game and save it to the database.
   create: (request, response, next) => {
-    // Create a new game and save it to the database.
     new Game()
       .save()
       .then((createdGame) => {
@@ -178,6 +179,53 @@ const GameController = {
   },
   getGameState: (game) => {
 
+  //   var data = {
+  //     isGameOver: false,
+  //     otherPlayers: [
+  //         {
+  //             handLength: 7,
+  //             playerNum: 4,
+  //         },
+  //         {
+  //             handLength: 7,
+  //             playerNum: 1,
+  //         },
+  //         {
+  //             handLength: 7,
+  //             playerNum: 2,
+  //         },
+  //     ],
+  //     user: {
+  //         cards: [
+  //             {
+  //                 value: 2,
+  //                 color: "Red",
+  //             },
+  //             {
+  //                 value: 3,
+  //                 color: "Green",
+  //             },
+  //             {
+  //                 value: 2,
+  //                 color: "Blue",
+  //             },
+
+  //         ],
+  //         handLength: 7,
+  //         playerNum: 3,
+  //     },
+  //     lastPlayedCard: {
+  //         value: 6,
+  //         color: "Yellow",
+  //     }
+  // }
+    const state = {
+      isGameOver: false,
+      otherPlayers: [],
+      user: {
+
+      }
+    }
   },
   // Check if a game exists in the database
   gameExists: (game_id) => {
