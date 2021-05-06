@@ -47,6 +47,8 @@ const GameController = {
     if (!user) return JSON_ERROR(response, "User is not provided.");
     if (!gameId) return JSON_ERROR(response, "Game ID not provided.");
 
+    console.log("called join game in Game Controller");
+
     // Check if the user is already in the game.
     GameUser.isGameUser(user.id, gameId)
       .then((isGameUser) => {
@@ -81,7 +83,7 @@ const GameController = {
                 GameUser.assignPlayerNumbers(gameId)
                   .then(() => {
                     // Start the game
-                    return GameController.startGame(gameId)
+                    GameController.startGame(gameId)
                   })
                   .then((_) => {
                     // Game successfully started, send trigger pusher event

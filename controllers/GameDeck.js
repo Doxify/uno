@@ -17,6 +17,7 @@ const GameDeckController = {
 
                     if (gameUsers.length < 4) {
                         // TODO: Throw error
+                        resolve(null);
                     }
                     console.log("got here");
 

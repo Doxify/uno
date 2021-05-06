@@ -126,9 +126,6 @@ class GameUser extends ActiveRecord {
           gameUsers.forEach((gameUser, index) => {
             promises.push(
               GameUser.update({ user: gameUser.user, game: gameUser.game }, { player_num: index+1 })
-                .then((update) => {
-                  console.log(update);
-                })
             )
           })
           // return resolve();

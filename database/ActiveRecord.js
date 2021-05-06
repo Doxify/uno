@@ -41,7 +41,7 @@ class ActiveRecord {
         Object.entries(conditions).forEach(([key, value], index) => {
             if (!this.fields.includes(key)) return this.INVALID_FIELD_ERROR(key);
             // Append condition.
-            whereClause += `${key} = '${value}'`;
+            whereClause += `"${key}" = '${value}'`;
 
             // Append AND if not last condition.
             if(index < Object.keys(conditions).length-1) {
@@ -57,9 +57,21 @@ class ActiveRecord {
             fieldsAndCols[1].push(`'${value}'`);
         });
 
+        // Build SET values section
+        const numValuesUpdating = fieldsAndCols[0].length;
+        var setSQLSection = '';
+        for(let i = 0; i < numValuesUpdating; i++) {
+            setSQLSection += `${fieldsAndCols[0][i]} = ${fieldsAndCols[1][i]}`;
+
+            if(i + 1 < numValuesUpdating) {
+                setSQLSection += ', ';
+            }
+        }
+
+
         return db.any(`
             UPDATE "${this.table_name}"
-            SET (${fieldsAndCols[0].join(", ")}) = (${fieldsAndCols[1].join(", ")})
+            SET ${setSQLSection}
             WHERE ${whereClause}
             RETURNING *
         `);
