@@ -35,6 +35,45 @@ class Game extends ActiveRecord {
         return this.clockwise;
     }
 
+    // Get specific game instance
+    getById(id) {
+        return new Promise((resolve, reject) => {
+            Game.findBy('id', id)
+                .then((game) => {
+                    if(!game) {
+                        return resolve(null);
+                    }
+                    
+                    this.id = game.id;
+                    this.active = game.active;
+                    this.clockwise = game.direction_clockwise;
+
+                    return resolve(this);
+                })
+                .catch((err) => {reject(err);})
+        });
+    }
+    
+    // Saves a game to the database with the values from the instance data fields
+    save() {
+        return new Promise((resolve, reject) => {
+            // Insert new game entry into Game table
+            Game.createDefault()// create() returns either null or the newly entered game row
+                .then((game) => {
+                    if(!game) {
+                        resolve(null);
+                    }
+                    // Set this game object's id from the auto incremented id field in the Game table
+                    this.id = game.id;
+                    this.active = game.active;
+                    this.clockwise = game.direction_clockwise;
+
+                    resolve(game);
+                })
+                .catch((err) => { reject(err); });
+        });
+    }
+
     // Get all active games, used for game dashboard
     static getActiveGames() {
         return new Promise((resolve, reject) => {
@@ -62,25 +101,6 @@ class Game extends ActiveRecord {
         });
     }
 
-    // Get specific game instance
-    getById(id) {
-        return new Promise((resolve, reject) => {
-            Game.findBy('id', id)
-                .then((game) => {
-                    if(!game) {
-                        return resolve(null);
-                    }
-                    
-                    this.id = game.id;
-                    this.active = game.active;
-                    this.clockwise = game.direction_clockwise;
-
-                    return resolve(this);
-                })
-                .catch((err) => {reject(err);})
-        });
-    }
-
     // Returns a game by its id.
     static get(id) {
         return new Promise((resolve, reject) => {
@@ -93,27 +113,6 @@ class Game extends ActiveRecord {
                 })
                 .catch((err) => {reject(err);})
         }); 
-    }
-
-    
-    // Saves a game to the database with the values from the instance data fields
-    save() {
-        return new Promise((resolve, reject) => {
-            // Insert new game entry into Game table
-            Game.createDefault()// create() returns either null or the newly entered game row
-                .then((game) => {
-                    if(!game) {
-                        resolve(null);
-                    }
-                    // Set this game object's id from the auto incremented id field in the Game table
-                    this.id = game.id;
-                    this.active = game.active;
-                    this.clockwise = game.direction_clockwise;
-
-                    resolve(game);
-                })
-                .catch((err) => { reject(err); });
-        });
     }
 }
 

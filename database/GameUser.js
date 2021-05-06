@@ -65,22 +65,18 @@ class GameUser extends ActiveRecord {
     const data = {
       game: this.game,
       user: this.user,
-      player_num: undefined,
+      player_num: null,
       current_player: false,
       winner: false
     };
 
     return new Promise((resolve, reject) => {
       // Check if there are any available spots.
-      GameUser.getNextAvailablePlayerNum(this.game)
-        .then((nextAvailablePlayerNum) => {
-          if(!nextAvailablePlayerNum) { 
+      GameUser.getGameUsers(this.game)
+        .then((gameUsers) => {
+          if (!gameUsers || gameUsers.length >= this.MAX_GAME_USERS_PER_GAME) {
             return reject(null);
           }
-
-          // Set the player_num
-          this.player_num = nextAvailablePlayerNum;
-          data.player_num = nextAvailablePlayerNum;
 
           // Creating the GameUser
           GameUser.create(data)
@@ -112,29 +108,43 @@ class GameUser extends ActiveRecord {
     });
   }
 
-
-  // Helper method to get the next available GameUser player_num for a given
-  // game. 
-  static getNextAvailablePlayerNum(game) {
+  // Assigns player numbers to a game which has the max number of users.
+  static assignPlayerNumbers(game) {
     return new Promise((resolve, reject) => {
-      this.findAll("game", game)
+      // Get all game users and update their player_num.
+      GameUser.getGameUsers(game)
         .then((gameUsers) => {
-          // No game users exist.
-          if (gameUsers.length === 0) { 
-            return resolve(1); 
+          // Game is not full or cannot get the number of players.
+          if(!gameUsers || gameUsers.length != this.MAX_GAME_USERS_PER_GAME) {
+            return reject(null);
           }
 
-          // Game is full.
-          if (gameUsers.length === this.MAX_GAME_USERS_PER_GAME) {
-            return resolve(null);
-          }
+          // Create a promise for updating each GameUser's
+          // player_num individually.
+          var promises = [];
 
-          return resolve(gameUsers.length + 1);
+          gameUsers.forEach((gameUser, index) => {
+            promises.push(
+              GameUser.update({ user: gameUser.user, game: gameUser.game }, { player_num: index+1 })
+                .then((update) => {
+                  console.log(update);
+                })
+            )
+          })
+          // return resolve();
+
+          // Execute all promises.
+          Promise.all(promises).then(() => {
+            return resolve();
+          })
+          .catch((err) => {
+            reject(err);
+          })
         })
         .catch((err) => {
           return reject(err);
         });
-    });
+    })
   }
 
   // Method to get the number of players in a given game

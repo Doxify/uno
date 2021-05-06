@@ -72,9 +72,17 @@ const GameController = {
                     message: 'Successfully created a new game user.'
                   })
                 }
+                
                 // Game has 4 players, that means all users in lobby have successfully joined
-                // Start game and create game deck and trigger game start pusher event
-                GameController.startGame(gameId)
+                // Start game and create game deck and trigger game start pusher
+                // event
+
+                // Assign player numbers
+                GameUser.assignPlayerNumbers(gameId)
+                  .then(() => {
+                    // Start the game
+                    return GameController.startGame(gameId)
+                  })
                   .then((_) => {
                     // Game successfully started, send trigger pusher event
                     LobbyPusher.TRIGGER_GAME_START(gameId);

@@ -12,12 +12,12 @@ module.exports = {
         },
         game: {
           type: Sequelize.UUID,
-          primaryKey:true,
+          primaryKey: true,
           references: {model: 'Game', key: 'id'}
         },
         player_num: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          allowNull: true,
         },
         current_player: {
           type: Sequelize.BOOLEAN,

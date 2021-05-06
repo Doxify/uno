@@ -48,7 +48,7 @@ const GameDeckController = {
                             var promises = [];
 
                             gameDeck.forEach((gameCard) => {
-                                console.log(gameCard);
+                                // console.log(gameCard);
                                 promises.push(
                                     gameCard.save()
                                 );
@@ -104,7 +104,7 @@ const GameDeckController = {
 
         // Iterate over array again and update order values of GameDeckCard object
         gameDeck.forEach((gameCard, i) => {
-            console.log(i);
+            // console.log(i);
             gameCard.order = i;
         });
 
