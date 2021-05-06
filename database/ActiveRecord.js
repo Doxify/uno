@@ -79,12 +79,6 @@ class ActiveRecord {
             }
         });
 
-        console.log(`
-        INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 
-        VALUES (${fieldsAndCols[1].join(", ")})
-        RETURNING *
-`);
-
         return db.oneOrNone(`
             INSERT INTO "${this.table_name}"(${fieldsAndCols[0].map(col => `"${col}"`).join(", ")}) 
             VALUES (${fieldsAndCols[1].join(", ")})

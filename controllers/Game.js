@@ -2,8 +2,7 @@ const { response } = require("express");
 const Game = require("../database/Game");
 const GameUser = require("../database/GameUser");
 const GameDeckController = require("./GameDeck");
-const GamePusherController = require('./GamePusher');
-const LobbyPusher = require('../events/lobby');
+const Pusher = require('../config/pusher');
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -105,41 +104,60 @@ const GameController = {
       .then((activeGames) => {
         // For each game, need to get the number of players
         var promises = [];
+        var lobbyState = undefined;
 
-        activeGames.forEach((game) => {
+        // Get the state of all lobbies.
+        Pusher.get({ path: '/channels', params: { info: 'user_count,subscription_count', filter_by_prefix: 'presence-LOBBY_' }})
+          .then((response) => response.json())
+          .then((data) => {
+            lobbyState = data.channels;
+          })
+          .then(() => {
+            // Get information relavant to the calling user about each game.
+            activeGames.forEach((game) => {
+              promises.push(
+                // Get the number of game users.
+                Game.getNumOfPlayers(game.id)
+                  .then((numPlayers) => {
+                    game.numPlayers = numPlayers;
+    
+                    // Get the number of users in the game's lobby if the game
+                    // has not started.
+                    if(game.numPlayers != GameUser.MAX_GAME_USERS_PER_GAME) {
+                      const lobbyChannelName = `presence-LOBBY_${game.id}`;
+                      if(lobbyState[lobbyChannelName]) {
+                        game.numPlayersInLobby = lobbyState[lobbyChannelName].user_count;
+                      } else {
+                        game.numPlayersInLobby = 0
+                      }
+                    }
 
-          // Add get number of players promise to promises[]
-          promises.push(
-            Game.getNumOfPlayers(game.id)
-              .then((numPlayers) => {
-                game.numPlayers = numPlayers;
-
-                // Check if the user is in the game.
-                return GameUser.isGameUser(user.id, game.id)
-              })
-              .then((isGameUser) => {
-                game.isGameUser = isGameUser;
-                return game;
-              })
-              .catch((err) => {
-                console.log(err);
-
-                return response.json({
-                  status: "failure",
-                  message:
-                    "Error occurred while getting number of players for each game.",
-                });
-              })
-          );
-        });
-
-        Promise.all(promises).then(() => {
-          return response.json({
-            status: 'success',
-            games: activeGames
-          });
-        });
-
+                    // Check if the user is in the game.
+                    return GameUser.isGameUser(user.id, game.id)
+                  })
+                  .then((isGameUser) => {
+                    game.isGameUser = isGameUser;
+                    return game;
+                  })
+                  .catch((err) => {
+                    console.log(err);
+    
+                    return response.json({
+                      status: "failure",
+                      message:
+                        "Error occurred while getting number of players for each game.",
+                    });
+                  })
+              );
+            });
+    
+            Promise.all(promises).then(() => {
+              return response.json({
+                status: 'success',
+                games: activeGames
+              });
+            });
+          })
       })
       .catch((err) => {
         console.log(err);

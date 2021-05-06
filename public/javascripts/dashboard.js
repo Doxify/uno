@@ -54,19 +54,24 @@ function renderGamesList(games) {
   document.getElementById('no-active-games-alert').setAttribute('hidden', true);
   games.forEach((game, i) => {
     let html = `
-      <div class="col">
+      <div class="col" id="${game.id}">
         <div class="card bg-dark text-white h-100">
         <div class="card-header text-muted small">Game: #${i+1}</div>
         <div class="card-body">
-            <div class="card-title text-start">
-              ${
-                game.numPlayers == 4 ?
-                  '<div class="card-text text-warning">In progress</div>'
-                  :
-                  '<div class="card-text text-success">In lobby</div>'
-              }
-            </div>
-            <div class="card-subtitle text-muted text-start">${game.numPlayers}/4 players</div>
+          <div class="card-title text-start">
+          ${
+            game.numPlayers == 4 ?
+              `
+                <div class="card-text text-warning">In progress</div>
+                <div class="card-text text-muted">${game.numPlayers}/4 players</div>
+              `
+              :
+              `
+                <div class="card-text text-success">In lobby</div>
+                <div class="card-text text-muted">${game.numPlayersInLobby}/4 players</div>
+              `
+          }
+          </div>  
         </div>
         <div class="card-footer d-grid">
           ${
