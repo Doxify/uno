@@ -140,13 +140,16 @@ const GameController = {
   },
   start: (request, response, next) => {
     const gameId = request.params.uuid;
-    console.log("called start game: " + gameId);
 
     // Assign player numbers to determine which player goes 1st, 2nd, etc...
     GameUser.assignPlayerNumbers(gameId)
       .then(() => {
         // Create the game deck and deal the cards to each player.
         return GameDeckController.createGameDeck(gameId);
+      })
+      .then(() => {
+        // Determine the current player.
+        return Game.determineCurrentPlayer(gameId);
       })
       .then(() => {
         // Game successfully started, send trigger pusher event
@@ -179,6 +182,7 @@ const GameController = {
       },
       otherPlayers: {},
       user: {
+        isCurrentPlayer: false,
         handLength: 0,
         playerNum: 0,
         cards: []
@@ -227,17 +231,20 @@ const GameController = {
                         // Add card state if the card belongs to the calling user.
                         if(gameDeckCard.user === userId) {
                           state.user.playerNum = gameUser.player_num;
+                          state.user.isCurrentPlayer = gameUser.current_player;
                           state.user.handLength += 1;
                           state.user.cards.push(baseCard);
                         
                         } else {
-                          
                           // Add limited card state if the card does not belong
                           // to the calling user.
                           if(state.otherPlayers[gameUser.player_num]) {
                             state.otherPlayers[gameUser.player_num].handLength += 1;
                           } else {
-                            state.otherPlayers[gameUser.player_num] = { handLength: 1 };
+                            state.otherPlayers[gameUser.player_num] = { 
+                              handLength: 1,
+                              isCurrentPlayer: gameUser.current_player
+                            };
                           }
                         }
                       }

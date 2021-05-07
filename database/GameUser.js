@@ -122,20 +122,18 @@ class GameUser extends ActiveRecord {
           // Create a promise for updating each GameUser's
           // player_num individually.
           var promises = [];
-
           gameUsers.forEach((gameUser, index) => {
             promises.push(
-              GameUser.update({ user: gameUser.user, game: gameUser.game }, { player_num: index+1 })
+              GameUser.update(
+                { user: gameUser.user, game: gameUser.game }, 
+                { player_num: index+1 }
+              )
             )
-          })
-          // return resolve();
+          });
 
           // Execute all promises.
           Promise.all(promises).then(() => {
             return resolve();
-          })
-          .catch((err) => {
-            reject(err);
           })
         })
         .catch((err) => {

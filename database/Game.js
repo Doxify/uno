@@ -74,6 +74,72 @@ class Game extends ActiveRecord {
         });
     }
 
+    // Determines the current player's turn in a game.
+    static determineCurrentPlayer(gameId) {
+        return new Promise((resolve, reject) => {
+            // Get the game
+            Game.get(gameId)
+                .then((game) => {
+                    const isClockwise = game.direction_clockwise;
+                    // Get all of the game users
+                    GameUser.getGameUsers(gameId)
+                        .then((gameUsers) => {
+                            var promises = [];
+                            const currentPlayer = gameUsers.filter(i => i.current_player == true)[0];
+                            var nextPlayer;
+                            
+                            // If the current player num is undefined, assign
+                            // one randomly.
+                            if(!currentPlayer) {
+                                nextPlayer = gameUsers.filter(i => i.player_num == (Math.floor(Math.random() * 4 + 1)))[0];
+                            } else {
+                                // Determine who the current player should be based off
+                                // the direction the game is currently going in.
+                                if(isClockwise) {
+                                    // 'increase' the player num
+                                    if(currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
+                                        nextPlayer = gameUsers.filter(i => i.player_num == 1)[0];
+                                    } else {
+                                        nextPlayer = gameUsers.filter(i => i.playerNum+1)[0];
+                                    }
+                                } else {
+                                    // 'decrease' the player num
+                                    if(currentPlayer.player_num == 1) {
+                                        nextPlayer = gameUsers.filter(i => i.player_num == 4)[0];
+                                    } else {
+                                        nextPlayer = gameUsers.filter(i => i.player_num-1)[0];
+                                    }
+                                }   
+                                
+                                // Create a promise to remove current_player
+                                // status from the current player.
+                                promises.push(
+                                    GameUser.update(
+                                        { user: currentPlayer.user, game: currentPlayer.game }, 
+                                        { current_player: false }
+                                    )
+                                );
+                            }
+
+                            // Create a promise to add current_player status to
+                            // the next player.
+                            promises.push(
+                                GameUser.update(
+                                    { user: nextPlayer.user, game: nextPlayer.game },
+                                    { current_player: true }
+                                )
+                            );
+
+                            // Execute all promises
+                            Promise.all(promises).then(() => {
+                                resolve(true);
+                            });
+                        })
+                })
+                .catch((err) => reject(err));
+        })
+    }
+
     // Get all active games, used for game dashboard
     static getActiveGames() {
         return new Promise((resolve, reject) => {
