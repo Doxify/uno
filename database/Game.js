@@ -86,7 +86,7 @@ class Game extends ActiveRecord {
                         .then((gameUsers) => {
                             var promises = [];
                             const currentPlayer = gameUsers.filter(i => i.current_player == true)[0];
-                            var nextPlayer;
+                            let nextPlayer;
                             
                             // If the current player num is undefined, assign
                             // one randomly.
