@@ -25,6 +25,7 @@ gameStateChannel.bind("pusher:member_removed", (member) => {
 gameStateChannel.bind("GAME_STATE", (data) => {
   console.log("Got state!");
   console.log(data);
+  renderCards(data);
 })
 
 // ====================================================================
@@ -38,3 +39,24 @@ async function requestGameState() {
 // ====================================================================
 // render functions
 // ====================================================================
+
+//<div class="face-up uno-card-${element.color}-${element.value}"></div>
+{/*
+ <div class="my-card">
+<div class="face-up uno-card-red-1"></div>
+ 
+</div> 
+*/}
+function renderCards(state){ 
+    state.user.cards.forEach(element => {
+     
+      let html = `
+      <div class="my-card">
+      <svg class="face-up uno-card uno-card-${element.color}-${element.value}"></svg>
+      </div>
+      `;
+      document.querySelector("#user-player").insertAdjacentHTML('beforeend', html);
+
+      });
+
+}

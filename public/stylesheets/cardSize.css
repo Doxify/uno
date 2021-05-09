@@ -1,0 +1,184 @@
+.user-hand .my-card {
+  --card-max-height: 60px;
+  --card-max-width: 32px;
+  margin: 2px;
+  max-height: var(--card-max-height);
+  max-width: var(--card-max-width);
+}
+.uno-card {
+  height: auto;
+  background-size: 448px 480px;
+  background-image: url("../images/UNO.svg");
+  background-repeat: no-repeat;
+  min-height: 100%;
+}
+.uno-card-red-0 {
+  background-position: 0px 0px;
+}
+.uno-card-red-1 {
+  background-position: -32px 0px;
+}
+.uno-card-red-2 {
+  background-position: -64px 0px;
+}
+.uno-card-red-3 {
+  background-position: -96px 0px;
+}
+.uno-card-red-4 {
+  background-position: -128px 0px;
+}
+.uno-card-red-5 {
+  background-position: -160px 0px;
+}
+.uno-card-red-6 {
+  background-position: -192px 0px;
+}
+.uno-card-red-7 {
+  background-position: -224px 0px;
+}
+.uno-card-red-8 {
+  background-position: -256px 0px;
+}
+.uno-card-red-9 {
+  background-position: -288px 0px;
+}
+
+.uno-card-yellow-0 {
+  background-position: 0px -60px;
+}
+.uno-card-yellow-1 {
+  background-position: -32px -60px;
+}
+.uno-card-yellow-2 {
+  background-position: -64px -60px;
+}
+.uno-card-yellow-3 {
+  background-position: -96px -60px;
+}
+.uno-card-yellow-4 {
+  background-position: -128px -60px;
+}
+.uno-card-yellow-5 {
+  background-position: -160px -60px;
+}
+.uno-card-yellow-6 {
+  background-position: -192px -60px;
+}
+.uno-card-yellow-7 {
+  background-position: -224px -60px;
+}
+.uno-card-yellow-8 {
+  background-position: -256px -60px;
+}
+.uno-card-yellow-9 {
+  background-position: -288px -60px;
+}
+
+.uno-card-green-0 {
+  background-position: 0px -120px;
+}
+.uno-card-green-1 {
+  background-position: -32px -120px;
+}
+.uno-card-green-2 {
+  background-position: -64px -120px;
+}
+.uno-card-green-3 {
+  background-position: -96px -120px;
+}
+.uno-card-green-4 {
+  background-position: -128px -120px;
+}
+.uno-card-green-5 {
+  background-position: -160px -120px;
+}
+.uno-card-green-6 {
+  background-position: -192px -120px;
+}
+.uno-card-green-7 {
+  background-position: -224px -120px;
+}
+.uno-card-green-8 {
+  background-position: -256px -120px;
+}
+.uno-card-green-9 {
+  background-position: -288px -120px;
+}
+
+.uno-card-blue-0 {
+  background-position: 0px -180px;
+}
+.uno-card-blue-1 {
+  background-position: -32px -180px;
+}
+.uno-card-blue-2 {
+  background-position: -64px -180px;
+}
+.uno-card-blue-3 {
+  background-position: -96px -180px;
+}
+.uno-card-blue-4 {
+  background-position: -128px -180px;
+}
+.uno-card-blue-5 {
+  background-position: -160px -180px;
+}
+.uno-card-blue-6 {
+  background-position: -192px -180px;
+}
+.uno-card-blue-7 {
+  background-position: -224px -180px;
+}
+.uno-card-blue-8 {
+  background-position: -256px -180px;
+}
+.uno-card-blue-9 {
+  background-position: -288px -180px;
+}
+
+.uno-card-skip-red-10 {
+  background-position: -320px 0px;
+}
+.uno-card-skip-yellow-10 {
+  background-position: -320px -60px;
+}
+.uno-card-skip-green-10 {
+  background-position: -320px -120px;
+}
+.uno-card-skip-blue-10 {
+  background-position: -320px -180px;
+}
+
+.uno-card-reverse-red-11 {
+  background-position: -352px 0px;
+}
+.uno-card-reverse-yellow-11 {
+  background-position: -352px -60px;
+}
+.uno-card-reverse-green-11 {
+  background-position: -352px -120px;
+}
+.uno-card-reverse-blue-11 {
+  background-position: -352px -180px;
+}
+
+.uno-card-red-draw-12 {
+  background-position: -384px 0px;
+}
+.uno-card-yellow-draw-12 {
+  background-position: -384px -60px;
+}
+.uno-card-green-draw-12 {
+  background-position: -384px -120px;
+}
+.uno-card-blue-draw-12 {
+  background-position: -384px -180px;
+}
+
+.uno-card-WILD-13 {
+  background-position: -416px 0px;
+}
+
+.uno-card-WILDDRAW4-14 {
+  background-position: -416px -240px;
+}
