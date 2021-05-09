@@ -100,6 +100,23 @@ class GameDeckCard extends ActiveRecord{
         });
     }
 
+    static getLastPlayedCard(game) {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.findAll('game', game)
+                .then((gameDeck) => {
+                    gameDeck.forEach((card) => {
+                        if(card.order === this.LAST_PLAYED) {
+                            return resolve(card);
+                        }
+                    })
+                    return resolve(null);
+                })
+                .catch((err) => {
+                    return reject(err);
+                })
+        })
+    }
+
 
     // Save GameDeckCard into Game Deck table in database with the values from the instance data fields
     save() {

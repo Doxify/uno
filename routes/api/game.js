@@ -20,7 +20,7 @@ router.get('/state/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (requ
     GameController.getGameState(request, response, next);
 });
 
-router.post('/makeMove/:uuid', isAuthed, gameExists, isGameUser, (request, response, next) => {
+router.post('/makeMove/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (request, response, next) => {
         // Validate post data
         // If validation fails, still tell user through websockets
         // Tell client 200 0k
