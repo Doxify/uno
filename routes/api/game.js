@@ -17,7 +17,8 @@ router.get('/join/:uuid', isAuthed, gameExists, notGameUser, (request, response,
 });
 
 router.get('/state/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (request, response, next) => {
-    GameController.getGameState(request, response, next);
+    GameController.getGameState(request.params.uuid, request.user.id);
+    return response.status(200);
 });
 
 router.post('/makeMove/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (request, response, next) => {

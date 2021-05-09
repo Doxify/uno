@@ -170,9 +170,7 @@ const GameController = {
   // Returns the current state of a game based on the user who made the request.
   // The calling user will get their full state and a limited state of all other
   // players.
-  getGameState: (request, response, next) => {
-    const gameId = request.params.uuid;
-    const userId = request.user.id;
+  getGameState: (gameId, userId) => {
     const state = {
       isGameOver: false,
       isClockwise: false,
@@ -192,7 +190,7 @@ const GameController = {
     // Get the current state of the game.
     Game.get(gameId)
       .then((game) => {
-        if(!game) return JSON_ERROR(response, "Could not get game state.");
+        // if(!game) return JSON_ERROR(response, "Could not get game state.");
 
         // Update game related state.
         state.isGameOver = !game.active;
@@ -201,17 +199,17 @@ const GameController = {
         // Get the base deck
         BaseDeck.getDeck()
           .then((baseDeck) => {
-            if(!baseDeck) return JSON_ERROR(response, "Could not get base deck state.");
+            // if(!baseDeck) return JSON_ERROR(response, "Could not get base deck state.");
 
             // Get the game users
             GameUser.getGameUsers(gameId)
               .then((gameUsers) => {
-                if(!gameUsers) return JSON_ERROR(response, "Could not get game user state");
+                // if(!gameUsers) return JSON_ERROR(response, "Could not get game user state");
 
                 // Get the game deck
                 GameDeck.getGameDeck(gameId)
                   .then((gameDeck) => {
-                    if(!gameDeck) return JSON_ERROR(response, "Could not get game deck state.");
+                    // if(!gameDeck) return JSON_ERROR(response, "Could not get game deck state.");
           
                     // Map through game deck and build the state.
                     gameDeck.map((gameDeckCard) => {
@@ -251,17 +249,17 @@ const GameController = {
                     })
             
                     GameEvents.TRIGGER_GAME_STATE(gameId, userId, state);
-                    return response.status(200);
+                    // return response.status(200);
                   })
               })
           })
       })
       .catch((err) => {
         console.log(err);
-        return response.json({
-          status: "failure",
-          message: "Error occurred while getting game state",
-        });
+        // return response.json({
+        //   status: "failure",
+        //   message: "Error occurred while getting game state",
+        // });
       })
   },
   // Check if a game exists in the database
@@ -287,7 +285,6 @@ const GameController = {
   },
   // Check if a user is a game user in the specific game in the database
   isGameUser: (user, game) => {
-
     return new Promise((resolve, reject) => {
       GameUser.isGameUser(user, game)
       .then((isGameUser) => {
