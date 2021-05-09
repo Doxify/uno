@@ -21,12 +21,11 @@ router.get('/state/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (requ
     return response.status(200);
 });
 
+// REQUIRED BODY:
+// - type [-1 = draw card, -2 = play card]
+// - cardId [id of card from base deck]
 router.post('/makeMove/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (request, response, next) => {
-        // Validate post data
-        // If validation fails, still tell user through websockets
-        // Tell client 200 0k
-        // update game state
-        // broadcast game state
+    GameConstroller.handleMove(request, response, next);
 });
 
 module.exports = router;

@@ -164,8 +164,36 @@ const GameController = {
         });
       });
   },
-  updateGameState: (game) => {
+  handleMove: (request, response, next) => {
+    const userId = request.user.id;
+    const gameId = request.params.uuid;
+    const cardId = request.body.cardId;
+    const moveType = request.body.type;
+    if (!userId) return JSON_ERROR(response, "User ID is not provided.");
+    if (!gameId) return JSON_ERROR(response, "Game ID not provided.");
+    if (!moveType) return JSON_ERROR(response, "Move type not provided.");
+    
+    switch(moveType) {
+      case Game.DRAW_CARD:
+        this.drawCard(gameId, userId);
+        break;
+      case Game.PLAY_CARD:
+        // play card function init here
+        this.playCard(gameId, userId, cardId);
+        break;
+    }
 
+    return response.status(200);
+  },
+  drawCard: (gameId, userId) => {
+
+  },
+  playCard: (gameId, userId, cardId) => {
+    // validate that user is currentPlayer
+    // validate that card is in user's deck
+    // validate that card is a legal move
+    // update db
+    // trigger getGameState
   },
   // Returns the current state of a game based on the user who made the request.
   // The calling user will get their full state and a limited state of all other
