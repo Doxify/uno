@@ -269,7 +269,8 @@ const GameController = {
                           } else {
                             state.otherPlayers[gameUser.player_num] = { 
                               handLength: 1,
-                              isCurrentPlayer: gameUser.current_player
+                              isCurrentPlayer: gameUser.current_player,
+                              userId: gameUser.user
                             };
                           }
                         }
