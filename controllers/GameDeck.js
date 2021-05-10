@@ -138,6 +138,9 @@ const GameDeckController = {
             }
         }
 
+        // Put the next card at the top of the deck as the last played card
+        gameDeck[topCard].order = GameDeckCard.LAST_PLAYED;
+
         return gameDeck;
     }
 }

@@ -80,6 +80,27 @@ class Game extends ActiveRecord {
     });
   }
 
+  static isCurrentPlayer(gameId, userId) {
+    return new Promise((resolve, reject) => {
+      GameUser.getGameUsers(gameId)
+        .then((gameUsers) => {
+          // Get the current player of the game
+          currentPlayer = gameUsers.filter((gameUser) => gameUser.current_player == true)[0];
+
+          if(gameUser.user === userId) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    })
+  }
+
+
   // Determines the current player's turn in a game.
   static determineCurrentPlayer(gameId) {
     return new Promise((resolve, reject) => {

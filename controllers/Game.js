@@ -7,6 +7,7 @@ const GameDeckController = require("./GameDeck");
 
 const LobbyEvents = require('../events/lobby');
 const GameEvents = require('../events/game');
+const { response } = require("express");
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -187,6 +188,45 @@ const GameController = {
   },
   drawCard: (gameId, userId) => {
 
+    // Validate that user is in that game and is currentPlayer
+    GameUser.isGameUser(userId, gameId)
+      .then((isGameUser) => {
+        Game.isCurrentPlayer(gameId, userId)
+          .then((isCurrentPlayer) => {
+
+            // Need to get the card at the top of the deck
+            GameDeck.getTopCard(gameId)
+              .then((topCard) => {
+                console.log(topCard);
+
+                // Update the order and user fields in topCard to simulate the Game User drawing the card
+                GameDeck.update(
+                  {game: topCard.game, card: topCard.card},
+                  {user: userId, order: GameDeck.DRAWN}
+                  )
+                  .then((_) => {
+                    // Send Game State to all users in game
+                    GameController.sendGameState(gameId);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    return response.status(200);
+                  });
+              })
+              .catch((err) => {
+                console.log(err);
+                return response.status(200);
+              })
+          })
+          .catch((err) => {
+            console.log(err);
+            return response.status(200);
+          })
+      })
+      .catch((err) => {
+        console.log(err);
+        return response.status(200);
+      });
   },
   playCard: (gameId, userId, cardId) => {
     // validate that user is currentPlayer
@@ -194,6 +234,28 @@ const GameController = {
     // validate that card is a legal move
     // update db
     // trigger getGameState
+  },
+  // Sends the individualized game state of all game users in a game
+  sendGameState: (gameId) => {
+    // Get all game users in game
+    GameUser.getGameUsers(gameId)
+      .then((gameUsers) => {
+        
+        var promises = [];
+        
+        // Create promise to send individualized game state
+        gameUsers.forEach((gameUser) => {
+          promises.push(
+            GameController.getGameState(gameUser.game, gameUser.user)
+          );
+        });
+
+        // Execute all promises
+        Promise.all(promises);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   },
   // Returns the current state of a game based on the user who made the request.
   // The calling user will get their full state and a limited state of all other
