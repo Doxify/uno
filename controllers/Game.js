@@ -68,7 +68,7 @@ const GameController = {
         return Game.getNumOfPlayers(gameId)
       })
       .then((totalPlayersInGame) => {
-        if(totalPlayersInGame && totalPlayersInGame >= GameUser.MAX_GAME_USERS_PER_GAME) {
+        if (totalPlayersInGame && totalPlayersInGame >= GameUser.MAX_GAME_USERS_PER_GAME) {
           // If there are enough GameUsers, start the game.
           return GameController.start(request, response, next);
         }
@@ -160,7 +160,7 @@ const GameController = {
         console.log(err);
         return response.json({
           status: "failure",
-          message: "Error occurred while getting starting GAME_"+gameId,
+          message: "Error occurred while getting starting GAME_" + gameId,
         });
       });
   },
@@ -172,7 +172,7 @@ const GameController = {
     if (!userId) return JSON_ERROR(response, "User ID is not provided.");
     if (!gameId) return JSON_ERROR(response, "Game ID not provided.");
     if (!moveType) return JSON_ERROR(response, "Move type not provided.");
-    switch(moveType) {
+    switch (moveType) {
       case Game.DRAW_CARD:
         GameController.drawCard(gameId, userId);
         break;
@@ -181,56 +181,68 @@ const GameController = {
         this.playCard(gameId, userId, cardId);
         break;
     }
-
     return response.status(200);
   },
   drawCard: (gameId, userId) => {
     // Validate that user is in that game and is currentPlayer
-    GameUser.isGameUser(userId, gameId)
-      .then((isGameUser) => {
+    return new Promise((resolve, reject) => {
 
-        if(!isGameUser) {
-          return;
-        }
-        Game.isCurrentPlayer(gameId, userId)
-          .then((isCurrentPlayer) => {
-            
-            if(!isCurrentPlayer) {
-              return;
-            }
+      GameUser.isGameUser(userId, gameId)
+        .then((isGameUser) => {
 
-            // Need to get the card at the top of the deck
-            GameDeck.getTopCard(gameId)
-              .then((topCard) => {
-                console.log(topCard);
+          if (!isGameUser) {
+            resolve(false);
+          }
+          Game.isCurrentPlayer(gameId, userId)
+            .then((isCurrentPlayer) => {
 
-                // Update the order and user fields in topCard to simulate the Game User drawing the card
-                GameDeck.update(
-                  {game: topCard.game, card: topCard.card},
-                  {user: userId, order: GameDeck.DRAWN}
+              if (!isCurrentPlayer) {
+                resolve(false);
+              }
+
+              // Need to get the card at the top of the deck
+              GameDeck.getTopCard(gameId)
+                .then((topCard) => {
+                  console.log(topCard);
+
+                  // Update the order and user fields in topCard to simulate the Game User drawing the card
+                  GameDeck.update(
+                    { game: topCard.game, card: topCard.card },
+                    { user: userId, order: GameDeck.DRAWN }
                   )
-                  .then((_) => {
-                    // Update Current Player and send Game State to all users in game
-                    Game.determineCurrentPlayer(gameId)
-                      .then((_) => {
-                        GameController.sendGameState(gameId);
-                      })
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+                    .then((_) => {
+                      // Update Current Player and send Game State to all users in game
+                      Game.determineCurrentPlayer(gameId)
+                        .then((_) => {
+                          GameController.sendGameState(gameId)
+                            .then((_) => {
+                              resolve(true)
+                            })
+                        })
+                        .catch((err) => {
+                          resolve(false);
+                        })
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      resolve(false);
+                    });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  resolve(false);
+                })
+            })
+            .catch((err) => {
+              console.log(err);
+              resolve(false);
+            })
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(false);
+        });
+    })
   },
   playCard: (gameId, userId, cardId) => {
     // validate that user is currentPlayer
@@ -242,24 +254,30 @@ const GameController = {
   // Sends the individualized game state of all game users in a game
   sendGameState: (gameId) => {
     // Get all game users in game
-    GameUser.getGameUsers(gameId)
-      .then((gameUsers) => {
+    return new Promise((resolve, reject) => {
+      GameUser.getGameUsers(gameId)
+        .then((gameUsers) => {
 
-        var promises = [];
+          var promises = [];
 
-        // Create promise to send individualized game state
-        gameUsers.forEach((gameUser) => {
-          promises.push(
-            GameController.getGameState(gameUser.game, gameUser.user)
-          );
-        });
+          // Create promise to send individualized game state
+          gameUsers.forEach((gameUser) => {
+            promises.push(
+              GameController.getGameState(gameUser.game, gameUser.user)
+            );
+          });
 
-        // Execute all promises
-        Promise.all(promises);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
+          // Execute all promises
+          Promise.all(promises)
+            .then((_) => {
+              resolve(true);
+            })
+        })
+        .catch((err) => {
+          console.log(err);
+          resolve(false);
+        })
+    })
   },
   // Returns the current state of a game based on the user who made the request.
   // The calling user will get their full state and a limited state of all other
@@ -304,7 +322,7 @@ const GameController = {
                 GameDeck.getGameDeck(gameId)
                   .then((gameDeck) => {
                     // if(!gameDeck) return JSON_ERROR(response, "Could not get game deck state.");
-          
+
                     // Map through game deck and build the state.
                     gameDeck.map((gameDeckCard) => {
                       // Get the base card from the base deck based on the game
@@ -312,28 +330,28 @@ const GameController = {
                       const baseCard = baseDeck.filter(i => i.id == gameDeckCard.card)[0];
 
                       // Update the last played card.
-                      if(gameDeckCard.order === GameDeck.LAST_PLAYED) {
+                      if (gameDeckCard.order === GameDeck.LAST_PLAYED) {
                         state.lastPlayedCard = baseCard;
                       }
-            
-                      if(gameDeckCard.user !== null) {
+
+                      if (gameDeckCard.user !== null) {
                         // Get the game user that this game deck card belongs to. 
                         const gameUser = gameUsers.filter(i => i.user == gameDeckCard.user)[0];
 
                         // Add card state if the card belongs to the calling user.
-                        if(gameDeckCard.user === userId) {
+                        if (gameDeckCard.user === userId) {
                           state.user.playerNum = gameUser.player_num;
                           state.user.isCurrentPlayer = gameUser.current_player;
                           state.user.handLength += 1;
                           state.user.cards.push(baseCard);
-                        
+
                         } else {
                           // Add limited card state if the card does not belong
                           // to the calling user.
-                          if(state.otherPlayers[gameUser.player_num]) {
+                          if (state.otherPlayers[gameUser.player_num]) {
                             state.otherPlayers[gameUser.player_num].handLength += 1;
                           } else {
-                            state.otherPlayers[gameUser.player_num] = { 
+                            state.otherPlayers[gameUser.player_num] = {
                               handLength: 1,
                               isCurrentPlayer: gameUser.current_player
                             };
@@ -341,7 +359,7 @@ const GameController = {
                         }
                       }
                     })
-            
+
                     GameEvents.TRIGGER_GAME_STATE(gameId, userId, state);
                     // return response.status(200);
                   })
@@ -381,20 +399,20 @@ const GameController = {
   isGameUser: (user, game) => {
     return new Promise((resolve, reject) => {
       GameUser.isGameUser(user, game)
-      .then((isGameUser) => {
-        if(isGameUser) {
-          return resolve(true);
-        }
+        .then((isGameUser) => {
+          if (isGameUser) {
+            return resolve(true);
+          }
 
-        return resolve(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        return response.json({
-          status: "failure",
-          message: "Error occurred while checking if user is a game user."
+          return resolve(false);
         })
-      })
+        .catch((err) => {
+          console.log(err);
+          return response.json({
+            status: "failure",
+            message: "Error occurred while checking if user is a game user."
+          })
+        })
     })
   }
 };

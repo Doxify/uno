@@ -85,7 +85,9 @@ class Game extends ActiveRecord {
       GameUser.getGameUsers(gameId)
         .then((gameUsers) => {
           // Get the current player of the game
+
           const currentPlayer = gameUsers.filter((gameUser) => gameUser.current_player == true)[0];
+
 
           if(currentPlayer.user === userId) {
             resolve(true);
@@ -109,6 +111,7 @@ class Game extends ActiveRecord {
           const isClockwise = game.direction_clockwise;
           // Get all of the game users
           GameUser.getGameUsers(gameId).then((gameUsers) => {
+
             var promises = [];
             const currentPlayer = gameUsers.filter(
               (i) => i.current_player == true
@@ -118,12 +121,14 @@ class Game extends ActiveRecord {
             // If the current player num is undefined, assign
             // one randomly.
             if (!currentPlayer) {
+              let randomPlayer = Math.floor(Math.random() * 4) + 1;
               nextPlayer = gameUsers.filter(
-                (i) => i.player_num == Math.floor(Math.random() * 4 + 1)
+                (i) => i.player_num == randomPlayer
               )[0];
             } else {
               // Determine who the current player should be based off
               // the direction the game is currently going in.
+
               if (isClockwise) {
                 // 'increase' the player num
                 if (
@@ -131,16 +136,17 @@ class Game extends ActiveRecord {
                 ) {
                   nextPlayer = gameUsers.filter((i) => i.player_num == 1)[0];
                 } else {
-                  nextPlayer = gameUsers.filter((i) => i.playerNum + 1)[0];
+                  nextPlayer = gameUsers.filter((i) => currentPlayer.player_num + 1 == i.player_num)[0];
                 }
               } else {
                 // 'decrease' the player num
                 if (currentPlayer.player_num == 1) {
                   nextPlayer = gameUsers.filter((i) => i.player_num == 4)[0];
                 } else {
-                  nextPlayer = gameUsers.filter((i) => i.player_num - 1)[0];
+                  nextPlayer = gameUsers.filter((i) => currentPlayer.player_num - 1 == i.player_num)[0];
                 }
               }
+
 
               // Create a promise to remove current_player
               // status from the current player.
