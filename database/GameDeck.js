@@ -1,4 +1,5 @@
 const ActiveRecord = require('./ActiveRecord');
+const BaseDeckCard = require('./BaseDeck');
 var BaseDeck = require('./BaseDeck');
 
 
@@ -9,6 +10,12 @@ class GameDeckCard extends ActiveRecord{
     static LAST_PLAYED = -1;
     static DRAWN = -2;
     static PLAYED = -3;
+
+    static LAST_PLAYED_RED = -6;
+    static LAST_PLAYED_GREEN = -7;
+    static LAST_PLAYED_YELLOW = -8;
+    static LAST_PLAYED_BLUE = -9;
+    static LAST_PLAYED_BLACK = -10;
 
     game = undefined;
     user = undefined;
@@ -114,14 +121,10 @@ class GameDeckCard extends ActiveRecord{
 
     static getLastPlayedCard(game) {
         return new Promise((resolve, reject) => {
-            GameDeckCard.findAll('game', game)
-                .then((gameDeck) => {
-                    gameDeck.forEach((card) => {
-                        if(card.order === this.LAST_PLAYED) {
-                            return resolve(card);
-                        }
-                    })
-                    return resolve(null);
+            GameDeckCard.findOne('order', -5, "<", true)
+                .then((card) => {
+                    console.log(card);
+                    resolve(card);
                 })
                 .catch((err) => {
                     return reject(err);
@@ -142,6 +145,21 @@ class GameDeckCard extends ActiveRecord{
                     return reject(err);
                 });
         });
+    }
+
+    static getLastPlayedCardOrder(color) {
+        switch(color) {
+            case "red":
+                return GameDeckCard.LAST_PLAYED_RED;
+            case "green":
+                return GameDeckCard.LAST_PLAYED_GREEN;
+            case "blue":
+                return GameDeckCard.LAST_PLAYED_BLUE;
+            case "yellow":
+                return GameDeckCard.LAST_PLAYED_YELLOW;
+            case "black":
+                return GameDeckCard.LAST_PLAYED_BLACK;
+        }
     }
 
 

@@ -88,7 +88,8 @@ body {
 .face-up,
 .face-down {
   display: block;
-  height: auto;
+  height: 100px;
+  max-height: 100px;
   width: 100%;
   object-fit: cover;
 
@@ -104,10 +105,9 @@ body {
   z-index: 1000;
 }
 
-#draw {
-  margin: 0px;
-  top: 0px;
-  left: 0px;
+#draw-card {
+  height: 100px;
+  max-height: 100px;
 }
 
 .user-hand {

@@ -7,6 +7,7 @@ const GameDeckController = require("./GameDeck");
 
 const LobbyEvents = require('../events/lobby');
 const GameEvents = require('../events/game');
+const GameDeckCard = require("../database/GameDeck");
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -257,6 +258,7 @@ const GameController = {
                   // Validate that the move is legal.
                   GameDeck.getLastPlayedCard(gameId)
                   .then((lastPlayedCard) => {
+                    console.log(lastPlayedCard);
                     if(!lastPlayedCard) return resolve(false);
 
                     // Get the base card of the played card and last played card.
@@ -285,7 +287,7 @@ const GameController = {
                               // Set the user of the card being played to null.
                               GameDeck.update(
                                 { game: cardPlayedFromHand.game, card: cardPlayedFromHand.card },
-                                { order: GameDeck.LAST_PLAYED, user: null }
+                                { order: GameDeckCard.getLastPlayedCardOrder(basePlayedCard.color), user: null }
                               )
                             ])
                             .then(() => {
@@ -422,7 +424,7 @@ const GameController = {
                       const baseCard = baseDeck.filter(i => i.id == gameDeckCard.card)[0];
 
                       // Update the last played card.
-                      if (gameDeckCard.order === GameDeck.LAST_PLAYED) {
+                      if (gameDeckCard.order < -5) {
                         state.lastPlayedCard = baseCard;
                       }
 

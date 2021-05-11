@@ -2,6 +2,7 @@ const BaseDeck = require('../database/BaseDeck')
 const GameDeck = require('../database/GameDeck')
 const GameUser = require('../database/GameUser')
 const GameDeckCard = require('../database/GameDeck')
+const BaseDeckCard = require('../database/BaseDeck')
 
 
 const GameDeckController = {
@@ -41,31 +42,36 @@ const GameDeckController = {
                             console.log("shuffled game deck");
 
                             // Deal 7 cards to each Game User
-                            gameDeck = GameDeckController.dealCards(gameUsers, gameDeck);
+                            gameDeck = GameDeckController.dealCards(gameUsers, gameDeck)
+                                .then((deck) => {
+                                    console.log("dealt cards")
 
-                            console.log("dealt cards")
+                                    // Insert all Game Deck Card objects into database using Promise.all
+                                    var promises = [];
 
-                            // Insert all Game Deck Card objects into database using Promise.all
-                            var promises = [];
+                                    deck.forEach((gameCard) => {
+                                        // console.log(gameCard);
+                                        promises.push(
+                                            gameCard.save()
+                                        );
+                                    });
 
-                            gameDeck.forEach((gameCard) => {
-                                // console.log(gameCard);
-                                promises.push(
-                                    gameCard.save()
-                                );
-                            });
-
-                            console.log("created all promises");
+                                    console.log("created all promises");
 
 
-                            Promise.all(promises)
-                                .then(() => {
-                                    console.log("added everything to database");
-                                    resolve(true)
+                                    Promise.all(promises)
+                                        .then(() => {
+                                            console.log("added everything to database");
+                                            resolve(true)
+                                        })
+                                        .catch((err) => {
+                                            console.log(err);
+                                        })
                                 })
                                 .catch((err) => {
                                     console.log(err);
                                 })
+
                         });
 
                 })
@@ -75,7 +81,7 @@ const GameDeckController = {
         });
 
     },
-    
+
 
     shuffle: (gameDeck, numShuffles) => {
 
@@ -117,31 +123,42 @@ const GameDeckController = {
     // gameUsers: Array of GameUser objects
     // gameDeck: Array of GameDeckCard objects
     dealCards: (gameUsers, gameDeck) => {
-        if (!(gameUsers instanceof Array)) {
-            throw new Error("gameUsers must be an array")
-        }
+        return new Promise((resolve, reject) => {
 
-        if (!(gameDeck instanceof Array)) {
-            throw new Error("gameDeck must be an array.");
-        }
 
-        if (!(gameDeck[0] instanceof GameDeckCard)) {
-            throw new Error("gameDeck objects must be a GameDeckCard object.");
-        }
-
-        topCard = 0;
-        for (let i = 0; i < 7; i++) {
-
-            for (let gameUser of gameUsers) {
-                gameDeck[topCard].user = gameUser.user;
-                gameDeck[topCard].order = GameDeckCard.DRAWN;
-                topCard++;
+            if (!(gameUsers instanceof Array)) {
+                throw new Error("gameUsers must be an array")
             }
-        }
 
-        gameDeck[topCard].order = GameDeckCard.LAST_PLAYED;
+            if (!(gameDeck instanceof Array)) {
+                throw new Error("gameDeck must be an array.");
+            }
 
-        return gameDeck;
+            if (!(gameDeck[0] instanceof GameDeckCard)) {
+                throw new Error("gameDeck objects must be a GameDeckCard object.");
+            }
+
+            topCard = 0;
+            for (let i = 0; i < 7; i++) {
+
+                for (let gameUser of gameUsers) {
+                    gameDeck[topCard].user = gameUser.user;
+                    gameDeck[topCard].order = GameDeckCard.DRAWN;
+                    topCard++;
+                }
+            }
+
+
+            console.log("setting last played")
+            console.log(gameDeck[topCard].card);
+
+            BaseDeckCard.getCard(gameDeck[topCard].card)
+                .then((baseCard) => {
+                    gameDeck[topCard].order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
+                    console.log("set last played")
+                    return resolve(gameDeck);
+                })
+        })
     }
 }
 
