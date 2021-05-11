@@ -210,8 +210,11 @@ const GameController = {
                   {user: userId, order: GameDeck.DRAWN}
                   )
                   .then((_) => {
-                    // Send Game State to all users in game
-                    GameController.sendGameState(gameId);
+                    // Update Current Player and send Game State to all users in game
+                    Game.determineCurrentPlayer(gameId)
+                      .then((_) => {
+                        GameController.sendGameState(gameId);
+                      })
                   })
                   .catch((err) => {
                     console.log(err);
