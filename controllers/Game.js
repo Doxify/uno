@@ -257,7 +257,6 @@ const GameController = {
                   // Validate that the move is legal.
                   GameDeck.getLastPlayedCard(gameId)
                   .then((lastPlayedCard) => {
-                    console.log(lastPlayedCard);
                     if(!lastPlayedCard) return resolve(false);
 
                     // Get the base card of the played card and last played card.
@@ -296,12 +295,12 @@ const GameController = {
 
                             // If the played card is a reverse card, change the
                             // direction of the game.
-                            if(basePlayedCard.value === BaseDeck.SKIP) {
+                            if(basePlayedCard.value === BaseDeck.REVERSE) {
                               promises.push(
                                 Game.get(gameId)
                                   .then((game) => {
                                     Game.update(
-                                      { game: cardPlayedFromHand.game },
+                                      { id: cardPlayedFromHand.game },
                                       { direction_clockwise: !game.direction_clockwise}
                                     )
                                   })
