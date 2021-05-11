@@ -1,9 +1,6 @@
 const ActiveRecord = require('./ActiveRecord');
-const BaseDeckCard = require('./BaseDeck');
-var BaseDeck = require('./BaseDeck');
 
-
-class GameDeckCard extends ActiveRecord{
+class GameDeckCard extends ActiveRecord {
     static table_name = "Game Deck";
     static fields = ['game','user', 'card', 'order'];
 

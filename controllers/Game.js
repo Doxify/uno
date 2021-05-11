@@ -276,20 +276,41 @@ const GameController = {
                               return resolve(false);
                             }
 
-                            // Execute promises which update the state of the game.
-                            Promise.all([
-                              // Set the order of the last played card to -3.
+                            var promises = [];
+
+                            // Set the order of the last played card to -3.
+                            promises.push(
                               GameDeck.update(
                                 { game: lastPlayedCard.game, card: lastPlayedCard.card },
                                 { order: GameDeck.PLAYED }
-                              ),
-                              // Set the order of the card being played to -1.
-                              // Set the user of the card being played to null.
+                              )
+                            );
+
+                            // Set the order of the card being played to -1.
+                            // Set the user of the card being played to null.
+                            promises.push(
                               GameDeck.update(
                                 { game: cardPlayedFromHand.game, card: cardPlayedFromHand.card },
                                 { order: GameDeckCard.getLastPlayedCardOrder(basePlayedCard.color), user: null }
                               )
-                            ])
+                            );
+
+                            // If the played card is a reverse card, change the
+                            // direction of the game.
+                            if(basePlayedCard.value === BaseDeck.SKIP) {
+                              promises.push(
+                                Game.get(gameId)
+                                  .then((game) => {
+                                    Game.update(
+                                      { game: cardPlayedFromHand.game },
+                                      { direction_clockwise: !game.direction_clockwise}
+                                    )
+                                  })
+                              )
+                            }
+
+                            // Execute promises which update the state of the game.
+                            Promise.all(promises)
                             .then(() => {
                               // Determine the next currentPlayer based on the
                               // move that just occurred.
