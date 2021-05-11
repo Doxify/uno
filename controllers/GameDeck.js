@@ -149,13 +149,10 @@ const GameDeckController = {
             }
 
 
-            console.log("setting last played")
-            console.log(gameDeck[topCard].card);
 
             BaseDeckCard.getCard(gameDeck[topCard].card)
                 .then((baseCard) => {
                     gameDeck[topCard].order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
-                    console.log("set last played")
                     return resolve(gameDeck);
                 })
         })

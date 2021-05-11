@@ -52,7 +52,6 @@ class GameDeckCard extends ActiveRecord {
         var promises = [];
 
         gameDeck.forEach((gameCard) => {
-            console.log(gameCard);
             promises.push(gameCard.save());
         });
 
@@ -117,8 +116,15 @@ class GameDeckCard extends ActiveRecord {
     }
 
     static getLastPlayedCard(game) {
+        const data = {
+            game: game,
+            order: -5
+        }
+
+        const comparator = ["=", "<"]
+
         return new Promise((resolve, reject) => {
-            GameDeckCard.findOne('order', -5, "<", true)
+            GameDeckCard.findOne(data, comparator, true, "order")
                 .then((card) => {
                     console.log(card);
                     resolve(card);
@@ -130,8 +136,15 @@ class GameDeckCard extends ActiveRecord {
     }
 
     static getTopCard(game) {
+        const data = {
+            game: game,
+            order: 0
+        }
+
+        const comparator = ["=", ">"]
+
         return new Promise((resolve, reject) => {
-            GameDeckCard.findOne('order', 0, ">", true)
+            GameDeckCard.findOne(data, comparator, true, "order")
                 .then((gameCardData) => {
                     // Create GameDeckCard object
                     let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);

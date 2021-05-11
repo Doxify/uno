@@ -18,12 +18,21 @@ class ActiveRecord {
         return db.any(`SELECT * FROM "${this.table_name}" WHERE "${field}"=$1`, value);
     }
 
-    static findOne(field, value, comparator, ascending) {
-        if(!this.fields.includes(field)) return this.INVALID_FIELD_ERROR(field);
+    static findOne(conditions, comparator, ascending, orderByField) {
+        var whereClause = '';
+        Object.entries(conditions).forEach(([key, value], index) => {
+            if(!this.fields.includes(key)) return this.INVALID_FIELD_ERROR(key);
 
-        console.log(`SELECT * FROM "${this.table_name}" WHERE "${field}"${comparator}=$1 ORDER BY "${field}" ${ascending ? "ASC" : "DESC"} LIMIT 1`);
+            // Append condition with comparator
+            whereClause += `"${key}" ${comparator[index]} '${value}'`;
 
-        return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE "${field}"${comparator}=$1 ORDER BY "${field}" ${ascending ? "ASC" : "DESC"} LIMIT 1`, value);
+            if(index < Object.keys(conditions).length-1) {
+                whereClause += ' AND ';
+            }
+        })
+
+
+        return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE ${whereClause} ORDER BY "${orderByField}" ${ascending ? "ASC" : "DESC"} LIMIT 1`);
     }
 
     static findBy(field, value) {

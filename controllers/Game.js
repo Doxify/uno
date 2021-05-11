@@ -248,7 +248,6 @@ const GameController = {
           Game.isCurrentPlayer(gameId, userId)
             .then((isCurrentPlayer) => {
               if(!isCurrentPlayer) return resolve(false);
-              
               GameDeck.getUserHand(gameId, userId)
                 .then((userGameHand) => {
                   // Check if the card is in the user's hand.

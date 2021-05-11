@@ -112,7 +112,7 @@ class Game extends ActiveRecord {
         .then((game) => {
           // Get the last played card to determine if next player is skipped or
           // direction changes.
-          GameDeck.getLastPlayedCard(game)
+          GameDeck.getLastPlayedCard(game.id)
             .then((lastPlayedCard) => {
               BaseDeck.getCard(lastPlayedCard.card)
                 .then((lastPlayedBaseCard) => {
