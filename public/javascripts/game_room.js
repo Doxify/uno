@@ -23,15 +23,15 @@ stateChannel.bind('update', (data) => {
         isGameOver: false,
         otherPlayers: [
             {
-                handLength: 7,
+                handLength: 5,
                 playerNum: 4,
             },
             {
-                handLength: 7,
+                handLength: 6,
                 playerNum: 1,
             },
             {
-                handLength: 7,
+                handLength: 4,
                 playerNum: 2,
             },
         ],

@@ -18,11 +18,8 @@ class ActiveRecord {
         return db.any(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
     }
 
-    // Similar to findBy(field, value), but this field takes in a comparator and a boolean ascending variable
-    static findOne(field, value, comparator, ascending) {
-        if(!this.fields.includes(field)) return this.INVALID_FIELD_ERROR(field);
-
-        return db.oneOrNone(`SELECT * FROM "${field}" WHERE ${field}${comparator}=$1 ORDER BY ASC LIMIT 1`, value);
+    static findOne(field, value, asscending) {
+        // TODO:
     }
 
     static findBy(field, value) {
