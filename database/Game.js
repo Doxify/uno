@@ -11,8 +11,8 @@ class Game extends ActiveRecord {
   static table_name = "Game";
   static fields = ["id", "active", "direction_clockwise"];
 
-  static DRAW_CARD = -1;
-  static PLAY_CARD = -2;
+  static DRAW_CARD = "-1";
+  static PLAY_CARD = "-2";
 
   id = undefined;
   active = undefined;
@@ -78,6 +78,26 @@ class Game extends ActiveRecord {
           reject(err);
         });
     });
+  }
+
+  static isCurrentPlayer(gameId, userId) {
+    return new Promise((resolve, reject) => {
+      GameUser.getGameUsers(gameId)
+        .then((gameUsers) => {
+          // Get the current player of the game
+          const currentPlayer = gameUsers.filter((gameUser) => gameUser.current_player == true)[0];
+
+          if(currentPlayer.user === userId) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          reject(err);
+        });
+    })
   }
 
   // Determines the current player's turn in a game.

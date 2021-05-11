@@ -136,49 +136,50 @@
   background-position: -288px -180px;
 }
 
-.uno-card-skip-red-10 {
+
+.uno-card-red-10 {
   background-position: -320px 0px;
 }
-.uno-card-skip-yellow-10 {
+.uno-card-yellow-10 {
   background-position: -320px -60px;
 }
-.uno-card-skip-green-10 {
+.uno-card-green-10 {
   background-position: -320px -120px;
 }
-.uno-card-skip-blue-10 {
+.uno-card-blue-10 {
   background-position: -320px -180px;
 }
 
-.uno-card-reverse-red-11 {
+.uno-card-red-11 {
   background-position: -352px 0px;
 }
-.uno-card-reverse-yellow-11 {
+.uno-card-yellow-11 {
   background-position: -352px -60px;
 }
-.uno-card-reverse-green-11 {
+.uno-card-green-11 {
   background-position: -352px -120px;
 }
-.uno-card-reverse-blue-11 {
+.uno-card-blue-11 {
   background-position: -352px -180px;
 }
 
-.uno-card-red-draw-12 {
+.uno-card-red-12 {
   background-position: -384px 0px;
 }
-.uno-card-yellow-draw-12 {
+.uno-card-yellow-12 {
   background-position: -384px -60px;
 }
-.uno-card-green-draw-12 {
+.uno-card-green-12 {
   background-position: -384px -120px;
 }
-.uno-card-blue-draw-12 {
+.uno-card-blue-12 {
   background-position: -384px -180px;
 }
 
-.uno-card-WILD-13 {
+.uno-card-black-13 {
   background-position: -416px 0px;
 }
 
-.uno-card-WILDDRAW4-14 {
+.uno-card-black-14 {
   background-position: -416px -240px;
 }

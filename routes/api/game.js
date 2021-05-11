@@ -25,7 +25,7 @@ router.get('/state/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (requ
 // - type [-1 = draw card, -2 = play card]
 // - cardId [id of card from base deck]
 router.post('/makeMove/:uuid', isAuthed, gameExists, isGameUser, isActiveGame, (request, response, next) => {
-    GameConstroller.handleMove(request, response, next);
+    GameController.handleMove(request, response, next);
 });
 
 module.exports = router;

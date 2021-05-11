@@ -2,7 +2,7 @@
 const gameStateChannel = pusher.subscribe(`presence-STATE_${roomId}${userId}`);
 const gameData = { members: {}, memberCount: 0}
 
-console.log(gameData);
+
 
 
 // ====================================================================
@@ -31,8 +31,10 @@ gameStateChannel.bind("GAME_STATE", (data) => {
   console.log(data);
   
   renderCards(data);
-  otherprenderCards(data);
-  console.log(data.otherPlayers[`${leftPlayer}`])
+})
+
+document.querySelector("#draw-card").addEventListener("click", async () =>  {
+  drawCard();
 })
 
 
@@ -41,6 +43,16 @@ gameStateChannel.bind("GAME_STATE", (data) => {
 // ====================================================================
 async function requestGameState() {
   await fetch(`/api/game/state/${roomId}`).then(res => res.json());
+}
+
+async function drawCard() {
+  await fetch(`/api/game/makeMove/${roomId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({type: "-1"}),
+    method: "POST"
+  })
 }
 
 
@@ -58,32 +70,43 @@ async function requestGameState() {
 
 
 function renderCards(state){ 
-  leftPlayer = ((state.user.playerNum + 1) % 4) + 1
-  topPlayer = ((state.user.playerNum + 2) % 4) + 1
-  rightPlayer = ((state.user.playerNum + 3) % 4) + 1
+  leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
+  topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
+  rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
   let html = `
     <div class="my-card">
     <img src="../images/unocards.png".face-down height = '100'>
+    
     </div>
     `;;
     document.querySelector("#left-player").innerHTML = null;
     document.querySelector("#top-player").innerHTML = null;
     document.querySelector("#right-player").innerHTML = null;
-    for( let i=0; i<state.otherPlayers[`${leftPlayer}`];i++)
+    document.querySelector("#last-played-card").innerHTML = null;
+
+    for( let i=0; i<state.otherPlayers[leftPlayer].handLength;i++)
     {
       document.querySelector("#left-player").insertAdjacentHTML('beforeend', html);
     
     }
-    for( let i=0; i<state.otherPlayers[`${topPlayer}`];i++)
+    for( let i=0; i<state.otherPlayers[topPlayer].handLength;i++)
     {
       document.querySelector("#top-player").insertAdjacentHTML('beforeend', html);
     
-    }for( let i=0; i<state.otherPlayers[`${rightPlayer}`];i++)
+    }
+    for( let i=0; i<state.otherPlayers[rightPlayer].handLength;i++)
     {
       document.querySelector("#right-player").insertAdjacentHTML('beforeend', html);
     
     }
 
+    html = `
+    <div class="my-card">
+    <svg class="face-up uno-card uno-card-${state.lastPlayedCard.color}-${state.lastPlayedCard.value}"></svg>
+    </div>
+    `;
+
+    document.querySelector("#last-played-card").insertAdjacentHTML('beforeend', html);
     
     
 
@@ -94,7 +117,7 @@ function renderCards(state){
       <div class="my-card">
       <svg class="face-up uno-card uno-card-${element.color}-${element.value}"></svg>
       </div>
-      `;;
+      `;
       document.querySelector("#user-player").insertAdjacentHTML('beforeend', html);
      
 
@@ -104,28 +127,4 @@ function renderCards(state){
 
 
       
-}
-
-
-function otherprenderCards(state){ 
-  state.user.cards.forEach(element => {
-     
-    let html = `
-    <div class="my-card">
-    <img src="../images/unocards.png".face-down/ height = '90px'
-    width= '64px';>
-    </div>
-    `;;
-    
-    document.querySelector("#right-player").insertAdjacentHTML('beforeend', html);
-    document.querySelector("#top-player").insertAdjacentHTML('beforeend', html);
-    document.querySelector("#left-player").insertAdjacentHTML('beforeend', html);
-    
-    
-   
-
-    });
-
-
-    
 }

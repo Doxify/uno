@@ -15,11 +15,15 @@ class ActiveRecord {
     // Similar to findBy(field, value), but this method returns all rows
     static findAll(field, value) {
         if(!this.fields.includes(field)) return this.INVALID_FIELD_ERROR(field);
-        return db.any(`SELECT * FROM "${this.table_name}" WHERE ${field}=$1`, value);
+        return db.any(`SELECT * FROM "${this.table_name}" WHERE "${field}"=$1`, value);
     }
 
-    static findOne(field, value, asscending) {
-        // TODO:
+    static findOne(field, value, comparator, ascending) {
+        if(!this.fields.includes(field)) return this.INVALID_FIELD_ERROR(field);
+
+        console.log(`SELECT * FROM "${this.table_name}" WHERE "${field}"${comparator}=$1 ORDER BY "${field}" ${ascending ? "ASC" : "DESC"} LIMIT 1`);
+
+        return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE "${field}"${comparator}=$1 ORDER BY "${field}" ${ascending ? "ASC" : "DESC"} LIMIT 1`, value);
     }
 
     static findBy(field, value) {
@@ -53,7 +57,7 @@ class ActiveRecord {
         const fieldsAndCols = [[], []];
         Object.entries(data).forEach(([key, value]) => {
             if (!this.fields.includes(key)) return this.INVALID_FIELD_ERROR(key);
-            fieldsAndCols[0].push(`${key}`);
+            fieldsAndCols[0].push(`"${key}"`);
             fieldsAndCols[1].push(`'${value}'`);
         });
 
@@ -67,7 +71,6 @@ class ActiveRecord {
                 setSQLSection += ', ';
             }
         }
-
 
         return db.any(`
             UPDATE "${this.table_name}"

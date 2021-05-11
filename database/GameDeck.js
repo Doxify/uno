@@ -117,6 +117,22 @@ class GameDeckCard extends ActiveRecord{
         })
     }
 
+    static getTopCard(game) {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.findOne('order', 0, ">", true)
+                .then((gameCardData) => {
+                    // Create GameDeckCard object
+                    let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
+
+                    resolve(gameCard);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
+    }
+
 
     // Save GameDeckCard into Game Deck table in database with the values from the instance data fields
     save() {

@@ -75,6 +75,7 @@ const GameDeckController = {
         });
 
     },
+    
 
     shuffle: (gameDeck, numShuffles) => {
 
@@ -137,6 +138,8 @@ const GameDeckController = {
                 topCard++;
             }
         }
+
+        gameDeck[topCard].order = GameDeckCard.LAST_PLAYED;
 
         return gameDeck;
     }
