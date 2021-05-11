@@ -226,7 +226,7 @@ body {
   border-radius: 8px;
 }
 
-.username::after {
+.username-current-player::after {
   content: "";
   position: absolute;
   display: block;

@@ -58,7 +58,12 @@ class ActiveRecord {
         Object.entries(data).forEach(([key, value]) => {
             if (!this.fields.includes(key)) return this.INVALID_FIELD_ERROR(key);
             fieldsAndCols[0].push(`"${key}"`);
-            fieldsAndCols[1].push(`'${value}'`);
+            
+            if (value != null) {
+                fieldsAndCols[1].push(`'${value}'`);
+            } else {
+                fieldsAndCols[1].push(`${value}`);
+            }
         });
 
         // Build SET values section

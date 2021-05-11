@@ -1,7 +1,6 @@
 extends layout 
 
 block content
-    // Import game_room.css
     head 
         title= title 
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
@@ -21,6 +20,7 @@ block content
             .row.flex-fill.d-flex.flex-row
                 .game-container.col
                     .game.container-fluid.h-100.d-flex.flex-column
+                        
                         .top.row
                             .container-fluid.w-100.h-100
                                 .row.w-100.h-100
@@ -28,6 +28,7 @@ block content
                                         #top-player.user-hand.reverse-hand
                                         .username-container    
                                             #top-player-username.username.bg-dark Username
+                        
                         .middle.row
                             .col-sm.center-player
                                 .username-container 
@@ -45,6 +46,7 @@ block content
                                 #right-player.user-hand.side-player.reverse-hand
                                 .username-container 
                                     #right-player-username.username.bg-dark Username
+                        
                         .bottom.row
                             .container-fluid.w-100.h-100
                                 .row.w-100.h-100

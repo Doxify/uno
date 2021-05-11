@@ -10,12 +10,10 @@ class GameDeckCard extends ActiveRecord{
     static DRAWN = -2;
     static PLAYED = -3;
 
-
     game = undefined;
     user = undefined;
     card = undefined;
     order = undefined;
-
 
     constructor(game, user, card, order) {
         super();
@@ -41,11 +39,6 @@ class GameDeckCard extends ActiveRecord{
         return this.order;
     }
 
-    set order(order) {
-        this.order = order;
-    }
-
-
 
     // Inserts a game deck into the database
     // gameDeck: Array of GameDeckCard objects
@@ -56,14 +49,7 @@ class GameDeckCard extends ActiveRecord{
 
         gameDeck.forEach((gameCard) => {
             console.log(gameCard);
-
-            promises.push(
-                gameCard.save()
-                    .catch((err) => {
-                        console.log(err);
-                        reject(err);
-                    })
-            );
+            promises.push(gameCard.save());
         });
 
         // Run all promises and return gameDeck for further use
@@ -71,6 +57,10 @@ class GameDeckCard extends ActiveRecord{
             Promise.all(promises)
             .then(() => {
                 resolve(gameDeck);
+            })
+            .catch((err) => {
+                console.log(err);
+                reject(err);
             });
         });
     }
@@ -100,6 +90,28 @@ class GameDeckCard extends ActiveRecord{
         });
     }
 
+    static getUserHand(game, user) {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.findAll('game', game)
+                .then((gameDeckData) => {
+                    let userGameDeck = [];
+
+                    for(let gameCardData of gameDeckData) {
+                        if(gameCardData.user === user) {
+                            let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
+                            userGameDeck.push(gameCard);                        
+                        }
+                    }
+
+                    return resolve(userGameDeck);
+                })
+                .catch((err) => {
+                    return reject(err);
+                })
+        })
+
+    }
+
     static getLastPlayedCard(game) {
         return new Promise((resolve, reject) => {
             GameDeckCard.findAll('game', game)
@@ -123,12 +135,11 @@ class GameDeckCard extends ActiveRecord{
                 .then((gameCardData) => {
                     // Create GameDeckCard object
                     let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
-
-                    resolve(gameCard);
+                    return resolve(gameCard);
                 })
                 .catch((err) => {
                     console.log(err);
-                    reject(err);
+                    return reject(err);
                 });
         });
     }
@@ -155,84 +166,8 @@ class GameDeckCard extends ActiveRecord{
                     reject(err);
                 });
         });
-
-
-        // return new Promise((resolve, reject) => {
-        //     GameDeckCard.all().then((deckk) => {
-                
-        //         const newdeck = new base_Deck();
-        //         newdeck.shuffle()
-        //         console.log('new deck');
-        //         console.log(newdeck.cards);
-        //         var hn = newdeck.cards;
-                
-        //         const grounddeck = new Stack();
-        //         const player1 = new Stack();
-        //         const player2 = new Stack();
-        //         const player3 = new Stack();
-        //         const player4 = new Stack();
-
-        //         for(let i=0; i<108; i++)
-        //         {
-        //             if(player1.size() != 7){
-        //                 player1.push(hn[i]);
-        //             }
-        //             if(player2.size() != 7){
-        //                 player2.push(hn[i+7]);
-        //             }
-        //             if(player3.size() != 7){
-        //                 player3.push(hn[i+14]);
-        //             }
-        //             if(player4.size() != 7){
-        //                 player4.push(hn[i+21]);
-        //             }
-        //             if(grounddeck.size() != 80){
-        //                 grounddeck.push(hn[i+28]);
-        //             }
-                    
-        //         }
-                
-        //         console.log('player1');
-        //         console.log(player1);
-
-        //         console.log('player2');
-        //         console.log(player2);
-
-        //         console.log('player3');
-        //         console.log(player3);
-                
-        //         console.log('player4');
-        //         console.log(player4);
-
-        //         console.log('gronunddeck')
-        //         console.log(grounddeck);
-        //     });
-            
-        // });
     }
 }
-
-
-// class Stack {
-//     constructor(){
-//         this.items = []
-//         this.count = 0
-//     }
-
-//     push(element){
-//         this.items[this.count] = element
-//         console.log(`${element} added to ${this.count} `)
-//         this.count++
-//         return this.count-1
-//     }
-//     size(){
-//         return this.count
-//     }
-//     length(){ 
-//         return this.count = 7
-//     }
-    
-// }
 
 module.exports = GameDeckCard;
 

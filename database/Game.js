@@ -113,27 +113,21 @@ class Game extends ActiveRecord {
           GameUser.getGameUsers(gameId).then((gameUsers) => {
 
             var promises = [];
-            const currentPlayer = gameUsers.filter(
-              (i) => i.current_player == true
-            )[0];
+            const currentPlayer = gameUsers.filter((i) => i.current_player == true)[0];
             let nextPlayer;
 
             // If the current player num is undefined, assign
             // one randomly.
             if (!currentPlayer) {
               let randomPlayer = Math.floor(Math.random() * 4) + 1;
-              nextPlayer = gameUsers.filter(
-                (i) => i.player_num == randomPlayer
-              )[0];
+              nextPlayer = gameUsers.filter((i) => i.player_num == randomPlayer)[0];
             } else {
               // Determine who the current player should be based off
               // the direction the game is currently going in.
 
               if (isClockwise) {
                 // 'increase' the player num
-                if (
-                  currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME
-                ) {
+                if (currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
                   nextPlayer = gameUsers.filter((i) => i.player_num == 1)[0];
                 } else {
                   nextPlayer = gameUsers.filter((i) => currentPlayer.player_num + 1 == i.player_num)[0];

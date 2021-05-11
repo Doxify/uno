@@ -1,14 +1,11 @@
-/*import '/stylesheets/cardSize.css';*/
 const gameStateChannel = pusher.subscribe(`presence-STATE_${roomId}${userId}`);
-const gameData = { members: {}, memberCount: 0}
-
-
-
+const gameChannel = pusher.subscribe(`presence-STATE${roomId}`);
+const gameData = { members: {}, memberCount: 0 }
 
 // ====================================================================
 // Event Listeners
 // ====================================================================
-gameStateChannel.bind("pusher:subscription_succeeded", async (data) => {
+gameChannel.bind("pusher:subscription_succeeded", async (data) => {
   gameData.members = data.members;
   gameData.memberCount = data.count;
 
@@ -16,12 +13,12 @@ gameStateChannel.bind("pusher:subscription_succeeded", async (data) => {
   requestGameState();
 })
 
-gameStateChannel.bind("pusher:member_added", (member) => {
+gameChannel.bind("pusher:member_added", (member) => {
   gameData.members[member.id] = member.info;
   gameData.memberCount += 1;
 });
 
-gameStateChannel.bind("pusher:member_removed", (member) => {
+gameChannel.bind("pusher:member_removed", (member) => {
   delete gameData.members[member.id];
   gameData.memberCount -= 1;
 })
@@ -29,14 +26,14 @@ gameStateChannel.bind("pusher:member_removed", (member) => {
 gameStateChannel.bind("GAME_STATE", (data) => {
   console.log("Got state!");
   console.log(data);
-  
+  renderGameInfo(data);
   renderCards(data);
 })
 
-document.querySelector("#draw-card").addEventListener("click", async () =>  {
+// Listen for the draw card being clicked.
+document.getElementById("draw-card").addEventListener("click", async () =>  {
   drawCard();
-})
-
+});
 
 // ====================================================================
 // Communicating with the backend API
@@ -50,9 +47,19 @@ async function drawCard() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({type: "-1"}),
+    body: JSON.stringify({ type: "-1" }),
     method: "POST"
-  })
+  }).then(res => res.json());
+}
+
+async function playCard(cardId) {
+  await fetch(`/api/game/makeMove/${roomId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ type: "-2", cardId: cardId }),
+    method: "POST"
+  }).then(res => res.json());
 }
 
 
@@ -60,71 +67,121 @@ async function drawCard() {
 // render functions
 // ====================================================================
 
-//<div class="face-up uno-card-${element.color}-${element.value}"></div>
-{/*
- <div class="my-card">
-<div class="face-up uno-card-red-1"></div>
- 
-</div> 
-*/}
+// Renders all game/user info on the screen such as usernames, curret_player status,
+// and direction the game is going in.
+function renderGameInfo(state) {
+  // Calculate other players location based on this player.
+  let leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
+  let topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
+  let rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
+  let user;
 
+  document.querySelectorAll(".username-container").forEach((element) => {
+    switch(element.firstElementChild.id) {
+      case "left-player-username": {
+        user = state.otherPlayers[leftPlayer];
+        break;
+      }
+      case "top-player-username": {
+        user = state.otherPlayers[topPlayer];
+        break;
+      }
+      case "right-player-username": {
+        user = state.otherPlayers[rightPlayer];
+        break;
+      }
+      case "username": {
+        user = state.user;
+        break;
+      }
+    }
 
-function renderCards(state){ 
-  leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
-  topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
-  rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
-  let html = `
-    <div class="my-card">
-    <img src="../images/unocards.png".face-down height = '100'>
-    
-    </div>
-    `;;
+    element.firstElementChild.innerText = gameData.members[user.userId] ? gameData.members[user.userId].username : "Offline";
+    if(user.isCurrentPlayer) {
+      element.firstElementChild.classList.add("username-current-player");
+    } else {
+      element.firstElementChild.classList.remove("username-current-player");
+    }
+
+  });
+}
+
+// Renders all cards on the screen based on the game state.
+function renderCards(state) {
+    // Calculate other players location based on this player.
+    let leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
+    let topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
+    let rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
+
+    // Clear all previous cards HTML from the page.
     document.querySelector("#left-player").innerHTML = null;
     document.querySelector("#top-player").innerHTML = null;
     document.querySelector("#right-player").innerHTML = null;
     document.querySelector("#last-played-card").innerHTML = null;
+    document.querySelector("#user-player").innerHTML = null;
 
-    for( let i=0; i<state.otherPlayers[leftPlayer].handLength;i++)
-    {
-      document.querySelector("#left-player").insertAdjacentHTML('beforeend', html);
-    
+    // Render the last played card.
+    document
+      .querySelector("#last-played-card")
+      .insertAdjacentHTML(
+        'beforeend', 
+        getFaceUpCardHTML(
+          state.lastPlayedCard.id, 
+          state.lastPlayedCard.color, 
+          state.lastPlayedCard.value, 
+          false
+        )); 
+
+    // Render other players' face down cards.
+    for( let i=0; i<state.otherPlayers[leftPlayer].handLength; i++) {
+      document
+        .querySelector("#left-player")
+        .insertAdjacentHTML('beforeend', getFaceDownCardHTML());
     }
-    for( let i=0; i<state.otherPlayers[topPlayer].handLength;i++)
-    {
-      document.querySelector("#top-player").insertAdjacentHTML('beforeend', html);
-    
+    for( let i=0; i<state.otherPlayers[topPlayer].handLength; i++) {
+      document
+        .querySelector("#top-player")
+        .insertAdjacentHTML('beforeend', getFaceDownCardHTML());
     }
-    for( let i=0; i<state.otherPlayers[rightPlayer].handLength;i++)
-    {
-      document.querySelector("#right-player").insertAdjacentHTML('beforeend', html);
-    
+    for( let i=0; i<state.otherPlayers[rightPlayer].handLength; i++) {
+      document
+        .querySelector("#right-player")
+        .insertAdjacentHTML('beforeend', getFaceDownCardHTML());
     }
+        
+    // Render this user's face up cards.
+    state.user.cards.forEach(card => {
+      document
+        .querySelector("#user-player")
+        .insertAdjacentHTML('beforeend', getFaceUpCardHTML(card.id, card.color, card.value));
+    });
+}
 
-    html = `
-    <div class="my-card">
-    <svg class="face-up uno-card uno-card-${state.lastPlayedCard.color}-${state.lastPlayedCard.value}"></svg>
-    </div>
-    `;
+function getUsernameHTML(username, isCurrentPlayer) {
 
-    document.querySelector("#last-played-card").insertAdjacentHTML('beforeend', html);
-    
-    
+}
 
-  document.querySelector("#user-player").innerHTML = null;
-    state.user.cards.forEach(element => {
-     
-      let html = `
-      <div class="my-card">
-      <svg class="face-up uno-card uno-card-${element.color}-${element.value}"></svg>
+// Helper function that returns the HTML for a face up card.
+function getFaceUpCardHTML(cardId, color, value, isPlayable=true) {
+  if(isPlayable) {
+    return `
+      <div class="my-card" onclick="playCard('${cardId}')">
+        <svg class="face-up uno-card uno-card-${color}-${value}"></svg>
       </div>
-      `;
-      document.querySelector("#user-player").insertAdjacentHTML('beforeend', html);
-     
+    `;
+  }
+  return `
+    <div class="my-card">
+      <svg class="face-up uno-card uno-card-${color}-${value}"></svg>
+    </div>
+  `;
+}
 
-      });
-
-
-
-
-      
+// Helper function that returns that HTML for a face down card.
+function getFaceDownCardHTML() {
+  return `
+    <div class="my-card">
+      <img src="../images/unocards.png".face-down height = '100'>
+    </div>
+  `;
 }

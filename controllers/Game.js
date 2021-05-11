@@ -172,16 +172,17 @@ const GameController = {
     if (!userId) return JSON_ERROR(response, "User ID is not provided.");
     if (!gameId) return JSON_ERROR(response, "Game ID not provided.");
     if (!moveType) return JSON_ERROR(response, "Move type not provided.");
+    
     switch (moveType) {
       case Game.DRAW_CARD:
         GameController.drawCard(gameId, userId);
         break;
       case Game.PLAY_CARD:
         // play card function init here
-        this.playCard(gameId, userId, cardId);
+        GameController.playCard(gameId, userId, cardId);
         break;
     }
-    return response.status(200);
+    return response.json({ status: 'success' });
   },
   drawCard: (gameId, userId) => {
     // Validate that user is in that game and is currentPlayer
@@ -189,16 +190,11 @@ const GameController = {
 
       GameUser.isGameUser(userId, gameId)
         .then((isGameUser) => {
+          if (!isGameUser) return resolve(false);
 
-          if (!isGameUser) {
-            resolve(false);
-          }
           Game.isCurrentPlayer(gameId, userId)
             .then((isCurrentPlayer) => {
-
-              if (!isCurrentPlayer) {
-                resolve(false);
-              }
+              if (!isCurrentPlayer) return resolve(false);
 
               // Need to get the card at the top of the deck
               GameDeck.getTopCard(gameId)
@@ -211,45 +207,142 @@ const GameController = {
                     { user: userId, order: GameDeck.DRAWN }
                   )
                     .then((_) => {
-                      // Update Current Player and send Game State to all users in game
-                      Game.determineCurrentPlayer(gameId)
+                      // send Game State to all users in game
+                      GameController.sendGameState(gameId)
                         .then((_) => {
-                          GameController.sendGameState(gameId)
-                            .then((_) => {
-                              resolve(true)
-                            })
+                          return resolve(true)
                         })
                         .catch((err) => {
-                          resolve(false);
+                          return resolve(false);
                         })
                     })
                     .catch((err) => {
                       console.log(err);
-                      resolve(false);
+                      return resolve(false);
                     });
                 })
                 .catch((err) => {
                   console.log(err);
-                  resolve(false);
+                  return resolve(false);
                 })
             })
             .catch((err) => {
               console.log(err);
-              resolve(false);
+              return resolve(false);
             })
         })
         .catch((err) => {
           console.log(err);
-          resolve(false);
+          return resolve(false);
         });
     })
   },
   playCard: (gameId, userId, cardId) => {
-    // validate that user is currentPlayer
-    // validate that card is in user's deck
-    // validate that card is a legal move
-    // update db
-    // trigger getGameState
+    return new Promise((resolve, reject) => {
+      
+      GameUser.isGameUser(userId, gameId)
+        .then((isGameUser) => {
+          if(!isGameUser) return resolve(false);
+          
+          Game.isCurrentPlayer(gameId, userId)
+            .then((isCurrentPlayer) => {
+              if(!isCurrentPlayer) return resolve(false);
+              
+              GameDeck.getUserHand(gameId, userId)
+                .then((userGameHand) => {
+                  // Check if the card is in the user's hand.
+                  let cardPlayedFromHand = userGameHand.filter(i => i.card == cardId)[0];
+                  if(!cardPlayedFromHand) return resolve(false);
+
+                  // Validate that the move is legal.
+                  GameDeck.getLastPlayedCard(gameId)
+                  .then((lastPlayedCard) => {
+                    if(!lastPlayedCard) return resolve(false);
+
+                    // Get the base card of the played card and last played card.
+                    BaseDeck.getCard(cardPlayedFromHand.card)
+                      .then((basePlayedCard) => {
+                        if(!basePlayedCard) return resolve(false);
+
+                        BaseDeck.getCard(lastPlayedCard.card)
+                          .then((baseLastPlayedCard) => {
+                            if(!baseLastPlayedCard) return resolve(false);
+
+                            // Move is valid iff it matches the color or value of the
+                            // last played card.
+                            if(basePlayedCard.color != baseLastPlayedCard.color && basePlayedCard.value != baseLastPlayedCard.value) {
+                              return resolve(false);
+                            }
+
+                            // Execute promises which update the state of the game.
+                            Promise.all([
+                              // Set the order of the last played card to -3.
+                              GameDeck.update(
+                                { game: lastPlayedCard.game, card: lastPlayedCard.card },
+                                { order: GameDeck.PLAYED }
+                              ),
+                              // Set the order of the card being played to -1.
+                              // Set the user of the card being played to null.
+                              GameDeck.update(
+                                { game: cardPlayedFromHand.game, card: cardPlayedFromHand.card },
+                                { order: GameDeck.LAST_PLAYED, user: null }
+                              )
+                            ])
+                            .then(() => {
+                              // Determine the next currentPlayer based on the
+                              // move that just occurred.
+                              Game.determineCurrentPlayer(gameId)
+                                .then(() => {
+                                  // Send the most recent game state to all users.
+                                  GameController.sendGameState(gameId)
+                                    .then(() => {
+                                      return resolve(true);
+                                    })
+                                    .catch((err) => {
+                                      console.log(err);
+                                      return resolve(false);
+                                    });
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                  return resolve(false);
+                                });
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                              return resolve(false);
+                            });
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            return resolve(false);
+                          });
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                        return resolve(false);
+                      });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    return resolve(false);
+                  });
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return resolve(false);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+              return resolve(false);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+          return resolve(false);
+        });
+    });
   },
   // Sends the individualized game state of all game users in a game
   sendGameState: (gameId) => {
@@ -257,7 +350,6 @@ const GameController = {
     return new Promise((resolve, reject) => {
       GameUser.getGameUsers(gameId)
         .then((gameUsers) => {
-
           var promises = [];
 
           // Create promise to send individualized game state
@@ -270,12 +362,12 @@ const GameController = {
           // Execute all promises
           Promise.all(promises)
             .then((_) => {
-              resolve(true);
+              return resolve(true);
             })
         })
         .catch((err) => {
           console.log(err);
-          resolve(false);
+          return resolve(false);
         })
     })
   },
@@ -342,6 +434,7 @@ const GameController = {
                         if (gameDeckCard.user === userId) {
                           state.user.playerNum = gameUser.player_num;
                           state.user.isCurrentPlayer = gameUser.current_player;
+                          state.user.userId = gameUser.user;
                           state.user.handLength += 1;
                           state.user.cards.push(baseCard);
 
@@ -353,25 +446,20 @@ const GameController = {
                           } else {
                             state.otherPlayers[gameUser.player_num] = {
                               handLength: 1,
-                              isCurrentPlayer: gameUser.current_player
+                              isCurrentPlayer: gameUser.current_player,
+                              userId: gameUser.user
                             };
                           }
                         }
                       }
                     })
-
                     GameEvents.TRIGGER_GAME_STATE(gameId, userId, state);
-                    // return response.status(200);
                   })
               })
           })
       })
       .catch((err) => {
         console.log(err);
-        // return response.json({
-        //   status: "failure",
-        //   message: "Error occurred while getting game state",
-        // });
       })
   },
   // Check if a game exists in the database
