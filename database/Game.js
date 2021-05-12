@@ -15,6 +15,7 @@ class Game extends ActiveRecord {
 
   static DRAW_CARD = "-1";
   static PLAY_CARD = "-2";
+  static CHOOSE_COLOR = "-3";
 
   id = undefined;
   active = undefined;
@@ -118,7 +119,7 @@ class Game extends ActiveRecord {
                 .then((lastPlayedBaseCard) => {
                   const isClockwise = game.direction_clockwise;
                   const directionChanged = lastPlayedBaseCard.value === BaseDeck.REVERSE;
-                  const nextPlayerSkipped = lastPlayedBaseCard.value === BaseDeck.SKIP;
+                  const nextPlayerSkipped = lastPlayedBaseCard.value === BaseDeck.SKIP || lastPlayedBaseCard.value === BaseDeck.DRAW2 || lastPlayedBaseCard.value === BaseDeck.WILDDRAW4;
     
                   // Get all of the game users
                   GameUser.getGameUsers(gameId).then((gameUsers) => {

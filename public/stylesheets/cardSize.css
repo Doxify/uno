@@ -55,7 +55,7 @@
   background-position: calc(-4 * var(--card-max-width)) 0px;
 }
 .uno-card-red-5 {
-  background-position: calc(-1 * var(--card-max-width)) 0px;
+  background-position: calc(-5 * var(--card-max-width)) 0px;
 }
 .uno-card-red-6 {
   background-position: calc(-6 * var(--card-max-width)) 0px;
@@ -71,7 +71,7 @@
 }
 
 .uno-card-yellow-0 {
-  background-position: 0px -60px;
+  background-position: 0px calc(-1 * var(--card-max-height));
 }
 .uno-card-yellow-1 {
   background-position: calc(-1 * var(--card-max-width)) calc(-1 * var(--card-max-height));
@@ -117,7 +117,7 @@
   background-position: calc(-4 * var(--card-max-width)) calc(-2 * var(--card-max-height));
 }
 .uno-card-green-5 {
-  background-position: calc(-1 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+  background-position: calc(-5 * var(--card-max-width)) calc(-2 * var(--card-max-height));
 }
 .uno-card-green-6 {
   background-position: calc(-6 * var(--card-max-width)) calc(-2 * var(--card-max-height));
@@ -148,7 +148,7 @@
   background-position: calc(-4 * var(--card-max-width)) calc(-3 * var(--card-max-height));
 }
 .uno-card-blue-5 {
-  background-position: calc(-1 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+  background-position: calc(-5 * var(--card-max-width)) calc(-3 * var(--card-max-height));
 }
 .uno-card-blue-6 {
   background-position: calc(-6 * var(--card-max-width)) calc(-3 * var(--card-max-height));

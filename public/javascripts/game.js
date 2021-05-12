@@ -30,6 +30,11 @@ gameStateChannel.bind("GAME_STATE", (data) => {
   renderCards(data);
 })
 
+gameStateChannel.bind("GAME_COLOR_CHOOSER", (data) => {
+  console.log("Open Color chooser!");
+  openColorChooser();
+})
+
 // Listen for the draw card being clicked.
 document.getElementById("draw-card").addEventListener("click", async () =>  {
   drawCard();
@@ -62,10 +67,26 @@ async function playCard(cardId) {
   }).then(res => res.json());
 }
 
+async function chooseColor(color) {
+  await fetch(`/api/game/makeMove/${roomId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ type: "-3", color: color}),
+    method: "POST"
+  }).then(res => res.json());
+}
 
 // ====================================================================
 // render functions
 // ====================================================================
+
+// Render Color Chooser
+async function openColorChooser() {
+  console.log("sending back color red");
+  chooseColor("red");
+}
+
 
 // Renders all game/user info on the screen such as usernames, curret_player status,
 // and direction the game is going in.

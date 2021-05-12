@@ -2,7 +2,7 @@ const ActiveRecord = require('./ActiveRecord');
 
 class GameDeckCard extends ActiveRecord {
     static table_name = "Game Deck";
-    static fields = ['game','user', 'card', 'order'];
+    static fields = ['game', 'user', 'card', 'order'];
 
     static LAST_PLAYED = -1;
     static DRAWN = -2;
@@ -58,28 +58,28 @@ class GameDeckCard extends ActiveRecord {
         // Run all promises and return gameDeck for further use
         return new Promise((resolve, reject) => {
             Promise.all(promises)
-            .then(() => {
-                resolve(gameDeck);
-            })
-            .catch((err) => {
-                console.log(err);
-                reject(err);
-            });
+                .then(() => {
+                    resolve(gameDeck);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                });
         });
     }
 
-    
+
     static getGameDeck(game) {
         return new Promise((resolve, reject) => {
             GameDeckCard.findAll('game', game)
                 .then((gameDeckData) => {
-                    
+
                     let gameDeck = [];
 
                     // This should always return a JSON array of 108 GameDeck rows
 
                     // For each row in JSON array, create GameDeckCard objects
-                    for(let gameCardData of gameDeckData) {
+                    for (let gameCardData of gameDeckData) {
                         let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
 
                         gameDeck.push(gameCard);
@@ -99,10 +99,10 @@ class GameDeckCard extends ActiveRecord {
                 .then((gameDeckData) => {
                     let userGameDeck = [];
 
-                    for(let gameCardData of gameDeckData) {
-                        if(gameCardData.user === user) {
+                    for (let gameCardData of gameDeckData) {
+                        if (gameCardData.user === user) {
                             let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
-                            userGameDeck.push(gameCard);                        
+                            userGameDeck.push(gameCard);
                         }
                     }
 
@@ -126,7 +126,6 @@ class GameDeckCard extends ActiveRecord {
         return new Promise((resolve, reject) => {
             GameDeckCard.findOne(data, comparator, true, "order")
                 .then((card) => {
-                    console.log(card);
                     resolve(card);
                 })
                 .catch((err) => {
@@ -172,7 +171,7 @@ class GameDeckCard extends ActiveRecord {
                     gameCards.forEach((gameCardData) => {
                         cards.push(new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order));
                     });
-                    
+
                     return resolve(cards);
                 })
                 .catch((err) => {
@@ -183,7 +182,7 @@ class GameDeckCard extends ActiveRecord {
     }
 
     static getLastPlayedCardOrder(color) {
-        switch(color) {
+        switch (color) {
             case "red":
                 return GameDeckCard.LAST_PLAYED_RED;
             case "green":
@@ -194,6 +193,19 @@ class GameDeckCard extends ActiveRecord {
                 return GameDeckCard.LAST_PLAYED_YELLOW;
             case "black":
                 return GameDeckCard.LAST_PLAYED_BLACK;
+        }
+    }
+
+    static getLastPlayedColor(cardOrder) {
+        switch (cardOrder) {
+            case GameDeckCard.LAST_PLAYED_RED:
+                return "red";
+            case GameDeckCard.LAST_PLAYED_GREEN:
+                return "green";
+            case GameDeckCard.LAST_PLAYED_BLUE:
+                return "blue";
+            case GameDeckCard.LAST_PLAYED_YELLOW:
+                return "yellow";
         }
     }
 
@@ -227,5 +239,5 @@ module.exports = GameDeckCard;
 
 
 
-    
+
 
