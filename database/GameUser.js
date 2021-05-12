@@ -108,6 +108,24 @@ class GameUser extends ActiveRecord {
     });
   }
 
+  // Returns the GameUser of a game with a specific playerNum
+  static getGameUserByPlayerNum(gameId, playerNum) {
+    return new Promise((resolve, reject) => {
+      if(playerNum < 0 || playerNum > this.MAX_GAME_USERS_PER_GAME) {
+        return reject(null);
+      }
+
+      this.getGameUsers(gameId)
+        .then((gameUsers) => {
+          let user = gameUsers.filter((i) => i.player_num === playerNum)[0];
+          return resolve(user);
+        })
+        .catch((err) => {
+          return reject(err);
+        })
+    })
+  }
+
   // Assigns player numbers to a game which has the max number of users.
   static assignPlayerNumbers(game) {
     return new Promise((resolve, reject) => {

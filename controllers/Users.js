@@ -37,7 +37,7 @@ const Controller = {
       errors.push("Password must be at least 8 characters long.");
     }
 
-    if ((errors.size = 0)) {
+    if (errors.length == 0) {
       return null;
     } else {
       return errors;
@@ -47,7 +47,7 @@ const Controller = {
     const { username, email, password } = request.body;
     const validationErrors = Controller.validate(username, email, password);
 
-    if (validationErrors.size != 0) {
+    if (validationErrors.length != 0) {
       return response.json({
         status: "failure",
         message: validationErrors.join("\n\n"),
