@@ -76,6 +76,7 @@ function renderGameInfo(state) {
   let rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
   let user;
 
+  // Render user info
   document.querySelectorAll(".username-container").forEach((element) => {
     switch(element.firstElementChild.id) {
       case "left-player-username": {
@@ -102,8 +103,15 @@ function renderGameInfo(state) {
     } else {
       element.firstElementChild.classList.remove("username-current-player");
     }
-
   });
+
+  // Render game direction
+  document.querySelector('#game-direction').innerHTML = `
+    <span>
+      Direction: 
+      <strong> ${state.isClockwise ? "Clockwise" : "Counter Clockwise"}</strong>
+    </span>
+  `
 }
 
 // Renders all cards on the screen based on the game state.
