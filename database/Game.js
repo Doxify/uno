@@ -195,7 +195,7 @@ class Game extends ActiveRecord {
     
                     // Execute all promises
                     Promise.all(promises).then(() => {
-                      resolve(true);
+                      return resolve(nextPlayer);
                     });
 
                   });

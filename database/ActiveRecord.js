@@ -31,8 +31,23 @@ class ActiveRecord {
             }
         })
 
-
         return db.oneOrNone(`SELECT * FROM "${this.table_name}" WHERE ${whereClause} ORDER BY "${orderByField}" ${ascending ? "ASC" : "DESC"} LIMIT 1`);
+    }
+
+    static findMany(conditions, comparator, ascending, orderByField, limit) {
+        var whereClause = '';
+        Object.entries(conditions).forEach(([key, value], index) => {
+            if(!this.fields.includes(key)) return this.INVALID_FIELD_ERROR(key);
+
+            // Append condition with comparator
+            whereClause += `"${key}" ${comparator[index]} '${value}'`;
+
+            if(index < Object.keys(conditions).length-1) {
+                whereClause += ' AND ';
+            }
+        })
+
+        return db.any(`SELECT * FROM "${this.table_name}" WHERE ${whereClause} ORDER BY "${orderByField}" ${ascending ? "ASC" : "DESC"} LIMIT ${limit}`);
     }
 
     static findBy(field, value) {

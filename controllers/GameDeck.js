@@ -125,7 +125,6 @@ const GameDeckController = {
     dealCards: (gameUsers, gameDeck) => {
         return new Promise((resolve, reject) => {
 
-
             if (!(gameUsers instanceof Array)) {
                 throw new Error("gameUsers must be an array")
             }
@@ -140,15 +139,12 @@ const GameDeckController = {
 
             topCard = 0;
             for (let i = 0; i < 7; i++) {
-
                 for (let gameUser of gameUsers) {
                     gameDeck[topCard].user = gameUser.user;
                     gameDeck[topCard].order = GameDeckCard.DRAWN;
                     topCard++;
                 }
             }
-
-
 
             BaseDeckCard.getCard(gameDeck[topCard].card)
                 .then((baseCard) => {

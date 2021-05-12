@@ -185,7 +185,7 @@ const GameController = {
     }
     return response.json({ status: 'success' });
   },
-  drawCard: (gameId, userId) => {
+  drawCard: (gameId, userId, amountToDraw=1) => {
     // Validate that user is in that game and is currentPlayer
     return new Promise((resolve, reject) => {
 
@@ -268,10 +268,18 @@ const GameController = {
                           .then((baseLastPlayedCard) => {
                             if(!baseLastPlayedCard) return resolve(false);
 
-                            // Move is valid iff it matches the color or value of the
-                            // last played card.
-                            if(basePlayedCard.color != baseLastPlayedCard.color && basePlayedCard.value != baseLastPlayedCard.value) {
-                              return resolve(false);
+                            // Move is valid iff it matches the color and/or value of the
+                            // last played card as well as being a WILD card.
+                            if(basePlayedCard.color != baseLastPlayedCard.color 
+                              && basePlayedCard.value != baseLastPlayedCard.value
+                              && basePlayedCard.value != BaseDeck.WILDDRAW4
+                              && basePlayedCard.value != BaseDeck.WILD) {
+                                console.log("BasePlayed: ");
+                                console.log(basePlayedCard)
+                                console.log("BaseLastPlayed: ")
+                                console.log(baseLastPlayedCard)
+                                return resolve(false);
+                              
                             }
 
                             var promises = [];
@@ -313,16 +321,64 @@ const GameController = {
                               // Determine the next currentPlayer based on the
                               // move that just occurred.
                               Game.determineCurrentPlayer(gameId)
-                                .then(() => {
-                                  // Send the most recent game state to all users.
-                                  GameController.sendGameState(gameId)
-                                    .then(() => {
+                                .then((currentPlayer) => {
+
+                                  var promises2 = [];
+
+                                  // If the card played requires the next player
+                                  // to draw cards, handle that here.
+                                  if(basePlayedCard.value === BaseDeck.DRAW2 || basePlayedCard.value === BaseDeck.WILDDRAW4) {
+                                      let numCards = basePlayedCard.value === BaseDeck.DRAW2 ? 2 : 4;
+                                      
+                                      GameDeck.getMultipleTopCards(gameId, numCards)
+                                        .then((topCards) => {
+                                          topCards.forEach((topCard, i) => {
+                                            promises2.push(
+                                              // Update the order and user fields in topCard to simulate the Game User drawing the card
+                                              GameDeck.update(
+                                                { game: topCard.game, card: topCard.card },
+                                                { user: currentPlayer.user, order: GameDeck.DRAWN }
+                                              )
+                                            )
+                                          });
+
+                                          // Execute all draw card promises and send game state.
+                                          Promise.all(promises2)
+                                            .then((_) => {
+                                              // Send the most recent game state to all users.
+                                                GameController.sendGameState(gameId)
+                                                  .then((_) => {
+                                                    return resolve(true);
+                                                  })
+                                                  .catch((err) => {
+                                                    console.log(err);
+                                                    return resolve(false);
+                                                  });
+                                            })
+                                            .catch((err) => {
+                                              console.log(err);
+                                              return resolve(false);
+                                            });
+                                        })
+                                        .catch((err) => {
+                                          console.log(err);
+                                          return resolve(false);
+                                        });
+
+                                  } else {
+
+                                    // If no cards are required to be draw, just
+                                    // send the game state.
+                                    GameController.sendGameState(gameId)
+                                    .then((_) => {
                                       return resolve(true);
                                     })
                                     .catch((err) => {
                                       console.log(err);
                                       return resolve(false);
                                     });
+                                  }
+
                                 })
                                 .catch((err) => {
                                   console.log(err);

@@ -157,6 +157,31 @@ class GameDeckCard extends ActiveRecord {
         });
     }
 
+    static getMultipleTopCards(game, amount) {
+        const data = {
+            game: game,
+            order: 0
+        }
+
+        const comparator = ["=", ">"]
+
+        return new Promise((resolve, reject) => {
+            GameDeckCard.findMany(data, comparator, true, "order", amount)
+                .then((gameCards) => {
+                    let cards = [];
+                    gameCards.forEach((gameCardData) => {
+                        cards.push(new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order));
+                    });
+                    
+                    return resolve(cards);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return reject(err);
+                });
+        });
+    }
+
     static getLastPlayedCardOrder(color) {
         switch(color) {
             case "red":
