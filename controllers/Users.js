@@ -46,8 +46,7 @@ const Controller = {
   create: (request, response, next) => {
     const { username, email, password } = request.body;
     const validationErrors = Controller.validate(username, email, password);
-
-    if (validationErrors.length != 0) {
+    if (validationErrors != null) {
       return response.json({
         status: "failure",
         message: validationErrors.join("\n\n"),
