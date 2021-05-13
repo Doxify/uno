@@ -201,26 +201,26 @@ const GameController = {
           }
           // Need to get the card at the top of the deck
           GameDeckController.getTopCard(gameId)
-            .then((topCard) => {                
-                // Update the order and user fields in topCard to simulate the Game User drawing the card
-                GameDeck.update(
-                  { game: topCard.game, card: topCard.card },
-                  { user: userId, order: GameDeck.DRAWN }
-                )
-                  .then((_) => {
-                    // send Game State to all users in game
-                    GameController.sendGameState(gameId)
-                      .then((_) => {
-                        return resolve(true)
-                      })
-                      .catch((err) => {
-                        return resolve(false);
-                      })
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                    return resolve(false);
-                  }); 
+            .then((topCard) => {
+              // Update the order and user fields in topCard to simulate the Game User drawing the card
+              GameDeck.update(
+                { game: topCard.game, card: topCard.card },
+                { user: userId, order: GameDeck.DRAWN }
+              )
+                .then((_) => {
+                  // send Game State to all users in game
+                  GameController.sendGameState(gameId)
+                    .then((_) => {
+                      return resolve(true)
+                    })
+                    .catch((err) => {
+                      return resolve(false);
+                    })
+                })
+                .catch((err) => {
+                  console.log(err);
+                  return resolve(false);
+                });
             })
             .catch((err) => {
               console.log(err);
@@ -304,7 +304,6 @@ const GameController = {
                             // Execute promises which update the state of the game.
                             Promise.all(promises)
                               .then(() => {
-                                console.log("got here 4");
                                 // Send Pusher Event to only the user that played the WildCard
                                 GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
                               })
@@ -356,12 +355,10 @@ const GameController = {
     });
   },
   changeGameColor: (gameId, userId, color) => {
-    console.log("got here");
     return new Promise((resolve, reject) => {
       GameController.canMakeMove(gameId, userId)
         .then((canMove) => {
           if (!canMove) {
-            console.log("can't make move")
             return resolve(false);
           }
           // Get last played card
@@ -423,25 +420,34 @@ const GameController = {
           if (basePlayedCard.value === BaseDeck.DRAW2 || basePlayedCard.value === BaseDeck.WILDDRAW4) {
             let numCards = basePlayedCard.value === BaseDeck.DRAW2 ? 2 : 4;
 
-            GameDeckController.getMultipleTopCards(gameId, numCards)
-              .then((topCards) => {
-                topCards.forEach((topCard, i) => {
-                  promises.push(
-                    // Update the order and user fields in topCard to simulate the Game User drawing the card
-                    GameDeck.update(
-                      { game: topCard.game, card: topCard.card },
-                      { user: currentPlayer.user, order: GameDeck.DRAWN }
-                    )
-                  )
-                });
+            // Since currentPlayer is now one player after the player that should draw cards, need to get the game user of the previous player num
+            Game.getPreviousPlayer(gameId, currentPlayer.player_num)
+              .then((previousPlayer) => {
+                console.log(previousPlayer);
+                GameDeckController.getMultipleTopCards(gameId, numCards)
+                  .then((topCards) => {
+                    topCards.forEach((topCard, i) => {
+                      promises.push(
+                        // Update the order and user fields in topCard to simulate the Game User drawing the card
+                        GameDeck.update(
+                          { game: topCard.game, card: topCard.card },
+                          { user: previousPlayer.user, order: GameDeck.DRAWN }
+                        )
+                      )
+                    });
 
-                // Execute all draw card promises and send game state.
-                Promise.all(promises)
-                  .then((_) => {
-                    // Send the most recent game state to all users.
-                    GameController.sendGameState(gameId)
+                    // Execute all draw card promises and send game state.
+                    Promise.all(promises)
                       .then((_) => {
-                        return resolve(true);
+                        // Send the most recent game state to all users.
+                        GameController.sendGameState(gameId)
+                          .then((_) => {
+                            return resolve(true);
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            return resolve(false);
+                          });
                       })
                       .catch((err) => {
                         console.log(err);
@@ -453,11 +459,6 @@ const GameController = {
                     return resolve(false);
                   });
               })
-              .catch((err) => {
-                console.log(err);
-                return resolve(false);
-              });
-
           } else {
 
             // If no cards are required to be draw, just
@@ -530,7 +531,7 @@ const GameController = {
     // Get the current state of the game.
     Game.get(gameId)
       .then((game) => {
-        if(!game) return;
+        if (!game) return;
 
         // Update game related state.
         state.isGameOver = !game.active;
@@ -539,12 +540,12 @@ const GameController = {
         // Get the base deck
         BaseDeck.getDeck()
           .then((baseDeck) => {
-            if(!baseDeck) return;
+            if (!baseDeck) return;
 
             // Get the game users
             GameUser.getGameUsers(gameId)
               .then((gameUsers) => {
-                if(!gameUsers) return;
+                if (!gameUsers) return;
 
                 var promises = [];
 
@@ -568,7 +569,7 @@ const GameController = {
                           );
                         }
 
-                        if(gameUser.user === userId) {
+                        if (gameUser.user === userId) {
                           state.user.isWinner = hand.length == 0 ? true : false;
                           state.user.handLength = hand.length;
                           state.user.playerNum = gameUser.player_num;
@@ -589,7 +590,7 @@ const GameController = {
                             userId: gameUser.user,
                             isWinner: hand.length == 0 ? true : false
                           };
-                        
+
                         }
                       })
                       .catch((err) => {
@@ -607,10 +608,10 @@ const GameController = {
                       }
 
                       state.lastPlayedCard = baseDeck[lastPlayedCard.card - 1];
-                      
-                      if(state.lastPlayedCard.color === 'black') {
+
+                      if (state.lastPlayedCard.color === 'black') {
                         state.lastPlayedCard.color = GameDeck.getLastPlayedColor(lastPlayedCard.order);
-                      } 
+                      }
 
                     })
                     .catch((err) => {

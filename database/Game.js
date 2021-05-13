@@ -147,7 +147,6 @@ class Game extends ActiveRecord {
                             (i) => i.player_num == (nextPlayerSkipped ? 2 : 1)
                           )[0];
                         } else {
-                          console.log("got here 1")
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (
                               nextPlayerSkipped ? (((currentPlayer.player_num + 2) > GameUser.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayer.player_num + 2) 
@@ -163,17 +162,13 @@ class Game extends ActiveRecord {
                         //   nextPlayer = gameUsers.filter((i) => i.player_num == (currentPlayer.player_num - 1))[0];
                         // }
                         if (currentPlayer.player_num == 1) {
-                          console.log("got here 2")
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (nextPlayerSkipped ? 3 : 4)
                           )[0];
-                          console.log("Next Player: " + nextPlayer.player_num);
                         } else {
-                          console.log("got here 3")
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (nextPlayerSkipped ? (((currentPlayer.player_num - 2) <= 0) ? 4 : currentPlayer.player_num - 2) : currentPlayer.player_num - 1
                           ))[0];
-                          console.log("Next Player: " + nextPlayer.player_num);
                         }
                       }
     
@@ -208,6 +203,45 @@ class Game extends ActiveRecord {
         })
         .catch((err) => reject(err));
     });
+  }
+
+  // Get the previous player given the current player's player num
+  static getPreviousPlayer(gameId, currentPlayerNum) {
+    // Get game
+
+    return new Promise((resolve, reject) => {
+      Game.get(gameId)
+      .then((game) => {
+
+        // Get all game users in the game
+        GameUser.getGameUsers(gameId)
+          .then((gameUsers) => {
+
+            let previousPlayerNum = 0;
+
+            if(game.direction_clockwise) {
+              previousPlayerNum = (currentPlayerNum === 1) ? 4 : currentPlayerNum - 1;
+            } else {
+              previousPlayerNum = (currentPlayerNum === Game.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayerNum + 1;
+            }
+            console.log("Clockwise: " + game.direction_clockwise)
+            console.log("Current Player: " + currentPlayerNum)
+            console.log("Previous Player: " + previousPlayerNum)
+
+
+            return resolve(gameUsers.filter((i) => i.player_num === previousPlayerNum)[0]);
+          })
+          .catch((err) => {
+            console.log(err);
+            return resolve(null);
+          })
+
+      })
+      .catch((err) => {
+        console.log(err);
+        return resolve(null);
+      })
+    })
   }
 
   // Get all active games, used for game dashboard
