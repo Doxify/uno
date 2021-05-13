@@ -1,6 +1,7 @@
 const gameStateChannel = pusher.subscribe(`presence-STATE_${roomId}${userId}`);
 const gameChannel = pusher.subscribe(`presence-STATE${roomId}`);
 const gameData = { members: {}, memberCount: 0 }
+const colorChooserModal = new bootstrap.Modal(document.getElementById('choose-color-modal'), { backdrop: 'static', keyboard:false, focus: true } ); 
 
 // ====================================================================
 // Event Listeners
@@ -30,10 +31,11 @@ gameStateChannel.bind("GAME_STATE", (data) => {
   console.log(data);
   renderGameInfo(data);
   renderCards(data);
+  // openColorChooser();
+
 })
 
 gameStateChannel.bind("GAME_COLOR_CHOOSER", (data) => {
-  console.log("Open Color chooser!");
   openColorChooser();
 })
 
@@ -77,6 +79,7 @@ async function chooseColor(color) {
     body: JSON.stringify({ type: "-3", color: color}),
     method: "POST"
   }).then(res => res.json());
+  closeColorChooser()
 }
 
 // ====================================================================
@@ -84,9 +87,12 @@ async function chooseColor(color) {
 // ====================================================================
 
 // Render Color Chooser
-async function openColorChooser() {
-  console.log("sending back color red");
-  chooseColor("red");
+function openColorChooser() {
+  colorChooserModal.show()
+}
+
+function closeColorChooser() {
+  colorChooserModal.hide()
 }
 
 
@@ -186,10 +192,6 @@ function renderCards(state) {
         .querySelector("#user-player")
         .insertAdjacentHTML('beforeend', getFaceUpCardHTML(card.id, card.color, card.value));
     });
-}
-
-function getUsernameHTML(username, isCurrentPlayer) {
-
 }
 
 // Helper function that returns the HTML for a face up card.
