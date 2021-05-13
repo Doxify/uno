@@ -41,11 +41,12 @@ block content
                             .center.col-sm
                                 #game-center.container.h-100.text-center
                                     .row.justify-content-center.align-items-center.w-100.h-100
+                                        .direction-container.card.bg-dark.text-white
+                                            #game-direction
                                         #last-played-card.my-card
                                             img(src="../images/unocards.png").face-up
                                         #draw-card.my-card
                                             img(src="../images/unocards.png").face-down
-                                        #game-direction
                             .col-sm.center-player.reverse
                                 #right-player.user-hand.side-player.reverse-hand
                                 .username-container 
@@ -81,19 +82,26 @@ block content
 
         //- CHOOSE COLOR MODAL
         .modal.fade(id="choose-color-modal" aria-hidden="true" tabindex="-1")
-            .modal-dialog
-                .modal-content
-                    .card.bg-dark.text-white
-                        .card-body
-                            h4.card-title Select a color
-                            h5.card-title Which color would you like to use for this wildcard?
-                            .row.p-2
-                                .col-sm-6
-                                    div.btn.btn-success.d-block.m-2(type="button" onclick="chooseColor(`green`)") Green
-                                .col-sm-6 
-                                    div.btn.btn-warning.d-block.m-2(type="button" onclick="chooseColor('yellow')") Yellow
-                                .col-sm-6 
-                                    div.btn.btn-danger.d-block.m-2(type="button" onclick="chooseColor('red')") Red
-                                .col-sm-6 
-                                    div.btn.btn-primary.d-block.m-2(type="button" onclick="chooseColor('blue')") Blue
-    
+            .modal-dialog.modal-dialog-centered
+                .modal-content.bg-dark.text-white
+                    .modal-body
+                        h4.modal-title Select a color
+                        h5.modal-subtitle Which color would you like to use for this wildcard?
+                        .row.p-2
+                            .col-sm-6
+                                div.btn.btn-success.d-block.m-2(type="button" onclick="chooseColor(`green`)") Green
+                            .col-sm-6 
+                                div.btn.btn-warning.d-block.m-2(type="button" onclick="chooseColor('yellow')") Yellow
+                            .col-sm-6 
+                                div.btn.btn-danger.d-block.m-2(type="button" onclick="chooseColor('red')") Red
+                            .col-sm-6 
+                                div.btn.btn-primary.d-block.m-2(type="button" onclick="chooseColor('blue')") Blue
+        
+        //- GAME OVER MODAL
+        .modal.fade(id="game-over-modal" aria-hidden="true" tabindex="-1")
+            .modal-dialog.modal-dialog-centered
+                .modal-content.bg-dark.text-white
+                    .modal-body
+                        h4.modal-title.text-center.m-2 Game Over
+                            #game-over-status You lost!
+                        a.btn.btn-success.d-block.m-2(href="/dashboard" type="button") Return to Dashboard

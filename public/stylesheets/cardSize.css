@@ -18,7 +18,6 @@
   background-repeat: no-repeat;
   min-height: 100%;
 }
-
 #last-played-card {
   --card-max-height: 100px;
   --card-max-width: 64px;
@@ -27,6 +26,8 @@
   max-width: var(--card-max-width);
 
   margin: 0;
+
+  /* background: red; */
 }
 
 #last-played-card .my-card {
@@ -206,7 +207,47 @@
 .uno-card-black-13 {
   background-position: calc(-13 * var(--card-max-width)) 0px;
 }
+.uno-card-red-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(255, 0, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-green-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(43, 255, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-blue-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(0, 4, 255, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-yellow-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(255, 238, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
 
 .uno-card-black-14 {
   background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+}
+.uno-card-red-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(255, 0, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-green-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(43, 255, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-blue-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(0, 4, 255, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-yellow-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(255, 238, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
 }

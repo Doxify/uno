@@ -1,7 +1,10 @@
+// Pusher
 const gameStateChannel = pusher.subscribe(`presence-STATE_${roomId}${userId}`);
 const gameChannel = pusher.subscribe(`presence-STATE${roomId}`);
 const gameData = { members: {}, memberCount: 0 }
+// Bootstrap Modals
 const colorChooserModal = new bootstrap.Modal(document.getElementById('choose-color-modal'), { backdrop: 'static', keyboard:false, focus: true } ); 
+const gameOverModal = new bootstrap.Modal(document.getElementById('game-over-modal'), { backdrop: 'static', keyboard:false, focus: true });
 
 // ====================================================================
 // Event Listeners
@@ -24,19 +27,17 @@ gameChannel.bind("pusher:member_removed", (member) => {
   gameData.memberCount -= 1;
 })
 
-gameStateChannel.bind("GAME_STATE", (data) => {
-  console.log(data.isGameOver);
-
-  console.log("Got state!");
-  console.log(data);
-  renderGameInfo(data);
-  renderCards(data);
-  // openColorChooser();
-
+gameStateChannel.bind("GAME_STATE", (state) => {
+  console.log(state);
+  renderGameInfo(state);
+  renderCards(state);
+  if(state.isGameOver) {
+    renderGameOverModal(state);
+  }
 })
 
-gameStateChannel.bind("GAME_COLOR_CHOOSER", (data) => {
-  openColorChooser();
+gameStateChannel.bind("GAME_COLOR_CHOOSER", (state) => {
+  colorChooserModal.show()
 })
 
 // Listen for the draw card being clicked.
@@ -79,20 +80,26 @@ async function chooseColor(color) {
     body: JSON.stringify({ type: "-3", color: color}),
     method: "POST"
   }).then(res => res.json());
-  closeColorChooser()
+  colorChooserModal.hide()
 }
 
 // ====================================================================
 // render functions
 // ====================================================================
 
-// Render Color Chooser
-function openColorChooser() {
-  colorChooserModal.show()
-}
+// Renders text and styling for the game over modal.
+function renderGameOverModal(state) {
+  let gameOverStatus = document.getElementById('game-over-status');
+  
+  if(state.user.isWinner) {
+    gameOverStatus.innerText = "You won!";
+    gameOverStatus.classList.add("text-success");
+  } else {
+    gameOverStatus.innerText = "You lost!";
+    gameOverStatus.classList.add('text-danger');
+  }
 
-function closeColorChooser() {
-  colorChooserModal.hide()
+  gameOverModal.show();
 }
 
 
@@ -129,16 +136,17 @@ function renderGameInfo(state) {
     element.firstElementChild.innerText = gameData.members[user.userId] ? gameData.members[user.userId].username : "Offline";
     if(user.isCurrentPlayer) {
       element.firstElementChild.classList.add("username-current-player");
+      element.firstElementChild.classList.add("text-success");
     } else {
       element.firstElementChild.classList.remove("username-current-player");
+      element.firstElementChild.classList.remove("text-success");
     }
   });
 
   // Render game direction
   document.querySelector('#game-direction').innerHTML = `
     <span>
-      Direction: 
-      <strong> ${state.isClockwise ? "Clockwise" : "Counter Clockwise"}</strong>
+      <strong> ${state.isClockwise ? `<i class="fa fa-2x fa-chevron-circle-left"></i>` : `<i class="fa fa-2x fa-chevron-circle-right"></i>`}</strong>
     </span>
   `
 }

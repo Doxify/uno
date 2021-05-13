@@ -118,7 +118,6 @@ class Game extends ActiveRecord {
               BaseDeck.getCard(lastPlayedCard.card)
                 .then((lastPlayedBaseCard) => {
                   const isClockwise = game.direction_clockwise;
-                  const directionChanged = lastPlayedBaseCard.value === BaseDeck.REVERSE;
                   const nextPlayerSkipped = lastPlayedBaseCard.value === BaseDeck.SKIP || lastPlayedBaseCard.value === BaseDeck.DRAW2 || lastPlayedBaseCard.value === BaseDeck.WILDDRAW4;
     
                   // Get all of the game users
@@ -136,7 +135,7 @@ class Game extends ActiveRecord {
                     } else {
                       // Determine who the current player should be based off
                       // the direction the game is currently going in.
-                      if (isClockwise && !directionChanged) {
+                      if (isClockwise) {
                         // 'increase' the player num
                         // if (currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
                         //   nextPlayer = gameUsers.filter((i) => i.player_num == 1)[0];
