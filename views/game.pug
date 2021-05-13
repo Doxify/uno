@@ -16,8 +16,11 @@ block content
         input(type="hidden", id="roomId", name="roomId" value=gameId)
         input(type="hidden", id="userId", name="userId" value=user.id)
 
+    body
         .container-fluid.d-flex.flex-column.h-100
             .row.flex-fill.d-flex.flex-row
+
+                //- GAME BOARD
                 .game-container.col
                     .game.container-fluid.h-100.d-flex.flex-column
                         
@@ -55,7 +58,8 @@ block content
                                         .username-container
                                             #username.username.bg-dark=user.username
                                         #user-player.user-hand
-
+                
+                //- GAME ROOM CHAT
                 .chat-sidebar.col-sm-3.flex-column.bg-dark
                     .chat-title-box.container.bg-dark.pt-2.pb-2
                         .row
@@ -74,3 +78,22 @@ block content
                 #chat-sidebar-closed.col.bg-dark.hidden
                     button#chat-open-btn.btn.btn-default.open-chat
                         i.fa.fa-chevron-left
+
+        //- CHOOSE COLOR MODAL
+        .modal.fade(id="choose-color-modal" aria-hidden="true" tabindex="-1")
+            .modal-dialog
+                .modal-content
+                    .card.bg-dark.text-white
+                        .card-body
+                            h4.card-title Select a color
+                            h5.card-title Which color would you like to use for this wildcard?
+                            .row.p-2
+                                .col-sm-6
+                                    div.btn.btn-success.d-block.m-2(type="button" onclick="chooseColor(`green`)") Green
+                                .col-sm-6 
+                                    div.btn.btn-warning.d-block.m-2(type="button" onclick="chooseColor('yellow')") Yellow
+                                .col-sm-6 
+                                    div.btn.btn-danger.d-block.m-2(type="button" onclick="chooseColor('red')") Red
+                                .col-sm-6 
+                                    div.btn.btn-primary.d-block.m-2(type="button" onclick="chooseColor('blue')") Blue
+    

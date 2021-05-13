@@ -260,14 +260,10 @@ const GameController = {
 
                       BaseDeck.getCard(lastPlayedCard.card)
                         .then((baseLastPlayedCard) => {
-
                           if (!baseLastPlayedCard) return resolve(false);
-
                           if (!GameController.validateMove(basePlayedCard, baseLastPlayedCard, lastPlayedCard)) {
-
                             return resolve(false);
                           }
-
 
                           var promises = [];
                           // Set the order of the last played card to -3.
@@ -311,10 +307,13 @@ const GameController = {
                             Promise.all(promises)
                               .then(() => {
                                 console.log("got here 4");
-                                // Send a pusher event back to the player that played the wildcard
-                                GameController.sendWildCardEvent(gameId, userId);
+                                  // Send Pusher Event to only the user that played the WildCard
+                                  GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
                               })
-
+                              .catch((err) => {
+                                console.log(err);
+                                return resolve(false);
+                              })
 
                           } else {
 
@@ -600,10 +599,6 @@ const GameController = {
       .catch((err) => {
         console.log(err);
       })
-  },
-  // Send Pusher Event to only the user that played the WildCard
-  sendWildCardEvent: (gameId, userId) => {
-    GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
   },
   // Check if the user can make move
   canMakeMove: (gameId, userId) => {
