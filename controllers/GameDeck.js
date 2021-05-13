@@ -25,7 +25,6 @@ const GameDeckController = {
                     // Need to get Base Deck from database
                     BaseDeck.getDeck()
                         .then((baseDeck) => {
-                            console.log("got base deck");
                             // Iterate over baseDeck array and create Game Deck Card objects
                             gameDeck = [];
 
@@ -35,16 +34,13 @@ const GameDeckController = {
                                 gameDeck.push(gameCard);
                             });
 
-                            console.log("created game deck array");
                             // Shuffle gameDeck
                             GameDeckController.shuffle(gameDeck, 2);
 
-                            console.log("shuffled game deck");
 
                             // Deal 7 cards to each Game User
                             gameDeck = GameDeckController.dealCards(gameUsers, gameDeck)
                                 .then((deck) => {
-                                    console.log("dealt cards")
 
                                     // Insert all Game Deck Card objects into database using Promise.all
                                     var promises = [];
@@ -56,20 +52,19 @@ const GameDeckController = {
                                         );
                                     });
 
-                                    console.log("created all promises");
-
 
                                     Promise.all(promises)
                                         .then(() => {
-                                            console.log("added everything to database");
                                             resolve(true)
                                         })
                                         .catch((err) => {
                                             console.log(err);
+                                            resolve(false)
                                         })
                                 })
                                 .catch((err) => {
                                     console.log(err);
+                                    resolve(false)
                                 })
 
                         });
@@ -77,12 +72,54 @@ const GameDeckController = {
                 })
                 .catch((err) => {
                     console.log(err);
+                    resolve(false)
                 });
         });
 
     },
+    // Reshuffles all of the played cards in a game deck for a game
+    reshuffle: (gameId) => {
+        console.log("RESHUFFLING DECK");
+        return new Promise((resolve, reject) => {
+            GameDeckCard.getAllPlayedCards(gameId)
+                .then((playedCards) => {
 
+                    // Need to get the rest of the cards in the deck, amount=0 means get all
+                    GameDeckCard.getMultipleTopCards(game, 0)
+                        .then((deckCards) => {
+                            // Combine decks
+                            deckCards = deckCards.concat(playedCards);
 
+                            // Shuffle deck
+                            deckCards = GameDeckController.shuffle(deckCards, 2)
+
+                            // Update each played card in database
+                            var promises = []
+
+                            deckCards.forEach((card) => {
+                                GameDeckCard.update(
+                                    { game: card.game, card: card.card },
+                                    { order: card.order }
+                                )
+                            })
+
+                            Promise.all(promises)
+                                .then(() => {
+                                    resolve(true)
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                    resolve(false);
+                                })
+                        })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    resolve(false)
+                })
+        })
+    },
+    // Shuffles a given array of game deck cards
     shuffle: (gameDeck, numShuffles) => {
 
         if (!(gameDeck instanceof Array)) {
@@ -150,6 +187,69 @@ const GameDeckController = {
                 .then((baseCard) => {
                     gameDeck[topCard].order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
                     return resolve(gameDeck);
+                })
+        })
+    },
+    // Return top card of deck
+    getTopCard: (game) => {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.getTopCard(game)
+                .then((gameCard) => {
+                    // Check how many cards are left in the game deck
+                    GameDeckCard.getNumberGameDeckCards(game)
+                        .then((numberOfCards) => {
+                            if (numberOfCards > 5) return resolve(gameCard);
+
+                            // Reshuffle deck and then return gameCard
+                            GameDeckController.reshuffle(game)
+                                .then((shuffled) => {
+                                    return resolve(gameCard);
+                                })
+                                .catch((err) => {
+                                    // Shuffling failed, still need to return gameCard
+                                    console.log(err);
+                                    return resolve(gameCard);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return resolve(gameCard);
+                        })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return reject(err);
+                })
+        })
+    },
+    getMultipleTopCards: (game, amount) => {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.getMultipleTopCards(game, amount)
+                .then((cards) => {
+                    // Check how many cards are left in the game deck
+                    GameDeckCard.getNumberGameDeckCards(game)
+                        .then((numberOfCards) => {
+                            if (numberOfCards > 5) return resolve(cards);
+
+                            // Reshuffle deck and then return cards
+                            GameDeckController.reshuffle(game)
+                                .then((shuffled) => {
+                                    return resolve(cards);
+                                })
+                                .catch((err) => {
+                                    // Shuffling failed, still need to return cards
+                                    console.log(err);
+                                    return resolve(cards);
+                                })
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            return resolve(cards);
+                        })
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return reject(err);
                 })
         })
     }

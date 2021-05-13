@@ -200,28 +200,27 @@ const GameController = {
             return resolve(false);
           }
           // Need to get the card at the top of the deck
-          GameDeck.getTopCard(gameId)
-            .then((topCard) => {
-
-              // Update the order and user fields in topCard to simulate the Game User drawing the card
-              GameDeck.update(
-                { game: topCard.game, card: topCard.card },
-                { user: userId, order: GameDeck.DRAWN }
-              )
-                .then((_) => {
-                  // send Game State to all users in game
-                  GameController.sendGameState(gameId)
-                    .then((_) => {
-                      return resolve(true)
-                    })
-                    .catch((err) => {
-                      return resolve(false);
-                    })
-                })
-                .catch((err) => {
-                  console.log(err);
-                  return resolve(false);
-                });
+          GameDeckController.getTopCard(gameId)
+            .then((topCard) => {                
+                // Update the order and user fields in topCard to simulate the Game User drawing the card
+                GameDeck.update(
+                  { game: topCard.game, card: topCard.card },
+                  { user: userId, order: GameDeck.DRAWN }
+                )
+                  .then((_) => {
+                    // send Game State to all users in game
+                    GameController.sendGameState(gameId)
+                      .then((_) => {
+                        return resolve(true)
+                      })
+                      .catch((err) => {
+                        return resolve(false);
+                      })
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    return resolve(false);
+                  }); 
             })
             .catch((err) => {
               console.log(err);
@@ -306,8 +305,8 @@ const GameController = {
                             Promise.all(promises)
                               .then(() => {
                                 console.log("got here 4");
-                                  // Send Pusher Event to only the user that played the WildCard
-                                  GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
+                                // Send Pusher Event to only the user that played the WildCard
+                                GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
                               })
                               .catch((err) => {
                                 console.log(err);
@@ -424,7 +423,7 @@ const GameController = {
           if (basePlayedCard.value === BaseDeck.DRAW2 || basePlayedCard.value === BaseDeck.WILDDRAW4) {
             let numCards = basePlayedCard.value === BaseDeck.DRAW2 ? 2 : 4;
 
-            GameDeck.getMultipleTopCards(gameId, numCards)
+            GameDeckController.getMultipleTopCards(gameId, numCards)
               .then((topCards) => {
                 topCards.forEach((topCard, i) => {
                   promises.push(
@@ -554,7 +553,7 @@ const GameController = {
                     GameDeck.getUserHand(gameId, gameUser.user)
                       .then((hand) => {
 
-                        if(hand.length == 0) {
+                        if (hand.length == 0) {
                           state.isGameOver = true;
 
                           promises.push(
@@ -575,8 +574,8 @@ const GameController = {
                           state.user.playerNum = gameUser.player_num;
                           state.user.isCurrentPlayer = gameUser.current_player;
                           state.user.userId = gameUser.user;
-                          state.user.cards = hand.map((i) => baseDeck[i.card-1]).sort((a, b) => {
-                            if(a.color != b.color) {
+                          state.user.cards = hand.map((i) => baseDeck[i.card - 1]).sort((a, b) => {
+                            if (a.color != b.color) {
                               return (a.color > b.color) ? 1 : -1
                             }
                             return (a.value > b.value) ? 1 : -1;
@@ -602,7 +601,7 @@ const GameController = {
                 promises.push(
                   GameDeck.getLastPlayedCard(gameId)
                     .then((lastPlayedCard) => {
-                      if(!lastPlayedCard) {
+                      if (!lastPlayedCard) {
                         state.lastPlayedCard = null;
                         return;
                       }

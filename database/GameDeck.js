@@ -93,6 +93,42 @@ class GameDeckCard extends ActiveRecord {
         });
     }
 
+    // Gets the number of game deck cards left in the deck
+    static getNumberGameDeckCards(game) {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.getGameDeckCards(game)
+                .then((gameDeckCards) => {
+                    return resolve(gameDeckCards.length);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    return resolve(0);
+                })
+        });
+    }
+
+    // Gets all of the cards left in the deck
+    static getGameDeckCards(game) {
+        return new Promise((resolve, reject) => {
+            GameDeckCard.getMultipleTopCards(game, 0)
+                .then((gameDeckData) => {
+                    let cards = [];
+
+                    gameDeckData.forEach((gameCardData) => {
+                        let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
+                        cards.push(gameCard);
+                    });
+
+                    return resolve(cards);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    // Return empty array
+                    return resolve([]);
+                })
+        })
+    }
+
     static getUserHand(game, user) {
         return new Promise((resolve, reject) => {
             GameDeckCard.findAll('game', game)
@@ -145,9 +181,12 @@ class GameDeckCard extends ActiveRecord {
         return new Promise((resolve, reject) => {
             GameDeckCard.findOne(data, comparator, true, "order")
                 .then((gameCardData) => {
+
+                    if(!gameCardData) return resolve(null);
                     // Create GameDeckCard object
                     let gameCard = new GameDeckCard(gameCardData.game, gameCardData.user, gameCardData.card, gameCardData.order);
-                    return resolve(gameCard);
+
+                    return resolve(gameCard)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -179,6 +218,28 @@ class GameDeckCard extends ActiveRecord {
                     return reject(err);
                 });
         });
+    }
+
+    // Returns array of all played gamedeck cards
+    static getAllPlayedCards(game) {
+        const data = {
+            game: game,
+            order: GameDeckCard.PLAYED
+        }
+
+        const comparator = ["=", "="]
+
+        return new Promise((resolve, reject) => {
+            GameDeckCard.findMany(data, comparator, true, "order")
+                .then((playedCards) => {
+                    let cards = [];
+                    playedCards.forEach((playedCardData) => {
+                        cards.push(new GameDeckCard(playedCardData.game, playedCardData.user, playedCardData.card, playedCardData.order))
+                    })
+
+                    return resolve(playedCards);
+                })
+        })
     }
 
     static getLastPlayedCardOrder(color) {
