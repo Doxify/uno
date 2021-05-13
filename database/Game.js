@@ -148,11 +148,13 @@ class Game extends ActiveRecord {
                             (i) => i.player_num == (nextPlayerSkipped ? 2 : 1)
                           )[0];
                         } else {
+                          console.log("got here 1")
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (
                               nextPlayerSkipped ? (((currentPlayer.player_num + 2) > GameUser.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayer.player_num + 2) 
                               : currentPlayer.player_num + 1
                           ))[0];
+                          console.log("Next Player: " + nextPlayer.player_num);
                         }
                       } else {
                         // 'decrease' the player num
@@ -162,15 +164,17 @@ class Game extends ActiveRecord {
                         //   nextPlayer = gameUsers.filter((i) => i.player_num == (currentPlayer.player_num - 1))[0];
                         // }
                         if (currentPlayer.player_num == 1) {
+                          console.log("got here 2")
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (nextPlayerSkipped ? 3 : 4)
                           )[0];
+                          console.log("Next Player: " + nextPlayer.player_num);
                         } else {
+                          console.log("got here 3")
                           nextPlayer = gameUsers.filter(
-                            (i) => i.player_num == (
-                              nextPlayerSkipped ? (((currentPlayer.player_num - 2) < 0) ? 4 : currentPlayer.player_num - 2)
-                              : currentPlayer.player_num - 1
+                            (i) => i.player_num == (nextPlayerSkipped ? (((currentPlayer.player_num - 2) <= 0) ? 4 : currentPlayer.player_num - 2) : currentPlayer.player_num - 1
                           ))[0];
+                          console.log("Next Player: " + nextPlayer.player_num);
                         }
                       }
     

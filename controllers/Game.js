@@ -8,6 +8,7 @@ const GameDeckController = require("./GameDeck");
 const LobbyEvents = require('../events/lobby');
 const GameEvents = require('../events/game');
 const GameDeckCard = require("../database/GameDeck");
+const game = require("../events/game");
 
 const GENERIC_ERROR = function (response) {
   return response.json({
@@ -242,10 +243,12 @@ const GameController = {
 
           GameDeck.getUserHand(gameId, userId)
             .then((userGameHand) => {
-              console.log("got here 1")
+              console.log("blah blah blah")
               // Check if the card is in the user's hand.
               let cardPlayedFromHand = userGameHand.filter(i => i.card == cardId)[0];
               if (!cardPlayedFromHand) return resolve(false);
+
+              console.log("blah 10")
 
               // Validate that the move is legal.
               GameDeck.getLastPlayedCard(gameId)
@@ -300,17 +303,14 @@ const GameController = {
                             )
                           }
 
-                          console.log("got here 2");
 
                           // If the played card is a wild card, need to send another request back to the player that played the wildcard
                           // so that he/she can choose what color to change it to
                           if (basePlayedCard.value === BaseDeck.WILD || basePlayedCard.value === BaseDeck.WILDDRAW4) {
-                            console.log("got here 3");
 
                             // Execute promises which update the state of the game.
                             Promise.all(promises)
                               .then(() => {
-                                console.log("got here 4");
                                 // Send a pusher event back to the player that played the wildcard
                                 GameController.sendWildCardEvent(gameId, userId);
                               })
@@ -549,51 +549,126 @@ const GameController = {
               .then((gameUsers) => {
                 // if(!gameUsers) return JSON_ERROR(response, "Could not get game user state");
 
-                // Get the game deck
-                GameDeck.getGameDeck(gameId)
-                  .then((gameDeck) => {
-                    // if(!gameDeck) return JSON_ERROR(response, "Could not get game deck state.");
 
-                    // Map through game deck and build the state.
-                    gameDeck.map((gameDeckCard) => {
-                      // Get the base card from the base deck based on the game
-                      // deck card.
-                      const baseCard = baseDeck.filter(i => i.id == gameDeckCard.card)[0];
+                var promises = [];
 
-                      // Update the last played card.
-                      if (gameDeckCard.order < -5) {
-                        state.lastPlayedCard = baseCard;
-                      }
 
-                      if (gameDeckCard.user !== null) {
-                        // Get the game user that this game deck card belongs to. 
-                        const gameUser = gameUsers.filter(i => i.user == gameDeckCard.user)[0];
+                gameUsers.forEach((gameUser) => {
+                  promises.push(
+                    GameDeck.getUserHand(gameId, gameUser.user)
+                      .then((hand) => {
 
-                        // Add card state if the card belongs to the calling user.
-                        if (gameDeckCard.user === userId) {
+                        if(hand.length == 0) {
+                          state.isGameOver = true;
+
+                          promises.push(
+                            GameUser.update(
+                              { game: gameId, user: gameUser.user },
+                              { winner: true }
+                            )
+                          );
+                        }
+
+                        if(gameUser.user === userId) {
+                          state.user.handLength = hand.length;
                           state.user.playerNum = gameUser.player_num;
                           state.user.isCurrentPlayer = gameUser.current_player;
                           state.user.userId = gameUser.user;
-                          state.user.handLength += 1;
-                          state.user.cards.push(baseCard);
+                          state.user.cards = hand.map((i) => baseDeck[i.card-1]).sort((a, b) => {
+                            if(a.color != b.color) {
+                              return (a.color > b.color) ? 1 : -1
+                            }
+                            return (a.value > b.value) ? 1 : -1;
+                          });
 
                         } else {
-                          // Add limited card state if the card does not belong
-                          // to the calling user.
-                          if (state.otherPlayers[gameUser.player_num]) {
-                            state.otherPlayers[gameUser.player_num].handLength += 1;
-                          } else {
-                            state.otherPlayers[gameUser.player_num] = {
-                              handLength: 1,
-                              isCurrentPlayer: gameUser.current_player,
-                              userId: gameUser.user
-                            };
-                          }
+                          state.otherPlayers[gameUser.player_num] = {
+                            handLength: hand.length,
+                            isCurrentPlayer: gameUser.current_player,
+                            userId: gameUser.user
+                          };
                         }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      })
+                  )
+                })
+
+                promises.push(
+                  GameDeck.getLastPlayedCard(gameId)
+                    .then((lastPlayedCard) => {
+                      if(!lastPlayedCard) {
+                        state.lastPlayedCard = null;
+                        return;
                       }
+
+                      state.lastPlayedCard = baseDeck[lastPlayedCard.card - 1];
                     })
+                    .catch((err) => {
+                      console.log(err);
+                    })
+                );
+
+                Promise.all(promises)
+                  .then(() => {
                     GameEvents.TRIGGER_GAME_STATE(gameId, userId, state);
                   })
+
+
+
+
+                // // Get the game deck
+                // GameDeck.getGameDeck(gameId)
+                //   .then((gameDeck) => {
+                //     // if(!gameDeck) return JSON_ERROR(response, "Could not get game deck state.");
+
+
+                //     const gameUser = gameUsers.filter(i => i.user == userId)[0];
+
+                //     state.user.playerNum = gameUser.player_num;
+                //     state.user.isCurrentPlayer = gameUser.current_player;
+                //     state.user.userId = gameUser.user;
+
+
+
+                //     // // Map through game deck and build the state.
+                //     // gameDeck.map((gameDeckCard) => {
+                //     //   // Get the base card from the base deck based on the game
+                //     //   // deck card.
+                //     //   const baseCard = baseDeck.filter(i => i.id == gameDeckCard.card)[0];
+
+                //     //   // Update the last played card.
+                //     //   if (gameDeckCard.order < -5) {
+                //     //     state.lastPlayedCard = baseCard;
+                //     //   }
+
+                //     //   if (gameDeckCard.user != null) {
+                //     //     // Get the game user that this game deck card belongs to. 
+                //     //     const gameUser = gameUsers.filter(i => i.user == gameDeckCard.user)[0];
+
+                //     //     // Add card state if the card belongs to the calling user.
+                //     //     if (gameDeckCard.user === userId) {
+                //     //       state.user.handLength += 1;
+                //     //       state.user.cards.push(baseCard);
+
+                //     //     } else {
+                //     //       // Add limited card state if the card does not belong
+                //     //       // to the calling user.
+                //     //       if (state.otherPlayers[gameUser.player_num]) {
+                //     //         state.otherPlayers[gameUser.player_num].handLength += 1;
+                //     //       } else {
+                //     //         state.otherPlayers[gameUser.player_num] = {
+                //     //           handLength: 1,
+                //     //           isCurrentPlayer: gameUser.current_player,
+                //     //           userId: gameUser.user
+                //     //         };
+                //     //       }
+                //     //     }
+                //     //   }
+                //     // })
+                //     GameEvents.TRIGGER_GAME_STATE(gameId, userId, state);
+                //   })
               })
           })
       })
@@ -647,7 +722,7 @@ const GameController = {
   },
   // Check if a game exists in the database
   gameExists: (gameId) => {
-    game = new Game()
+    let game = new Game()
     return new Promise((resolve, reject) => {
       game.getById(gameId)
         .then((game) => {

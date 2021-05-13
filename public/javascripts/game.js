@@ -24,6 +24,8 @@ gameChannel.bind("pusher:member_removed", (member) => {
 })
 
 gameStateChannel.bind("GAME_STATE", (data) => {
+  console.log(data.isGameOver);
+
   console.log("Got state!");
   console.log(data);
   renderGameInfo(data);
