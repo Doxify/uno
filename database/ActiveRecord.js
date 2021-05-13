@@ -46,8 +46,7 @@ class ActiveRecord {
                 whereClause += ' AND ';
             }
         })
-
-        return db.any(`SELECT * FROM "${this.table_name}" WHERE ${whereClause} ORDER BY "${orderByField}" ${ascending ? "ASC" : "DESC"} LIMIT ${limit}`);
+        return db.any(`SELECT * FROM "${this.table_name}" WHERE ${whereClause} ORDER BY "${orderByField}" ${ascending ? "ASC" : "DESC"} ${limit > 0 ? `LIMIT ${limit}` : ""}`);
     }
 
     static findBy(field, value) {
