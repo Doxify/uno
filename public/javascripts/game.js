@@ -45,6 +45,15 @@ document.getElementById("draw-card").addEventListener("click", async () =>  {
   drawCard();
 });
 
+// Listen for chat sidebar being open/closed.
+document.getElementById("chat-close-btn").addEventListener("click", function(event) {
+  closeChat(event);
+});
+
+document.getElementById("chat-open-btn").addEventListener("click", function(event) {
+  openChat(event);
+});
+
 // ====================================================================
 // Communicating with the backend API
 // ====================================================================
@@ -225,4 +234,23 @@ function getFaceDownCardHTML() {
       <img src="../images/unocards.png".face-down height = '100'>
     </div>
   `;
+}
+
+function openChat(event) {
+  event.preventDefault()
+  chatSidebar = document.getElementsByClassName("chat-sidebar")[0];
+  chatClosed = document.getElementById("chat-sidebar-closed");
+
+  chatSidebar.classList.remove("hidden");
+  chatClosed.classList.add("hidden");
+}
+
+
+function closeChat(event) {
+  event.preventDefault();
+  chatSidebar = document.getElementsByClassName("chat-sidebar")[0];
+  chatClosed = document.getElementById("chat-sidebar-closed");
+
+  chatSidebar.classList.add("hidden")
+  chatClosed.classList.remove("hidden")
 }
