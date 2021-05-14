@@ -112,7 +112,6 @@ const GameController = {
               })
               .catch((err) => {
                 console.log(err);
-
                 return response.json({
                   status: "failure",
                   message:
@@ -123,9 +122,11 @@ const GameController = {
         });
 
         Promise.all(promises).then(() => {
+          let filteredList = activeGames.filter((i) => i.isGameUser || i.numPlayers != GameUser.MAX_GAME_USERS_PER_GAME);
+
           return response.json({
             status: 'success',
-            games: activeGames
+            games: filteredList
           });
         });
       })
