@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const userController = require('../../controllers/Users');
+const AuthController = require('../../controllers/Auth');
 const passport = require('../../config/passport');
 const pusher = require('../../config/pusher');
 const { isAuthed, notAuthed } = require('../../middleware/auth');
 
 // Creates a user and saves their account to the database.
 router.post('/register', notAuthed, (req, res, next) => {
-  userController.create(req, res, next);
+  AuthController.create(req, res, next);
 });
 
 // Authentication endpoint for Pusher.
