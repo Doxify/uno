@@ -175,168 +175,159 @@ const GameController = {
     if (!gameId) return JSON_ERROR(response, "Game ID not provided.");
     if (!moveType) return JSON_ERROR(response, "Move type not provided.");
 
-    switch (moveType) {
-      case Game.DRAW_CARD:
-        GameController.drawCard(gameId, userId, 1);
-        break;
-      case Game.PLAY_CARD:
-        // play card function init here
-        if (!cardId) return JSON_ERROR(response, "Card not provided.");
-        GameController.playCard(gameId, userId, cardId);
-        break;
-      case Game.CHOOSE_COLOR:
-        console.log("received choose color event");
-        if (!color) return JSON_ERROR(response, "Color not provided.");
-        GameController.changeGameColor(gameId, userId, color);
-        break;
-    }
-    return response.json({ status: 'success' });
+    // Check if this user can make a move in this game at this time.
+    GameController.canMakeMove((gameId, userId))
+      .then((canMakeMove) => {
+        
+        if(canMakeMove) {
+          switch (moveType) {
+            case Game.DRAW_CARD:
+              GameController.drawCard(gameId, userId, 1);
+              break;
+            case Game.PLAY_CARD:
+              if (!cardId) return JSON_ERROR(response, "Card not provided.");
+              GameController.playCard(gameId, userId, cardId);
+              break;
+            case Game.CHOOSE_COLOR:
+              console.log("received choose color event");
+              if (!color) return JSON_ERROR(response, "Color not provided.");
+              GameController.changeGameColor(gameId, userId, color);
+              break;
+          }
+        }
+
+        return response.json({ status: 'success' });
+      })
+      .catch((err) => {
+        return response.json({ status: 'failure' });
+      })
   },
   drawCard: (gameId, userId, amountToDraw = 1) => {
-    // Validate that user is in that game and is currentPlayer
     return new Promise((resolve, reject) => {
-      GameController.canMakeMove(gameId, userId)
-        .then((canMove) => {
-          if (!canMove) {
-            return resolve(false);
-          }
-          // Need to get the card at the top of the deck
-          GameDeckController.getTopCard(gameId)
-            .then((topCard) => {
-              // Update the order and user fields in topCard to simulate the Game User drawing the card
-              GameDeck.update(
-                { game: topCard.game, card: topCard.card },
-                { user: userId, order: GameDeck.DRAWN }
-              )
+      // Need to get the card at the top of the deck
+      GameDeckController.getTopCard(gameId)
+        .then((topCard) => {
+          // Update the order and user fields in topCard to simulate the Game User drawing the card
+          GameDeck.update(
+            { game: topCard.game, card: topCard.card },
+            { user: userId, order: GameDeck.DRAWN }
+          )
+            .then((_) => {
+              // send Game State to all users in game
+              GameController.sendGameState(gameId)
                 .then((_) => {
-                  // send Game State to all users in game
-                  GameController.sendGameState(gameId)
-                    .then((_) => {
-                      return resolve(true)
-                    })
-                    .catch((err) => {
-                      return resolve(false);
-                    })
+                  return resolve(true)
                 })
                 .catch((err) => {
-                  console.log(err);
                   return resolve(false);
-                });
+                })
             })
             .catch((err) => {
               console.log(err);
               return resolve(false);
-            })
+            });
         })
-    })
+        .catch((err) => {
+          console.log(err);
+          return resolve(false);
+        })
+      })
   },
   playCard: (gameId, userId, cardId) => {
     return new Promise((resolve, reject) => {
-      GameController.canMakeMove(gameId, userId)
-        .then((canMove) => {
-          if (!canMove) {
-            console.log("can't make move")
-            return resolve(false);
-          }
+      GameDeck.getUserHand(gameId, userId)
+        .then((userGameHand) => {
+          console.log("blah blah blah")
+          // Check if the card is in the user's hand.
+          let cardPlayedFromHand = userGameHand.filter(i => i.card == cardId)[0];
+          if (!cardPlayedFromHand) return resolve(false);
 
-          GameDeck.getUserHand(gameId, userId)
-            .then((userGameHand) => {
-              console.log("blah blah blah")
-              // Check if the card is in the user's hand.
-              let cardPlayedFromHand = userGameHand.filter(i => i.card == cardId)[0];
-              if (!cardPlayedFromHand) return resolve(false);
+          console.log("blah 10")
 
-              console.log("blah 10")
+          // Validate that the move is legal.
+          GameDeck.getLastPlayedCard(gameId)
+            .then((lastPlayedCard) => {
+              if (!lastPlayedCard) return resolve(false);
 
-              // Validate that the move is legal.
-              GameDeck.getLastPlayedCard(gameId)
-                .then((lastPlayedCard) => {
-                  if (!lastPlayedCard) return resolve(false);
+              // Get the base card of the played card and last played card.
+              BaseDeck.getCard(cardPlayedFromHand.card)
+                .then((basePlayedCard) => {
 
-                  // Get the base card of the played card and last played card.
-                  BaseDeck.getCard(cardPlayedFromHand.card)
-                    .then((basePlayedCard) => {
+                  if (!basePlayedCard) return resolve(false);
 
-                      if (!basePlayedCard) return resolve(false);
+                  BaseDeck.getCard(lastPlayedCard.card)
+                    .then((baseLastPlayedCard) => {
+                      if (!baseLastPlayedCard) return resolve(false);
+                      if (!GameController.validateMove(basePlayedCard, baseLastPlayedCard, lastPlayedCard)) {
+                        return resolve(false);
+                      }
 
-                      BaseDeck.getCard(lastPlayedCard.card)
-                        .then((baseLastPlayedCard) => {
-                          if (!baseLastPlayedCard) return resolve(false);
-                          if (!GameController.validateMove(basePlayedCard, baseLastPlayedCard, lastPlayedCard)) {
+                      var promises = [];
+                      // Set the order of the last played card to -3.
+                      promises.push(
+                        GameDeck.update(
+                          { game: lastPlayedCard.game, card: lastPlayedCard.card },
+                          { order: GameDeck.PLAYED }
+                        )
+                      );
+                      // Set the order of the card being played to one of the LAST_PLAYED constants in GameDeck.
+                      // Set the user of the card being played to null.
+                      promises.push(
+                        GameDeck.update(
+                          { game: cardPlayedFromHand.game, card: cardPlayedFromHand.card },
+                          { order: GameDeck.getLastPlayedCardOrder(basePlayedCard.color), user: null }
+                        )
+                      );
+
+                      // If the played card is a reverse card, change the
+                      // direction of the game.
+                      if (basePlayedCard.value === BaseDeck.REVERSE) {
+                        promises.push(
+                          Game.get(gameId)
+                            .then((game) => {
+                              Game.update(
+                                { id: cardPlayedFromHand.game },
+                                { direction_clockwise: !game.direction_clockwise }
+                              )
+                            })
+                        )
+                      }
+
+
+                      // If the played card is a wild card, need to send another request back to the player that played the wildcard
+                      // so that he/she can choose what color to change it to
+                      if (basePlayedCard.value === BaseDeck.WILD || basePlayedCard.value === BaseDeck.WILDDRAW4) {
+
+                        // Execute promises which update the state of the game.
+                        Promise.all(promises)
+                          .then(() => {
+                            // Send Pusher Event to only the user that played the WildCard
+                            GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
+                          })
+                          .catch((err) => {
+                            console.log(err);
                             return resolve(false);
-                          }
+                          })
 
-                          var promises = [];
-                          // Set the order of the last played card to -3.
-                          promises.push(
-                            GameDeck.update(
-                              { game: lastPlayedCard.game, card: lastPlayedCard.card },
-                              { order: GameDeck.PLAYED }
-                            )
-                          );
-                          // Set the order of the card being played to one of the LAST_PLAYED constants in GameDeck.
-                          // Set the user of the card being played to null.
-                          promises.push(
-                            GameDeck.update(
-                              { game: cardPlayedFromHand.game, card: cardPlayedFromHand.card },
-                              { order: GameDeck.getLastPlayedCardOrder(basePlayedCard.color), user: null }
-                            )
-                          );
+                      } else {
 
-                          // If the played card is a reverse card, change the
-                          // direction of the game.
-                          if (basePlayedCard.value === BaseDeck.REVERSE) {
-                            promises.push(
-                              Game.get(gameId)
-                                .then((game) => {
-                                  Game.update(
-                                    { id: cardPlayedFromHand.game },
-                                    { direction_clockwise: !game.direction_clockwise }
-                                  )
-                                })
-                            )
-                          }
-
-
-                          // If the played card is a wild card, need to send another request back to the player that played the wildcard
-                          // so that he/she can choose what color to change it to
-                          if (basePlayedCard.value === BaseDeck.WILD || basePlayedCard.value === BaseDeck.WILDDRAW4) {
-
-                            // Execute promises which update the state of the game.
-                            Promise.all(promises)
-                              .then(() => {
-                                // Send Pusher Event to only the user that played the WildCard
-                                GameEvents.TRIGGER_GAME_COLOR_CHOOSER(gameId, userId);
+                        // Execute promises which update the state of the game.
+                        Promise.all(promises)
+                          .then(() => {
+                            GameController.updateNextPlayerState(gameId, basePlayedCard)
+                              .then((resolved) => {
+                                return resolve(resolved);
                               })
                               .catch((err) => {
                                 console.log(err);
                                 return resolve(false);
                               })
-
-                          } else {
-
-                            // Execute promises which update the state of the game.
-                            Promise.all(promises)
-                              .then(() => {
-                                GameController.updateNextPlayerState(gameId, basePlayedCard)
-                                  .then((resolved) => {
-                                    return resolve(resolved);
-                                  })
-                                  .catch((err) => {
-                                    console.log(err);
-                                    return resolve(false);
-                                  })
-                              })
-                              .catch((err) => {
-                                console.log(err);
-                                return resolve(false);
-                              });
-                          }
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          return resolve(false);
-                        });
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                            return resolve(false);
+                          });
+                      }
                     })
                     .catch((err) => {
                       console.log(err);
@@ -353,57 +344,55 @@ const GameController = {
               return resolve(false);
             });
         })
+        .catch((err) => {
+          console.log(err);
+          return resolve(false);
+        });
     });
   },
   changeGameColor: (gameId, userId, color) => {
     return new Promise((resolve, reject) => {
-      GameController.canMakeMove(gameId, userId)
-        .then((canMove) => {
-          if (!canMove) {
-            return resolve(false);
-          }
-          // Get last played card
-          GameDeck.getLastPlayedCard(gameId)
-            .then((lastPlayedCard) => {
-              if (!lastPlayedCard) return resolve(false);
+      // Get last played card
+      GameDeck.getLastPlayedCard(gameId)
+        .then((lastPlayedCard) => {
+          if (!lastPlayedCard) return resolve(false);
 
-              // Get the base card of the last played card.
+          // Get the base card of the last played card.
 
-              BaseDeck.getCard(lastPlayedCard.card)
-                .then((baseLastPlayedCard) => {
+          BaseDeck.getCard(lastPlayedCard.card)
+            .then((baseLastPlayedCard) => {
 
-                  // Check to make sure that the last played card is a wildcard
-                  if (!baseLastPlayedCard || (baseLastPlayedCard.value != BaseDeck.WILD && baseLastPlayedCard.value != BaseDeck.WILDDRAW4)) return resolve(false);
+              // Check to make sure that the last played card is a wildcard
+              if (!baseLastPlayedCard || (baseLastPlayedCard.value != BaseDeck.WILD && baseLastPlayedCard.value != BaseDeck.WILDDRAW4)) return resolve(false);
 
-                  // Update the order of the baseLastPlayedCard to whatever color the user chose
-                  GameDeck.update(
-                    { game: gameId, card: baseLastPlayedCard.id },
-                    { order: GameDeck.getLastPlayedCardOrder(color) }
-                  )
-                    .then((_) => {
-                      GameController.updateNextPlayerState(gameId, baseLastPlayedCard);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                      return resolve(false);
-                    })
-
+              // Update the order of the baseLastPlayedCard to whatever color the user chose
+              GameDeck.update(
+                { game: gameId, card: baseLastPlayedCard.id },
+                { order: GameDeck.getLastPlayedCardOrder(color) }
+              )
+                .then((_) => {
+                  GameController.updateNextPlayerState(gameId, baseLastPlayedCard);
                 })
                 .catch((err) => {
                   console.log(err);
                   return resolve(false);
                 })
+
             })
             .catch((err) => {
               console.log(err);
               return resolve(false);
             })
-
         })
         .catch((err) => {
           console.log(err);
           return resolve(false);
         })
+
+    })
+    .catch((err) => {
+      console.log(err);
+      return resolve(false);
     })
   },
   // Helper method that updates the current player, makes the updated current player draw cards if he/she has to, and skips when needed
