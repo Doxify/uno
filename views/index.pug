@@ -3,7 +3,8 @@ extends layout
 block content
   // TODO: Replace this image with an actual gameplay
   //- Header Image Section
-  img(src="https://picsum.photos/200/?blur" alt="..." height="500").d-block.w-100
+  video(src='/images/uno.mp4' type='video/mp4'  autoplay muted  ).mw-100
+  //img(src="https://picsum.photos/200/?blur" alt="..." height="500")
   
   //- Play Now Section
   div.container.mt-5
@@ -116,19 +117,19 @@ block content
     var aboutData = [
       {
         name: "Andrei Georgescu",
-        image: "https://picsum.photos/150/?blur"
+        image: "/images/p1.jpeg"
       },
       {
         name: "Benjamin Kao",
-        image: "https://picsum.photos/150/?blur"
+        image: "/images/p2.jpg"
       },
       {
         name: "Yangesh KC",
-        image: "https://picsum.photos/150/?blur"
+        image: "/images/p3.jpeg"
       },
       {
         name: "Abishek Neralla",
-        image: "https://picsum.photos/150/?blur"
+        image: "/images/p4.jpg"
       }
     ]
 

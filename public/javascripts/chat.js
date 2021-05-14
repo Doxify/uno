@@ -17,6 +17,7 @@ document.getElementById("chatbox-btn").addEventListener("click", function(event)
 // Listening for all messages sent in this channel.
 chatChannel.bind('message', (data) => {
   updateChatBox(data);
+  console.log('Message revid via web sockets')
 });
 
 function sendMessage(message) {
