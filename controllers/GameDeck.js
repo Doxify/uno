@@ -185,7 +185,10 @@ const GameDeckController = {
 
             BaseDeckCard.getCard(gameDeck[topCard].card)
                 .then((baseCard) => {
+                    console.log("HERE!!!");
+                    console.log(baseCard);
                     gameDeck[topCard].order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
+                    console.log(gameDeck[topCard]);
                     return resolve(gameDeck);
                 })
         })

@@ -176,7 +176,7 @@ const GameController = {
     if (!moveType) return JSON_ERROR(response, "Move type not provided.");
 
     // Check if this user can make a move in this game at this time.
-    GameController.canMakeMove((gameId, userId))
+    GameController.canMakeMove(gameId, userId)
       .then((canMakeMove) => {
         
         if(canMakeMove) {
