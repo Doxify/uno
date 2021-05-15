@@ -127,7 +127,6 @@ class Game extends ActiveRecord {
 
                       // If there is no current player, assign one at random.
                       if(!currentPlayer) {
-                        console.log("here...");
                         let randomPlayerNum = Math.floor(Math.random() * GameUser.MAX_GAME_USERS_PER_GAME) + 1;
                         let randomPlayer = gameUsers.filter((i) => i.player_num == randomPlayerNum)[0];
                         
