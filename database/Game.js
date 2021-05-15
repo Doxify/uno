@@ -136,12 +136,6 @@ class Game extends ActiveRecord {
                       // Determine who the current player should be based off
                       // the direction the game is currently going in.
                       if (isClockwise) {
-                        // 'increase' the player num
-                        // if (currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
-                        //   nextPlayer = gameUsers.filter((i) => i.player_num == 1)[0];
-                        // } else {
-                        //   nextPlayer = gameUsers.filter((i) => currentPlayer.player_num + 1 == i.player_num)[0];
-                        // }
                         if (currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (nextPlayerSkipped ? 2 : 1)
@@ -152,15 +146,8 @@ class Game extends ActiveRecord {
                               nextPlayerSkipped ? (((currentPlayer.player_num + 2) > GameUser.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayer.player_num + 2) 
                               : currentPlayer.player_num + 1
                           ))[0];
-                          console.log("Next Player: " + nextPlayer.player_num);
                         }
                       } else {
-                        // 'decrease' the player num
-                        // if (currentPlayer.player_num == 1) {
-                        //   nextPlayer = gameUsers.filter((i) => i.player_num == 4)[0];
-                        // } else {
-                        //   nextPlayer = gameUsers.filter((i) => i.player_num == (currentPlayer.player_num - 1))[0];
-                        // }
                         if (currentPlayer.player_num == 1) {
                           nextPlayer = gameUsers.filter(
                             (i) => i.player_num == (nextPlayerSkipped ? 3 : 4)
@@ -182,6 +169,12 @@ class Game extends ActiveRecord {
                         )
                       );
                     }
+
+                    if(lastPlayedBaseCard == BaseDeck.REVERSE) {
+                      console.log(currentPlayer);
+                      console.log(nextPlayer);
+                    }
+
     
                     // Create a promise to add current_player status to
                     // the next player.
