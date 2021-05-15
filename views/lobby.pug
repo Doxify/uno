@@ -1,0 +1,50 @@
+extends layout 
+
+block content
+    // Import game_room.css
+    head 
+        title= title 
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/stylesheets/game_room.css')
+        script(src="/javascripts/_pusher.js" defer)
+        script(src="/javascripts/chat.js" defer)
+        script(src="/javascripts/lobby.js" defer)
+
+        //- This input value is used by various scripts.
+        input(type="hidden", id="roomId", name="roomId" value=gameId)
+        input(type="hidden", id="userId", name="userId" value=user.id)
+
+        .container-fluid.d-flex.flex-column.h-100
+            .row.flex-fill.d-flex.flex-row
+              .game-container.col
+                .row.p-5
+
+                  //- Lobby Status Section
+                  .col-sm-12.col-md-9 
+
+
+                    .card.bg-dark.text-white 
+                      .card-body
+                        h4.card-title Game Lobby 
+                        h5.card-subtitle.text-muted(id="lobby-status" hidden)
+                          span Waiting for 
+                          span.text-success(id="lobby-player-count")
+                          span other player(s) before starting...
+                        br
+                        .spinner-border(id="loading")
+                        .row(id="connected-players")
+
+                  //- Game Chat Section
+                  .col-sm-12.col-md-3
+                    .card.bg-dark.text-white 
+                      .card-body
+                        .chatroom-title-container
+                            h4.card-title Game Chat
+                        .chatbox
+                            //- Messages will be appended here.
+                        .messagebox
+                          form
+                            .input-group
+                              input(id="userInput" type="text").form-control
+                              button.btn.bg-success(id="chatbox-btn" type="submit")
+                                i.fa.fa-paper-plane

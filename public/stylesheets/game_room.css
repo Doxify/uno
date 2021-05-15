@@ -1,5 +1,5 @@
 body {
-    height: 92.25vh;
+  height: 94.25vh;
 }
 
 /* ================================================================================ */
@@ -7,52 +7,50 @@ body {
 /* ================================================================================ */
 
 .game-container {
-    flex-grow: 1;
-    padding: 0px;
+  flex-grow: 1;
+  padding: 0px;
+  background-color: #58636e;
 }
 .game {
-    margin: 0px;
-    padding: 0px;
-    background-color: lightgrey;
+  margin: 0px;
+  padding: 0px;
 }
 
-
 .top {
-    flex-grow: 0.5;
-    background-color: red;
+  flex-grow: 0.5;
 }
 
 .middle {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 .middle .col-sm {
-    padding: 0px;
-    max-height: 100%;
+  padding: 0px;
+  max-height: 100%;
 }
 
 .row .col-sm-6 {
-    padding: 0px;
+  padding: 0px;
 }
 
-.center {
-    background-color: chartreuse;
-}
+/* .center {
+} */
 
 .bottom {
-    flex-basis: 150px;
-    flex-grow: 0.5;
-    background-color: violet;
-    margin: 0px;
+  flex-basis: 150px;
+  flex-grow: 0.5;
+  margin: 0px;
 }
 
 .bottom .container-fluid {
-    padding: 0px;
+  padding: 0px;
 }
 
-.bottom .container-fluid .row .col {
-    margin: 0px;
-    padding: 0px;
+.direction-container {
+  width: 50px;
+  padding: 5px;
+  margin: 10px;
+  z-index: 0;
 }
 
 /* ================================================================================ */
@@ -60,175 +58,254 @@ body {
 /* ================================================================================ */
 
 .my-card {
-    box-sizing: border-box;
-    display: block;
+  box-sizing: border-box;
+  display: block;
 
-    height: 100px;
-    width: 64px;
+  height: 100px;
+  width: 64px;
 
+  margin: 8px;
+  padding: 0px;
 
-    margin: 8px;
-    padding: 0px;
-    border-radius: 10px;
+  background-color: inherit;
 
-    background-color: inherit;
+  transition: transform 0.2s;
 
-    transition: transform .2s;
-
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.my-card:hover {
-    transform: scale(1.6);
+#game-center .my-card:hover {
+  transform: scale(1.6);
 }
 
 .middle .center {
-    padding: 0px;
+  padding: 0px;
 }
 
 #game-center {
-    padding: 0px;
+  padding: 0px;
 }
 
 #game-center .row {
-    margin: 0px;
-    height: 100%;
-    width: 100%;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
 }
 
-.face-up {
-    border-radius: 6px;
-    background-color: white;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-}
-
+.face-up,
 .face-down {
-    display: block;
-    height: auto;
-    width: 100%;
-    object-fit: cover;
+  display: block;
+  height: 100px;
+  max-height: 100px;
+  width: 100%;
+  object-fit: cover;
 
+  border-radius: 5px;
+  box-shadow: 4px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .deck {
-    cursor: pointer;
+  cursor: pointer;
 
-    padding: 0px;
+  padding: 0px;
 
-    z-index: 1000;
+  z-index: 1000;
 }
 
-#draw {
-    margin: 0px;
-    top: 0px;
-    left: 0px;
+#draw-card {
+  height: 100px;
+  max-height: 100px;
 }
-
-
 
 .user-hand {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 1px;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+  flex-grow: 1;
+
+  height: 100%;
+  width: 100%;
+
+  justify-content: center;
+  align-items: start;
 }
 
 .user-hand .my-card {
-    margin: 2px;
-    max-height: 60px;
-    max-width: 32px;
+  margin: 2px;
+  max-height: 60px;
+  max-width: 32px;
 }
 
+.user-hand .face-down,
+.user-hand .face-up {
+  height: 100%;
 
-.user-hand .my-card:hover {
-    
-    transform: scale(2.75);
+  object-fit: contain;
 }
 
-.user-hand .face-down {
-    height: 100%;
+.center-player {
+  box-sizing: border-box;
+  display: flex;
 
-    object-fit: contain;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: start;
 }
 
+.reverse {
+  align-items: flex-end;
+}
+
+.top-player-container {
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.user-player-container {
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: center;
+  align-items: center;
+}
 
 #top-player {
-    flex-wrap: wrap-reverse;
+  flex-wrap: wrap-reverse;
 }
 
 .side-player {
-    padding: 0px 20px;
+  padding: 0px 20px;
 }
 
-.side-player .my-card {
+/* #left-player .my-card {
     transform: rotate(90deg);
 }
 
-#left-player .my-card .face-down {
-    /* max-height: 400px; */
+#right-player .my-card {
+    transform: rotate(270deg);
+} */
+
+#user-player .my-card:hover {
+  transform: scale(3, 2.75);
 }
+
+#user-player .my-card img:hover {
+  object-fit: fill;
+  border: 2px solid rgba(0, 255, 255);
+}
+
+#user-player .my-card {
+  object-fit: cover;
+  height: 58px;
+  width: 32px;
+}
+
+.username-container {
+  box-sizing: border-box;
+  display: flex;
+  padding: 16px;
+
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  color: white;
+}
+
+.username {
+  --username-padding: 1rem;
+  position: relative;
+  display: block;
+
+  padding: var(--username-padding);
+
+  border-radius: 8px;
+}
+
+.username-current-player::after {
+  content: "";
+  position: absolute;
+  display: block;
+
+  left: 0;
+
+  height: 3px;
+  width: 75%;
+
+  background-color: rgb(0, 255, 0);
+}
+
+.color-card {
+  height: 50px
+}
+
 /* ================================================================================ */
 /* Chat-sidebar*/
 /* ================================================================================ */
 
 .chat-sidebar {
-    display: flex;
-    /* flex-direction: column;
+  display: flex;
+  /* flex-direction: column;
     
     height: 100%;
     min-width: 200px;
     max-width: 350px; */
-    /* flex-grow: 0.25; */
+  /* flex-grow: 0.25; */
 
-    padding: 0px;
+  padding: 0px;
 
-    border-top: 0.5px solid grey;
+  border-top: 0.5px solid grey;
 }
 
 #chat-sidebar-closed {
-    max-width: 50px;
-    padding: 0px;
+  max-width: 50px;
+  padding: 0px;
 
-    border-top: 0.5px solid grey;
+  border-top: 0.5px solid grey;
 }
 
 .chat-title-box {
-    border-bottom: 1px solid grey;
-    padding: 8px 16px;
+  border-bottom: 1px solid grey;
+  padding: 8px 16px;
 }
 
 .chat-close-container {
-    margin-right: 8px;
-    padding: 0px;
+  margin-right: 8px;
+  padding: 0px;
 }
 
 .chat-title {
-    display: block;
-    color: #fff;
+  display: block;
+  color: #fff;
 }
 
 .chat-message-box {
-    padding: 8px;
-    padding-top: 16px;
-    border-top: 1px solid grey;
+  padding: 8px;
+  padding-top: 16px;
+  border-top: 1px solid grey;
 }
 
 .open-chat {
-    padding-left: 16px;
-    font-size: 24px;
-    color: white;
+  padding-left: 16px;
+  font-size: 24px;
+  color: white;
 }
 
 .open-chat:hover {
-    color: white;
+  color: white;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }

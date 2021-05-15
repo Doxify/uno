@@ -1,0 +1,106 @@
+extends layout 
+
+block content
+    head 
+        title= title 
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/stylesheets/game_room.css')
+        link(rel='stylesheet', href='/stylesheets/cardSize.css')
+        script(src="/javascripts/_pusher.js" defer)
+        script(src="/javascripts/chat.js" defer)
+        script(src="/javascripts/game.js" defer)
+        
+
+        //- This input value is used by various scripts.
+        input(type="hidden", id="roomId", name="roomId" value=gameId)
+        input(type="hidden", id="userId", name="userId" value=user.id)
+
+    body
+        .container-fluid.d-flex.flex-column.h-100
+            .row.flex-fill.d-flex.flex-row
+
+                //- GAME BOARD
+                .game-container.col
+                    .game.container-fluid.h-100.d-flex.flex-column
+                        
+                        .top.row.mt-5
+                            .container-fluid.w-100.h-100
+                                .row.w-100.h-100
+                                    .col.top-player-container
+                                        #top-player.user-hand.reverse-hand
+                                        .username-container    
+                                            #top-player-username.username.bg-dark Username
+                        
+                        .middle.row
+                            .col-sm.center-player
+                                .username-container 
+                                    #left-player-username.username.bg-dark Username
+                                #left-player.user-hand.side-player
+                                    
+                            .center.col-sm
+                                #game-center.container.h-100.text-center
+                                    .row.justify-content-center.align-items-center.w-100.h-100
+                                        .direction-container.card.bg-dark.text-white
+                                            #game-direction
+                                        #last-played-card.my-card
+                                            img(src="../images/unocards.png").face-up
+                                        #draw-card.my-card
+                                            img(src="../images/unocards.png").face-down
+                            .col-sm.center-player.reverse
+                                #right-player.user-hand.side-player.reverse-hand
+                                .username-container 
+                                    #right-player-username.username.bg-dark Username
+                        
+                        .bottom.row
+                            .container-fluid.w-100.h-100
+                                .row.w-100.h-100
+                                    .col.user-player-container
+                                        .username-container
+                                            #username.username.bg-dark=user.username
+                                        #user-player.user-hand
+                
+                //- GAME ROOM CHAT
+                .chat-sidebar.col-sm-3.flex-column.bg-dark
+                    .chat-title-box.container.bg-dark.pt-2.pb-2
+                        .row
+                            .chat-close-container.col-sm-1.text-center.mt-2
+                                button#chat-close-btn.btn.btn-close.btn-close-white
+                            .chat-title.col.h4.mt-1 Chat
+                            
+                            .chatbox
+                                //- Messages will be appended here.
+                            .chat-message-box.container.bg-dark.mb-2
+                                form
+                                    .input-group
+                                        input(id="userInput" type="text").form-control
+                                        button.btn.bg-success(id="chatbox-btn" type="submit")
+                                            i.fa.fa-paper-plane
+                #chat-sidebar-closed.col.bg-dark.hidden
+                    button#chat-open-btn.btn.btn-default.open-chat
+                        i.fa.fa-chevron-left
+
+        //- CHOOSE COLOR MODAL
+        .modal.fade(id="choose-color-modal" aria-hidden="true" tabindex="-1")
+            .modal-dialog.modal-dialog-centered
+                .modal-content.bg-dark.text-white
+                    .modal-body
+                        h4.modal-title Select a color
+                        h5.modal-subtitle Which color would you like to use for this wildcard?
+                        .row.p-2
+                            .col-sm-6
+                                div.btn.btn-success.d-block.m-2(type="button" onclick="chooseColor(`green`)") Green
+                            .col-sm-6 
+                                div.btn.btn-warning.d-block.m-2(type="button" onclick="chooseColor('yellow')") Yellow
+                            .col-sm-6 
+                                div.btn.btn-danger.d-block.m-2(type="button" onclick="chooseColor('red')") Red
+                            .col-sm-6 
+                                div.btn.btn-primary.d-block.m-2(type="button" onclick="chooseColor('blue')") Blue
+        
+        //- GAME OVER MODAL
+        .modal.fade(id="game-over-modal" aria-hidden="true" tabindex="-1")
+            .modal-dialog.modal-dialog-centered
+                .modal-content.bg-dark.text-white
+                    .modal-body
+                        h4.modal-title.text-center.m-2 Game Over
+                            #game-over-status You lost!
+                        a.btn.btn-success.d-block.m-2(href="/dashboard" type="button") Return to Dashboard

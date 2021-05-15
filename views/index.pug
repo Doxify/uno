@@ -1,5 +1,142 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  // TODO: Replace this image with an actual gameplay
+  //- Header Image Section
+  video(src='/images/uno.mp4' type='video/mp4'  autoplay muted  ).mw-100
+  //img(src="https://picsum.photos/200/?blur" alt="..." height="500")
+  
+  //- Play Now Section
+  div.container.mt-5
+    
+    div.row
+      div.col-sm-12.col-md-4.offset-md-4.d-grid
+        a(type="button" href="/dashboard").btn.btn-lg.btn-success 
+          i.fa.fa-gamepad 
+            span Play Now
+
+  //- TODO: Fetch this from an API
+  -
+    var rulesData = [
+      {
+        id: 0,
+        title: "Main Objective",
+        content: "The First player to finish their hand but call 'UNO' before they place their last card down is declared the winner"
+      },
+      {
+        id: 1,
+        title: "Rule 1",
+        content: "The top card from the draw pile is placed in the card pile (The pile that is in the center of the game with face up cards)."
+      },
+      {
+        id: 2,
+        title: "Rule 2",
+        content: "Players, taking turns, must then place a card on top of the card pile that matches by number, color, or word."
+      },
+      {
+        id: 3,
+        title: "Rule 3",
+        content: "If a player has no playable card, they must draw a card from the draw pile. If the player still has no playable card, they are skipped."
+      },
+      
+      {
+        id: 5,
+        title: "Rule 3",
+        content: "Before a player plays their next to last card, they must press “UNO”. If they fail to do this and “no uno” is pressed, they must draw 4 cards from the draw pile."
+      },
+      {
+        id: 6,
+        title: "Rule 4",
+        content: "Once a player plays their last card, after successfully calling 'UNO', the game is over and that player is declared the WINNER."
+      },
+    ]
+
+  //- Rules Section
+  div.container.mt-5
+    h2.text-center Rules
+    p.text-center Here are some things to keep in mind while playing.
+    hr
+    div.row.mt-4
+      each rule in rulesData
+        div.col-sm-12.col-md-4
+          .card.p-2
+            .card-body
+              h5.card-title=rule.title
+              p.card-text=rule.content
+
+    - 
+        var faqData = [
+            { 
+              id: 0, 
+              title: "Question 1: How to play a UNO game?", 
+              content: "To Play a UNO game, first make to have been registered and logged in. Then you can click the play button on the homescreen and it will take you into our gamerooms from which you can select one room and hop in to enjoy a game."
+            },
+            { 
+              id: 1, 
+              title: "Question 2: How many players can play at ones", 
+              content: "The number of player per game is 4."
+            },
+            { 
+              id: 2, 
+              title: "Question 3: If i am already in a game can i leave and come back", 
+              content: "Yes, you can leave and hop back into the same game again. Just remember, your turn may get skipped."
+            },
+            {
+              id: 3, 
+              title: "Question 4: How do i win a game?", 
+              content: "You can visit our rules page for all the rules about the game!"
+            },
+            {
+              id: 4, 
+              title: "Question 5: How can i chat with my friends in the game?", 
+              content: "You can chat with friends and peopel in your game through the in game chat feature"
+            }
+          ]
+
+  //- FAQ Section
+  div.container.mt-5
+    h2.text-center FAQs
+    p.text-center Find the answers to the questions you are probably thinking about.
+    hr
+    div.row.mt-4
+      div.col-sm-12
+        div(id="faq-accordian").accordion.accordian-flush
+          each faq in faqData
+            div.accordian-item
+              h2(id="flush-heading"+faq.id).accordian-header
+                button(type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse"+faq.id aria-expanded="false" aria-controls="flush-collapse"+faq.id).accordion-button.collapsed=faq.title 
+              div(id="flush-collapse"+faq.id  aria-labelledby="flush-heading"+faq.id data-bs-parent="faq-accordian").accordian-collapse.collapse
+                div.accordion-body=faq.content
+
+  -
+    var aboutData = [
+      {
+        name: "Andrei Georgescu",
+        image: "/images/p1.jpeg"
+      },
+      {
+        name: "Benjamin Kao",
+        image: "/images/p2.jpg"
+      },
+      {
+        name: "Yangesh KC",
+        image: "/images/p3.jpeg"
+      },
+      {
+        name: "Abishek Neralla",
+        image: "/images/p4.jpg"
+      }
+    ]
+
+  //- About Us Section
+  div.container.mt-5.mb-5
+    h2.text-center About Us
+    p.text-center Learn more about the team behind this website.
+    hr
+    div.row.mt-4
+      each item in aboutData
+        div.col-sm-12.col-md-3
+          div.card
+            img(src=item.image).card-img-top
+            .card-body
+              strong.card-text.text-center=item.name

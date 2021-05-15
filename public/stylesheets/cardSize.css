@@ -1,0 +1,253 @@
+.user-hand .my-card {
+  --card-max-height: 60px;
+  --card-max-width: 32px;
+  margin: 2px;
+  max-height: var(--card-max-height);
+  max-width: var(--card-max-width);
+}
+
+.user-hand .my-card img {
+  max-height: var(--card-max-height);
+  max-width: var(--card-max-width);
+}
+
+.uno-card {
+  height: auto;
+  background-size: calc(14 * var(--card-max-width)) calc(8 * var(--card-max-height));
+  background-image: url("../images/UNO.svg");
+  background-repeat: no-repeat;
+  min-height: 100%;
+}
+#last-played-card {
+  --card-max-height: 100px;
+  --card-max-width: 64px;
+
+  max-height: var(--card-max-height);
+  max-width: var(--card-max-width);
+
+  margin: 0;
+
+  /* background: red; */
+}
+
+#last-played-card .my-card {
+  margin: 0;
+}
+
+#last-played-card .uno-card {
+  margin: 0;
+  height: var(--card-max-height);
+  background-size: calc(14 * var(--card-max-width)) calc(8 * var(--card-max-height));
+}
+
+.uno-card-red-0 {
+  background-position: 0px 0px;
+}
+.uno-card-red-1 {
+  background-position: calc(-1 * var(--card-max-width)) 0px;
+}
+.uno-card-red-2 {
+  background-position: calc(-2 * var(--card-max-width)) 0px;
+}
+.uno-card-red-3 {
+  background-position: calc(-3 * var(--card-max-width)) 0px;
+}
+.uno-card-red-4 {
+  background-position: calc(-4 * var(--card-max-width)) 0px;
+}
+.uno-card-red-5 {
+  background-position: calc(-5 * var(--card-max-width)) 0px;
+}
+.uno-card-red-6 {
+  background-position: calc(-6 * var(--card-max-width)) 0px;
+}
+.uno-card-red-7 {
+  background-position: calc(-7 * var(--card-max-width)) 0px;
+}
+.uno-card-red-8 {
+  background-position: calc(-8 * var(--card-max-width)) 0px;
+}
+.uno-card-red-9 {
+  background-position: calc(-9 * var(--card-max-width)) 0px;
+}
+
+.uno-card-yellow-0 {
+  background-position: 0px calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-1 {
+  background-position: calc(-1 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-2 {
+  background-position: calc(-2 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-3 {
+  background-position: calc(-3 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-4 {
+  background-position: calc(-4 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-5 {
+  background-position: calc(-5 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-6 {
+  background-position: calc(-6 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-7 {
+  background-position: calc(-7 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-8 {
+  background-position: calc(-8 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-yellow-9 {
+  background-position: calc(-9 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+
+.uno-card-green-0 {
+  background-position: 0px calc(-2 * var(--card-max-height));
+}
+.uno-card-green-1 {
+  background-position: calc(-1 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-2 {
+  background-position: calc(-2 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-3 {
+  background-position: calc(-3 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-4 {
+  background-position: calc(-4 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-5 {
+  background-position: calc(-5 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-6 {
+  background-position: calc(-6 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-7 {
+  background-position: calc(-7 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-8 {
+  background-position: calc(-8 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-green-9 {
+  background-position: calc(-9 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+
+.uno-card-blue-0 {
+  background-position: 0px calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-1 {
+  background-position: calc(-1 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-2 {
+  background-position: calc(-2 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-3 {
+  background-position: calc(-3 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-4 {
+  background-position: calc(-4 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-5 {
+  background-position: calc(-5 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-6 {
+  background-position: calc(-6 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-7 {
+  background-position: calc(-7 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-8 {
+  background-position: calc(-8 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+.uno-card-blue-9 {
+  background-position: calc(-9 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+
+
+.uno-card-red-10 {
+  background-position: calc(-10 * var(--card-max-width)) 0px;
+}
+.uno-card-yellow-10 {
+  background-position: calc(-10 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-green-10 {
+  background-position: calc(-10 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-blue-10 {
+  background-position: calc(-10 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+
+.uno-card-red-11 {
+  background-position: calc(-11 * var(--card-max-width)) 0px;
+}
+.uno-card-yellow-11 {
+  background-position: calc(-11 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-green-11 {
+  background-position: calc(-11 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-blue-11 {
+  background-position: calc(-11 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+
+.uno-card-red-12 {
+  background-position: calc(-12 * var(--card-max-width)) 0px;
+}
+.uno-card-yellow-12 {
+  background-position: calc(-12 * var(--card-max-width)) calc(-1 * var(--card-max-height));
+}
+.uno-card-green-12 {
+  background-position: calc(-12 * var(--card-max-width)) calc(-2 * var(--card-max-height));
+}
+.uno-card-blue-12 {
+  background-position: calc(-12 * var(--card-max-width)) calc(-3 * var(--card-max-height));
+}
+
+.uno-card-black-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+}
+.uno-card-red-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(255, 0, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-green-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(43, 255, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-blue-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(0, 4, 255, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-yellow-13 {
+  background-position: calc(-13 * var(--card-max-width)) 0px;
+  background-color: rgba(255, 238, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+
+.uno-card-black-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+}
+.uno-card-red-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(255, 0, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-green-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(43, 255, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-blue-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(0, 4, 255, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
+.uno-card-yellow-14 {
+  background-position: calc(-13 * var(--card-max-width)) calc(-4 * var(--card-max-height));
+  background-color: rgba(255, 238, 0, 0.5); /* Tint color */
+  background-blend-mode: multiply;
+}
