@@ -121,78 +121,105 @@ class Game extends ActiveRecord {
                   const nextPlayerSkipped = lastPlayedBaseCard.value === BaseDeck.SKIP || lastPlayedBaseCard.value === BaseDeck.DRAW2 || lastPlayedBaseCard.value === BaseDeck.WILDDRAW4;
     
                   // Get all of the game users
-                  GameUser.getGameUsers(gameId).then((gameUsers) => {
-    
-                    var promises = [];
-                    const currentPlayer = gameUsers.filter((i) => i.current_player == true)[0];
-                    let nextPlayer;
-    
-                    // If the current player num is undefined, assign
-                    // one randomly.
-                    if (!currentPlayer) {
-                      let randomPlayer = Math.floor(Math.random() * 4) + 1;
-                      nextPlayer = gameUsers.filter((i) => i.player_num == randomPlayer)[0];
-                    } else {
-                      // Determine who the current player should be based off
-                      // the direction the game is currently going in.
-                      if (isClockwise) {
-                        if (currentPlayer.player_num == GameUser.MAX_GAME_USERS_PER_GAME) {
-                          nextPlayer = gameUsers.filter(
-                            (i) => i.player_num == (nextPlayerSkipped ? 2 : 1)
-                          )[0];
-                        } else {
-                          nextPlayer = gameUsers.filter(
-                            (i) => i.player_num == (
-                              nextPlayerSkipped ? (((currentPlayer.player_num + 2) > GameUser.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayer.player_num + 2) 
-                              : currentPlayer.player_num + 1
-                          ))[0];
-                        }
+                  GameUser.getGameUsers(gameId)
+                    .then((gameUsers) => {
+                      const currentPlayer = gameUsers.filter((i) => i.current_player == true)[0];
+
+                      // If there is no current player, assign one at random.
+                      if(!currentPlayer) {
+                        console.log("here...");
+                        let randomPlayerNum = Math.floor(Math.random() * GameUser.MAX_GAME_USERS_PER_GAME) + 1;
+                        let randomPlayer = gameUsers.filter((i) => i.player_num == randomPlayerNum)[0];
+                        
+                        GameUser.setCurrentPlayer(gameId, randomPlayer.user, true)
+                          .then(() => {
+                            return resolve(randomPlayer);
+                          })
+                          .catch((err) => {
+                            return reject(err);
+                          })
+                      
                       } else {
-                        if (currentPlayer.player_num == 1) {
-                          nextPlayer = gameUsers.filter(
-                            (i) => i.player_num == (nextPlayerSkipped ? 3 : 4)
-                          )[0];
+                        // If there is a current player, determine the next player
+                        // and update current player status for both players.
+                        var promises = [];
+                        let nextPlayerNum;
+                        let nextPlayer;
+
+                        if(isClockwise) {
+
+                          if(currentPlayer.player_num === GameUser.MAX_GAME_USERS_PER_GAME) {
+                            
+                            if(nextPlayerSkipped) {
+                              nextPlayerNum = 2
+                            } else {
+                              nextPlayerNum = 1;
+                            }
+
+                          } else {
+
+                            if(nextPlayerSkipped) {
+                              if(currentPlayer.player_num + 2 > GameUser.MAX_GAME_USERS_PER_GAME) {
+                                nextPlayerNum = 1;
+                              } else {
+                                nextPlayerNum = currentPlayer.player_num + 2;
+                              }
+                            } else {
+                              nextPlayerNum = currentPlayer.player_num + 1;
+                            }
+
+                          }
+
                         } else {
-                          nextPlayer = gameUsers.filter(
-                            (i) => i.player_num == (nextPlayerSkipped ? (((currentPlayer.player_num - 2) <= 0) ? 4 : currentPlayer.player_num - 2) : currentPlayer.player_num - 1
-                          ))[0];
+
+                          if(currentPlayer.player_num === 1) {
+
+                            if(nextPlayerSkipped) {
+                              nextPlayerNum = GameUser.MAX_GAME_USERS_PER_GAME - 1;
+                            } else {
+                              nextPlayerNum = GameUser.MAX_GAME_USERS_PER_GAME;
+                            }
+
+                          } else {
+
+                            if(nextPlayerSkipped) {
+                              if(currentPlayer.player_num - 2 < 1) {
+                                nextPlayerNum = GameUser.MAX_GAME_USERS_PER_GAME;
+                              } else {
+                                nextPlayerNum = currentPlayer.player_num - 2;
+                              }
+                            } else {
+                              nextPlayerNum = currentPlayer.player_num - 1;
+                            }
+
+                          }
+
                         }
+
+                        // Set the nextPlayer based off the computed nextPlayerNum
+                        nextPlayer = gameUsers.filter((i) => i.player_num == nextPlayerNum)[0];
+                        
+                        // Create promises for updating current and next player.
+                        promises.push(
+                          GameUser.setCurrentPlayer(gameId, currentPlayer.user, false),
+                          GameUser.setCurrentPlayer(gameId, nextPlayer.user, true)
+                        );
+
+                        // Execute promises
+                        Promise.all(promises)
+                          .then(() => {
+                            return resolve(nextPlayer);
+                          })
+                          .catch((err) => {
+                            return reject(err);
+                          })
                       }
-    
-    
-                      // Create a promise to remove current_player
-                      // status from the current player.
-                      promises.push(
-                        GameUser.update(
-                          { user: currentPlayer.user, game: currentPlayer.game },
-                          { current_player: false }
-                        )
-                      );
-                    }
-
-                    if(lastPlayedBaseCard == BaseDeck.REVERSE) {
-                      console.log(currentPlayer);
-                      console.log(nextPlayer);
-                    }
-
-    
-                    // Create a promise to add current_player status to
-                    // the next player.
-                    promises.push(
-                      GameUser.update(
-                        { user: nextPlayer.user, game: nextPlayer.game },
-                        { current_player: true }
-                      )
-                    );
-    
-                    // Execute all promises
-                    Promise.all(promises).then(() => {
-                      return resolve(nextPlayer);
-                    });
-
-                  });
+                    })
+                    .catch((err) => reject(err));
                 })
+                .catch((err) => reject(err));
             })
+            .catch((err) => reject(err));
         })
         .catch((err) => reject(err));
     });
