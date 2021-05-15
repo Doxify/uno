@@ -183,12 +183,13 @@ const GameDeckController = {
                 }
             }
 
-            BaseDeckCard.getCard(gameDeck[topCard].card)
+            // Find the first card not in a user's hand and has an ID <= 76.
+            // (cards with ID > 76 are all special cards)
+            let randomLastPlayedCard = gameDeck.filter(i => i.user == null && i.card <= 76)[0];
+
+            BaseDeckCard.getCard(randomLastPlayedCard.card)
                 .then((baseCard) => {
-                    console.log("HERE!!!");
-                    console.log(baseCard);
-                    gameDeck[topCard].order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
-                    console.log(gameDeck[topCard]);
+                    randomLastPlayedCard.order = GameDeckCard.getLastPlayedCardOrder(baseCard.color);
                     return resolve(gameDeck);
                 })
         })
