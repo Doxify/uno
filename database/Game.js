@@ -222,7 +222,7 @@ class Game extends ActiveRecord {
             if(game.direction_clockwise) {
               previousPlayerNum = (currentPlayerNum === 1) ? 4 : currentPlayerNum - 1;
             } else {
-              previousPlayerNum = (currentPlayerNum === Game.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayerNum + 1;
+              previousPlayerNum = (currentPlayerNum === GameUser.MAX_GAME_USERS_PER_GAME) ? 1 : currentPlayerNum + 1;
             }
             console.log("Clockwise: " + game.direction_clockwise)
             console.log("Current Player: " + currentPlayerNum)

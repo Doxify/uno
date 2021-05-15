@@ -237,12 +237,10 @@ const GameController = {
     return new Promise((resolve, reject) => {
       GameDeck.getUserHand(gameId, userId)
         .then((userGameHand) => {
-          console.log("blah blah blah")
           // Check if the card is in the user's hand.
           let cardPlayedFromHand = userGameHand.filter(i => i.card == cardId)[0];
           if (!cardPlayedFromHand) return resolve(false);
 
-          console.log("blah 10")
 
           // Validate that the move is legal.
           GameDeck.getLastPlayedCard(gameId)
