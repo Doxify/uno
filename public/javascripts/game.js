@@ -116,9 +116,9 @@ function renderGameOverModal(state) {
 // and direction the game is going in.
 function renderGameInfo(state) {
   // Calculate other players location based on this player.
-  let leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
-  let topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
-  let rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
+  const leftPlayer = ((state.user.playerNum + 1) % 4) == 0 ? 4 : ((state.user.playerNum + 1) % 4);
+  const topPlayer = ((state.user.playerNum + 2) % 4) == 0 ? 4 : ((state.user.playerNum + 2) % 4);
+  const rightPlayer = ((state.user.playerNum + 3) % 4) == 0 ? 4 : ((state.user.playerNum + 3) % 4);
   let user;
 
   // Render user info
@@ -142,7 +142,9 @@ function renderGameInfo(state) {
       }
     }
 
-    element.firstElementChild.innerText = gameData.members[user.userId] ? gameData.members[user.userId].username : "Offline";
+    const username =  gameData.members[user.userId] ? gameData.members[user.userId].username : "Offline";
+    element.firstElementChild.innerText = username;
+    
     if(user.isCurrentPlayer) {
       element.firstElementChild.classList.add("username-current-player");
       element.firstElementChild.classList.add("text-success");
