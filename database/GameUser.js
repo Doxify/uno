@@ -44,22 +44,6 @@ class GameUser extends ActiveRecord {
     return this.winner;
   }
 
-  set current_player(x) {
-    if (!(x instanceof Number)) {
-      throw new Error("current_player must be a number.");
-    }
-    this.current_player = x;
-    // TODO: Save to db.
-  }
-
-  set winner(x) {
-    if (!(x instanceof Boolean)) {
-      throw new Error("winner must be a boolean.");
-    }
-    this.winner = x;
-    // TODO: Save to db.
-  }
-
   // Saves a gameUser to the database with the values from instance data fields.
   save() {
     const data = {
@@ -91,6 +75,22 @@ class GameUser extends ActiveRecord {
           return reject(err);
         });
     });
+  }
+
+  // Sets the curernt player in a game
+  static setCurrentPlayer(gameId, userId, isCurrentPlayer) {
+    return new Promise((resolve, reject) => {
+      GameUser.update(
+        { user: userId, game: gameId }, 
+        { current_player: isCurrentPlayer }
+      )
+        .then(() => {
+          return resolve();
+        })
+        .catch((err) => {
+          return reject(err);
+        })
+    })
   }
 
   // Get all Game Users in a game

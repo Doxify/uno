@@ -1,19 +1,22 @@
 extends layout
 
 block content
-  // TODO: Replace this image with an actual gameplay
   //- Header Image Section
-  video(src='/images/uno.mp4' type='video/mp4'  autoplay muted  ).mw-100
-  //img(src="https://picsum.photos/200/?blur" alt="..." height="500")
+  .gradient
+    #main-container
+      #main-title Youno 
+      #main-message Play UNO with your Friends
+      //- Play Now Section
+      div.container
+        
+        div.row
+          div.col-sm-20.col-md-6.offset-md-3.d-grid
+            a(type="button" href="/dashboard")#main-btn.btn.btn-lg.btn-success
+              i.fa.fa-gamepad 
+                span Play Now
+    video#main-video(src='/images/uno.mp4' type='video/mp4'  autoplay muted loop).mw-100
   
-  //- Play Now Section
-  div.container.mt-5
-    
-    div.row
-      div.col-sm-12.col-md-4.offset-md-4.d-grid
-        a(type="button" href="/dashboard").btn.btn-lg.btn-success 
-          i.fa.fa-gamepad 
-            span Play Now
+  
 
   //- TODO: Fetch this from an API
   -
