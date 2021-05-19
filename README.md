@@ -17,7 +17,3 @@ To gain more hands-on experience with web technologies such as websockets, templ
 <div align="center">
   <img src="https://i.imgur.com/QsDlIsV.png" width="75%" height="75%">
 </div>
-
-<div align="center">
-  <img src="https://i.imgur.com/QsDlIsV.png" width="75%" height="75%">
-</div>
