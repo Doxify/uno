@@ -1,10 +1,23 @@
-# CSC 667 Spring 2021 Term Project
+# UNO Online
 
-## Game Web Application: UNO
+### Features
+* 4 player games
+* Global and game chat
 
-| **Team Member** | **Student Email** |
-| ---------------- | ---------------- |
-| Benjamin Kao | bkao1@mail.sfsu.edu |
-| Abishek Neralla | aneralla@mail.sfsu.edu |
-| Andrei Georgescu | ageorgescu@mail.sfsu.edu |
-| Yangesh KC      | ykc@mail.sfsu.edu|
+### Motivation
+To gain more hands-on experience with web technologies such as websockets, templating engines, and deploying to production.
+
+---
+
+## Screenshots
+<div align="center">
+  <img src="https://i.imgur.com/FlLw5QH.png" width="75%" height="75%">
+</div>
+
+<div align="center">
+  <img src="https://i.imgur.com/QsDlIsV.png" width="75%" height="75%">
+</div>
+
+<div align="center">
+  <img src="https://i.imgur.com/QsDlIsV.png" width="75%" height="75%">
+</div>
