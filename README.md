@@ -7,6 +7,9 @@
 ### Motivation
 To gain more hands-on experience with web technologies such as websockets, templating engines, and deploying to production.
 
+### What did I do?
+Most of my work was on the backend. I was responsible for implementing the backend game logic and creating APIs for interfacing with the game.
+
 ---
 
 ## Screenshots
