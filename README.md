@@ -16,7 +16,13 @@
 * Pusher
 
 ## Running the application
-This project uses docker, make sure you have docker installed before running this project.
+<!-- This project uses docker, make sure you have docker installed before running this project.
+ -->
+### Prerequisites
+* This project uses docker, make sure you have docker installed before running this project.
+* Use the following [template](https://pastebin.com/raw/ECmYJfKN) to create a `.env` file in the root of this project.
+
+### Usage
 1. Build the application's docker image:
     ```sh
     docker build -t uno-app .
