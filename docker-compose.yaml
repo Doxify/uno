@@ -7,6 +7,13 @@ services:
       POSTGRES_DB: uno
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: mysecretpassword
+  migration:
+    image: uno-app:latest
+    command: npm run db:migrate
+    env_file:
+      - .env
+    depends_on:
+      - db
   app:
     image: uno-app:latest
     restart: always
@@ -15,4 +22,4 @@ services:
     env_file:
       - .env
     depends_on:
-      - db
+      - migration
