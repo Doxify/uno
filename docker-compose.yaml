@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment: 
+      POSTGRES_DB: uno
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+  app:
+    image: uno-app:latest
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - db
