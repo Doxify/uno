@@ -31,6 +31,8 @@
     ```sh
     docker-compose up
     ```
+3. Application is now running on `localhost:3000`.
+
 ## Contributors
 Thank you to these contributors for helping me work on this application!
 
