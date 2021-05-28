@@ -1,22 +1,41 @@
-# UNO Online
+<p align="center">
+  <img src="https://i.imgur.com/FlLw5QH.png" width="35%" height="35%">
+  <h3 align="center">Uno</h3>
 
-### Features
-* 4 player games
-* Global and game chat
-
-### Motivation
-To gain more hands-on experience with web technologies such as websockets, templating engines, and deploying to production.
-
-### What did I do?
-Most of my work was on the backend. I was responsible for implementing the backend game logic and creating APIs for interfacing with the game.
+  <p align="center"> 
+  An online multiplayer clone of the card game, <a href="https://www.mattelgames.com/en-us/cards/uno">Uno</a>.
+  </p>
+</p>
 
 ---
 
-## Screenshots
-<div align="center">
-  <img src="https://i.imgur.com/FlLw5QH.png" width="75%" height="75%">
-</div>
+## Built with
+* Node
+* Express
+* Postgres
+* Pusher
 
-<div align="center">
-  <img src="https://i.imgur.com/QsDlIsV.png" width="75%" height="75%">
-</div>
+## Running the application
+<!-- This project uses docker, make sure you have docker installed before running this project.
+ -->
+### Prerequisites
+* This project uses docker, make sure you have docker installed before running this project.
+* Use the following [template](https://pastebin.com/raw/ECmYJfKN) to create a `.env` file in the root of this project.
+
+### Usage
+1. Build the application's docker image:
+    ```sh
+    docker build -t uno-app .
+    ```
+2. Start the docker container:
+    ```sh
+    docker-compose up
+    ```
+3. Application is now running on https://localhost:3000.
+
+## Contributors
+Thank you to these contributors for helping me work on this application!
+
+* [Benjamin](https://github.com/benjaminkao) - helped with backend/frontend
+* [KC](https://github.com/yogeskc) - helped with frontend
+* [Abishek](https://github.com/AbishekNeralla) - helped with testing
