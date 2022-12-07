@@ -4,9 +4,6 @@
   <p align="center"> 
     An online multiplayer clone of the card game, <a href="https://www.mattelgames.com/en-us/cards/uno">Uno</a>.
   </p>
-  <p align="center"> 
-    <a href="https://uno.ageorgescu.dev/">Live demo running on Heroku</a>
-  </p>
 </p>
 
 ---
